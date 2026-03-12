@@ -5,6 +5,7 @@ import {
   getOrCreateBackupFolder,
   uploadBackup,
 } from "@/features/backup/services";
+import type { ImportPayload } from "@/features/backup/types";
 import { getAccessToken, getAuthToken } from "@/features/backup/utils/identity";
 import { gzipJSON, ungzipJSON } from "@/utils/gzip";
 
@@ -13,55 +14,40 @@ export const backupApi = createApi({
   tagTypes: ["Backup"],
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    restoreBackup: builder.mutation<string, void>({
+    restoreBackup: builder.mutation<ImportPayload, void>({
       queryFn: async () => {
-        try {
-          const token = await getAuthToken();
+        let token: string | null = null;
 
-          const latest = await getLatestBackup(token);
+        if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
+        else token = await getAuthToken();
 
-          const buffer = await downloadBackup(token, latest.id);
+        const latest = await getLatestBackup(token);
 
-          const data = ungzipJSON(buffer);
+        const buffer = await downloadBackup(token, latest.id);
 
-          return { data };
-        } catch (error) {
-          return {
-            error: {
-              status: "CUSTOM_ERROR",
-              error: String(error),
-            },
-          };
-        }
+        const data = ungzipJSON<ImportPayload>(buffer);
+
+        return { data };
       },
     }),
-    backupToDrive: builder.mutation<string, { data: object; version: string }>({
+    backupToDrive: builder.mutation<
+      string,
+      { data: ImportPayload; version: string }
+    >({
       invalidatesTags: ["Backup"],
       queryFn: async (payload) => {
-        try {
-          let token: string | null = null;
+        let token: string | null = null;
 
-          console.log({ browser: import.meta.env.BROWSER });
+        if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
+        else token = await getAuthToken();
 
-          if (import.meta.env.BROWSER === "brave")
-            token = await getAccessToken();
-          else token = await getAuthToken();
+        const folderId = await getOrCreateBackupFolder(token);
 
-          const folderId = await getOrCreateBackupFolder(token);
+        const blob = gzipJSON(payload.data);
 
-          const blob = gzipJSON(payload.data);
+        await uploadBackup(token, folderId, blob, payload.version);
 
-          await uploadBackup(token, folderId, blob, payload.version);
-
-          return { data: "success" };
-        } catch (error) {
-          return {
-            error: {
-              status: "CUSTOM_ERROR",
-              error: String(error),
-            },
-          };
-        }
+        return { data: "success" };
       },
     }),
   }),

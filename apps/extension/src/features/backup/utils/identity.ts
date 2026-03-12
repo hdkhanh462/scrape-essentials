@@ -15,7 +15,7 @@ export function getAuthToken() {
 export async function launchWebAuthFlow(): Promise<string> {
   const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
   const clientId = import.meta.env.WXT_BRAVE_GOOGLE_CLIENT_ID;
-  const redirectUri = `https://${browser.runtime.id}.chromiumapp.org`;
+  const redirectUri = browser.identity.getRedirectURL();
   const state = crypto.randomUUID();
   const scopes = [
     "openid",

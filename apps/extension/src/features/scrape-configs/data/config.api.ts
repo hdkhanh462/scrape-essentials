@@ -1,3 +1,4 @@
+import type { ImportPayload } from "@/features/backup/types";
 import type { ConfigInput } from "@/features/scrape-configs/types/form-input";
 import { type ConfigField, dexie, type ScrapeConfig } from "@/lib/dexie";
 import { dexieApi } from "@/lib/redux/dexie.api";
@@ -7,10 +8,7 @@ type DataInput<T = ConfigInput> = {
   data: T;
 };
 
-export type ImportConfigsPayload = {
-  allConfigs: ScrapeConfig[];
-  allConfigFields: ConfigField[];
-};
+export type ImportConfigsPayload = Omit<ImportPayload, "records">;
 
 export const configApi = dexieApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -39,9 +37,9 @@ export const configApi = dexieApi.injectEndpoints({
           dexie.configFields,
           async (tx) => {
             await tx.scrapeConfigs.clear();
-            await tx.scrapeConfigs.bulkAdd(payload.allConfigs);
+            await tx.scrapeConfigs.bulkAdd(payload.configs);
             await tx.configFields.clear();
-            await tx.configFields.bulkAdd(payload.allConfigFields);
+            await tx.configFields.bulkAdd(payload.fields);
             return true;
           },
         );
