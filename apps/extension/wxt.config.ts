@@ -10,10 +10,11 @@ export default defineConfig({
     "@": "src/",
   },
   manifest: () => ({
+    name: "Scrape Essentials",
     permissions: ["activeTab", "identity", "storage", "scripting"],
     host_permissions: [`${import.meta.env.VITE_API_URL}/*`],
     oauth2: {
-      client_id: import.meta.env.WXT_APP_CLIENT_ID,
+      client_id: import.meta.env.WXT_GOOGLE_CLIENT_ID,
       scopes: ["https://www.googleapis.com/auth/drive.file"],
     },
   }),

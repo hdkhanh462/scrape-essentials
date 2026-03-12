@@ -5,7 +5,7 @@ import {
   getOrCreateBackupFolder,
   uploadBackup,
 } from "@/features/backup/services";
-import { getAuthToken } from "@/features/backup/utils/identity";
+import { getAccessToken, getAuthToken } from "@/features/backup/utils/identity";
 import { gzipJSON, ungzipJSON } from "@/utils/gzip";
 
 export const backupApi = createApi({
@@ -39,7 +39,13 @@ export const backupApi = createApi({
       invalidatesTags: ["Backup"],
       queryFn: async (payload) => {
         try {
-          const token = await getAuthToken();
+          let token: string | null = null;
+
+          console.log({ browser: import.meta.env.BROWSER });
+
+          if (import.meta.env.BROWSER === "brave")
+            token = await getAccessToken();
+          else token = await getAuthToken();
 
           const folderId = await getOrCreateBackupFolder(token);
 
@@ -62,3 +68,4 @@ export const backupApi = createApi({
 });
 
 export const { useRestoreBackupMutation, useBackupToDriveMutation } = backupApi;
+export const backupReducer = backupApi.reducer;

@@ -82,4 +82,47 @@ app.post("/api/auth/token", async (c) => {
   }
 });
 
+app.post("/api/auth/refresh", async (c) => {
+  const clientId = c.env.GOOGLE_CLIENT_ID;
+  const clientSecret = c.env.GOOGLE_CLIENT_SECRET;
+
+  const body = await c.req.json();
+  const now = Math.floor(Date.now() / 1000);
+
+  try {
+    const response = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: body.refreshToken,
+        grant_type: "refresh_token",
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("refresh token failed:", error);
+      return c.json(error, 400);
+    }
+
+    const { access_token: accessToken, expires_in: expiresIn } =
+      (await response.json()) as OAuthTokenResponse;
+
+    return c.json(
+      {
+        accessToken,
+        expiresAt: now + expiresIn,
+      },
+      200,
+    );
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    return c.json({ error }, 400);
+  }
+});
+
 export default app;

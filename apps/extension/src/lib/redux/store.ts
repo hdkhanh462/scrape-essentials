@@ -4,6 +4,7 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
+import { backupReducer } from "@/features/backup/data/backup.api";
 import { scrapingApi } from "@/features/scraped-records/data/scraping.api";
 import { recordReducer } from "@/features/scraped-records/store/record.slice";
 import { persistSettingsMiddleware } from "@/features/settings/store/settings.middleware";
@@ -16,6 +17,7 @@ export const store = configureStore({
     settings: settingsReducer,
     sidebar: sidebarReducer,
     record: recordReducer,
+    backup: backupReducer,
 
     [scrapingApi.reducerPath]: scrapingApi.reducer,
     [dexieApi.reducerPath]: dexieApi.reducer,
