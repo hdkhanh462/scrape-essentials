@@ -10,55 +10,75 @@ export function getAuthToken() {
   });
 }
 
-export async function googleLogin() {
-  const clientId = import.meta.env.WXT_APP_CLIENT_ID;
-  const redirectUri = browser.identity.getRedirectURL();
-  const scope = "https://www.googleapis.com/auth/drive.file";
-  const authUrl =
-    "https://accounts.google.com/o/oauth2/v2/auth" +
-    `?client_id=${clientId}` +
-    `&response_type=code` +
-    `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-    `&scope=${encodeURIComponent(scope)}` +
-    `&access_type=offline` +
-    `&prompt=consent`;
+export async function launchWebAuthFlow() {
+  try {
+    const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+    const clientId = import.meta.env.WXT_APP_CLIENT_ID;
 
-  const responseUrl = await browser.identity.launchWebAuthFlow({
-    url: authUrl,
-    interactive: true,
-  });
+    const redirectUri = `https://${browser.runtime.id}.chromiumapp.org`;
 
-  if (!responseUrl) {
-    throw new Error("OAuth failed");
+    const state = Math.random().toString(36).substring(2);
+    const scopes = "profile email drive.file";
+
+    authUrl.searchParams.set("client_id", clientId);
+    authUrl.searchParams.set("redirect_uri", redirectUri);
+    authUrl.searchParams.set("response_type", "code");
+    authUrl.searchParams.set("scope", scopes);
+    authUrl.searchParams.set("state", state);
+    authUrl.searchParams.set("access_type", "offline");
+    authUrl.searchParams.set("include_granted_scopes", "true");
+    authUrl.searchParams.set("prompt", "consent");
+
+    browser.identity.launchWebAuthFlow(
+      {
+        url: authUrl.href,
+        interactive: true,
+      },
+      async (redirectUrl) => {
+        if (browser.runtime.lastError || !redirectUrl) {
+          throw new Error(`WebAuthFlow failed: ${browser.runtime.lastError}`);
+        }
+
+        const params = new URLSearchParams(redirectUrl.split("?")[1]);
+        const code = params.get("code");
+
+        if (!code) {
+          throw new Error("No authorization code returned");
+        }
+
+        await exchangeToken(code);
+      },
+    );
+  } catch (error) {
+    throw new Error(`Sign-in failed: ${error.message}`);
   }
-
-  const url = new URL(responseUrl);
-
-  const code = url.searchParams.get("code");
-
-  if (!code) {
-    throw new Error("Authorization code missing");
-  }
-
-  return code;
 }
 
 export async function exchangeToken(code: string) {
-  const res = await fetch("https://your-worker-url/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ code }),
-  });
+  let response: Response;
 
-  const data = await res.json();
+  try {
+    response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code,
+      }),
+    });
 
-  await browser.storage.local.set({
-    access_token: data.access_token,
-    refresh_token: data.refresh_token,
-    expires_at: Date.now() + data.expires_in * 1000,
-  });
+    const { accessToken, expiresAt, refreshToken } = await response.json();
 
-  return data.access_token;
+    if (accessToken) {
+      // Save the tokens and expiration time to Chrome Storage
+      await browser.storage.local.set({
+        accessToken,
+        refreshToken,
+        expiresAt,
+      });
+    }
+  } catch (error) {
+    throw new Error(`OAuth Sign-in failed: ${error.message}`);
+  }
 }
