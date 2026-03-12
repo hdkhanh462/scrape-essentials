@@ -1,0 +1,195 @@
+{
+  "name": "AnimeVietsub",
+  "domains": [{ "value": "animevietsub." }],
+  "isActive": true,
+  "fields": [
+    {
+      "parentFieldId": "",
+      "name": "Point",
+      "order": 0,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "input-select",
+      "uiOptions": {
+        "label": "Point",
+        "defaultValue": "0",
+        "options": [
+          { "label": "0", "value": "0" },
+          { "label": "1", "value": "1" },
+          { "label": "2", "value": "2" },
+          { "label": "3", "value": "3" },
+          { "label": "4", "value": "4" },
+          { "label": "5", "value": "5" },
+          { "label": "6", "value": "6" },
+          { "label": "7", "value": "7" },
+          { "label": "8", "value": "8" },
+          { "label": "9", "value": "9" },
+          { "label": "10", "value": "10" }
+        ]
+      }
+    },
+    {
+      "parentFieldId": "",
+      "name": "Episode",
+      "order": 1,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "input-number",
+      "uiOptions": { "label": "Episode" }
+    },
+    {
+      "parentFieldId": "",
+      "name": "Status",
+      "order": 2,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "input-select",
+      "uiOptions": {
+        "label": "Status",
+        "options": [
+          { "label": "Watching", "value": "Watching" },
+          { "label": "Completed", "value": "Completed" },
+          { "label": "Watch Later", "value": "Watch Later" },
+          { "label": "Dropped", "value": "Dropped" }
+        ]
+      }
+    },
+    {
+      "parentFieldId": "",
+      "name": "Title",
+      "order": 3,
+      "isRequired": true,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "text",
+      "scrapeOptions": {
+        "cssSelector": "header > .Title",
+        "condition": "",
+        "attributeName": "",
+        "isMultiple": false
+      },
+      "isPrimary": true,
+      "regex": "",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "",
+      "name": "Alternatives",
+      "order": 4,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "text",
+      "scrapeOptions": {
+        "cssSelector": "h2.SubTitle",
+        "condition": "",
+        "attributeName": "",
+        "isMultiple": false
+      },
+      "isPrimary": false,
+      "regex": "",
+      "spliter": ",",
+      "removers": []
+    },
+    {
+      "parentFieldId": "",
+      "name": "InfoLeft (AnimeVietsub)",
+      "order": 5,
+      "isRequired": false,
+      "type": "text",
+      "isParent": true,
+      "scrapeOptions": {
+        "cssSelector": ".mvici-left > .InfoList > li",
+        "condition": "",
+        "attributeName": "",
+        "isMultiple": true
+      },
+      "isPrimary": false,
+      "regex": "",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "0395ea38-6345-4c97-af28-c733f6b58cf9",
+      "name": "Genres",
+      "order": 6,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "text",
+      "isParent": false,
+      "scrapeOptions": {
+        "cssSelector": "a",
+        "condition": "Thể loại",
+        "attributeName": "",
+        "isMultiple": true
+      },
+      "isPrimary": false,
+      "regex": "",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "",
+      "name": "InfoRight (AnimeVietsub)",
+      "order": 7,
+      "isRequired": false,
+      "type": "text",
+      "isParent": true,
+      "scrapeOptions": {
+        "cssSelector": ".mvici-right > .InfoList > li",
+        "condition": "",
+        "attributeName": "",
+        "isMultiple": true
+      },
+      "isPrimary": false,
+      "regex": "",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "d7f1846a-6985-4c12-a0a3-e0c970422280",
+      "name": "Season",
+      "order": 8,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "text",
+      "isParent": false,
+      "scrapeOptions": {
+        "cssSelector": "a",
+        "condition": "Season",
+        "attributeName": "",
+        "isMultiple": false
+      },
+      "isPrimary": false,
+      "regex": "",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "d7f1846a-6985-4c12-a0a3-e0c970422280",
+      "name": "Studios",
+      "order": 9,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "text",
+      "isParent": false,
+      "scrapeOptions": {
+        "cssSelector": "a",
+        "condition": "Studio",
+        "attributeName": "",
+        "isMultiple": false
+      },
+      "isPrimary": false,
+      "regex": "",
+      "spliter": ",",
+      "removers": []
+    }
+  ]
+}

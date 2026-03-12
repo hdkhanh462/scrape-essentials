@@ -1,0 +1,92 @@
+{
+  "name": "Twitter",
+  "domains": [{ "value": "^x\\.com$" }],
+  "isActive": true,
+  "fields": [
+    {
+      "parentFieldId": "",
+      "name": "Point",
+      "order": 0,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "input-select",
+      "uiOptions": {
+        "label": "Point",
+        "defaultValue": "0",
+        "options": [
+          { "label": "0", "value": "0" },
+          { "label": "1", "value": "1" },
+          { "label": "2", "value": "2" },
+          { "label": "3", "value": "3" },
+          { "label": "4", "value": "4" },
+          { "label": "5", "value": "5" },
+          { "label": "6", "value": "6" },
+          { "label": "7", "value": "7" },
+          { "label": "8", "value": "8" },
+          { "label": "9", "value": "9" },
+          { "label": "10", "value": "10" }
+        ]
+      }
+    },
+    {
+      "parentFieldId": "",
+      "name": "Downloaded",
+      "order": 1,
+      "isRequired": false,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "input-checkbox",
+      "uiOptions": { "label": "Downloaded", "defaultValue": "false" }
+    },
+    {
+      "parentFieldId": "",
+      "name": "Code",
+      "order": 2,
+      "isRequired": true,
+      "isFilterable": true,
+      "type": "page-url",
+      "isPrimary": true,
+      "regex": "/([^/]+)/media(?:\\?|$)/",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "",
+      "name": "Name",
+      "order": 3,
+      "isRequired": true,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "text",
+      "scrapeOptions": {
+        "cssSelector": "[data-testid=\"UserName\"] .css-146c3p1 > .css-1jxf684 > .css-1jxf684:nth-child(1)",
+        "condition": "",
+        "attributeName": "",
+        "isMultiple": false
+      },
+      "isPrimary": false,
+      "regex": "",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "",
+      "name": "Media",
+      "order": 4,
+      "isRequired": false,
+      "isShowOnTable": true,
+      "type": "text",
+      "scrapeOptions": {
+        "cssSelector": ".r-1habvwh > .css-146c3p1:nth-child(2)",
+        "condition": "",
+        "attributeName": "",
+        "isMultiple": false
+      },
+      "isPrimary": false,
+      "regex": "(\\d+(?:\\.\\d+)*)",
+      "spliter": "",
+      "removers": []
+    }
+  ]
+}

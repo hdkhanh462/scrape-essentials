@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domains": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["value"],
+        "additionalProperties": false
+      }
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "fields": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "parentFieldId": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "order": {
+                "type": "number",
+                "minimum": 0
+              },
+              "isRequired": {
+                "type": "boolean"
+              },
+              "isFilterable": {
+                "type": "boolean"
+              },
+              "isShowOnTable": {
+                "type": "boolean"
+              }
+            },
+            "required": ["name", "order"],
+            "additionalProperties": false
+          },
+          {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "input-text",
+                      "input-textarea",
+                      "input-number",
+                      "input-checkbox"
+                    ]
+                  },
+                  "uiOptions": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "defaultValue": {}
+                    },
+                    "required": ["label"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["type", "uiOptions"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["input-select", "input-multiselect"]
+                  },
+                  "uiOptions": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "defaultValue": {},
+                      "options": {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "label": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "value": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": ["label", "value"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": ["label", "options"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["type", "uiOptions"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["text", "link", "image", "element-attribute"]
+                  },
+                  "isParent": {
+                    "type": "boolean"
+                  },
+                  "scrapeOptions": {
+                    "type": "object",
+                    "properties": {
+                      "cssSelector": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "condition": {
+                        "type": "string"
+                      },
+                      "attributeName": {
+                        "type": "string"
+                      },
+                      "isMultiple": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": ["cssSelector"],
+                    "additionalProperties": false
+                  },
+                  "isPrimary": {
+                    "type": "boolean"
+                  },
+                  "regex": {
+                    "type": "string"
+                  },
+                  "spliter": {
+                    "type": "string"
+                  },
+                  "removers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": ["value"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["type", "scrapeOptions"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "page-url"
+                  },
+                  "isPrimary": {
+                    "type": "boolean"
+                  },
+                  "regex": {
+                    "type": "string"
+                  },
+                  "spliter": {
+                    "type": "string"
+                  },
+                  "removers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": ["value"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["type"],
+                "additionalProperties": false
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "required": ["name", "domains", "fields"],
+  "additionalProperties": false
+}

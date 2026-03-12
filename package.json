@@ -23,7 +23,9 @@
     "dev:server": "turbo -F server dev",
     "deploy": "turbo -F @scrape-essentials/infra deploy",
     "destroy": "turbo -F @scrape-essentials/infra destroy",
-    "check": "biome check --write ."
+    "lint": "biome check --write",
+    "lint:unsafe": "biome check --write --unsafe",
+    "format": "biome format --write"
   },
   "dependencies": {
     "@scrape-essentials/env": "workspace:*",
