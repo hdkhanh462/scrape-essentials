@@ -1,12 +1,10 @@
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   backupToDrive,
-  downloadBackup,
-  getLatestBackup,
+  getUserInfo,
+  restoreBackup,
 } from "@/features/backup/services";
-import type { ImportPayload } from "@/features/backup/types";
-import { getAccessToken, getAuthToken } from "@/features/backup/utils/identity";
-import { ungzipJSON } from "@/utils/gzip";
+import type { GoogleUserInfo, ImportPayload } from "@/features/backup/types";
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const backupApi = createApi({
   reducerPath: "backupApi",
@@ -15,17 +13,7 @@ export const backupApi = createApi({
   endpoints: (builder) => ({
     restoreBackup: builder.mutation<ImportPayload, void>({
       queryFn: async () => {
-        let token: string | null = null;
-
-        if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
-        else token = await getAuthToken();
-
-        const latest = await getLatestBackup(token);
-
-        const buffer = await downloadBackup(token, latest.id);
-
-        const data = ungzipJSON<ImportPayload>(buffer);
-
+        const data = await restoreBackup();
         return { data };
       },
     }),
@@ -37,8 +25,18 @@ export const backupApi = createApi({
         return { data: "success" };
       },
     }),
+    getUserInfo: builder.query<GoogleUserInfo | null, void>({
+      queryFn: async () => {
+        const data = await getUserInfo();
+        return { data };
+      },
+    }),
   }),
 });
 
-export const { useRestoreBackupMutation, useBackupToDriveMutation } = backupApi;
+export const {
+  useRestoreBackupMutation,
+  useBackupToDriveMutation,
+  useGetUserInfoQuery,
+} = backupApi;
 export const backupReducer = backupApi.reducer;

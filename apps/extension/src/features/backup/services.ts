@@ -1,6 +1,7 @@
 import { shouldBackup } from "@/features/backup/utils";
 import { getAccessToken, getAuthToken } from "@/features/backup/utils/identity";
 import { dexie } from "@/lib/dexie";
+import { GoogleUserInfo, ImportPayload } from "./types";
 
 export async function getOrCreateBackupFolder(token: string): Promise<string> {
   const search = await fetch(
@@ -98,11 +99,27 @@ export async function downloadBackup(token: string, fileId: string) {
   return await res.arrayBuffer();
 }
 
-export async function backupToDrive() {
+export async function restoreBackup(): Promise<ImportPayload> {
   let token: string | null = null;
 
   if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
   else token = await getAuthToken();
+
+  if (!token) throw new Error("No token found");
+
+  const latest = await getLatestBackup(token);
+  const buffer = await downloadBackup(token, latest.id);
+
+  return ungzipJSON<ImportPayload>(buffer);
+}
+
+export async function backupToDrive(): Promise<void> {
+  let token: string | null = null;
+
+  if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
+  else token = await getAuthToken();
+
+  if (!token) throw new Error("No token found");
 
   const folderId = await getOrCreateBackupFolder(token);
 
@@ -120,4 +137,24 @@ export async function autoBackupToDrive() {
   if (await shouldBackup()) {
     await backupToDrive();
   }
+}
+
+export async function getUserInfo(): Promise<GoogleUserInfo | null> {
+  let userInfo = await storage.getItem<GoogleUserInfo | null>("local:userInfo");
+  if (userInfo) return userInfo;
+
+  const token = await getAccessToken(false);
+  if (!token) return null;
+
+  const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) return null;
+
+  userInfo = await res.json();
+  await storage.setItem("local:userInfo", userInfo);
+
+  return userInfo;
 }

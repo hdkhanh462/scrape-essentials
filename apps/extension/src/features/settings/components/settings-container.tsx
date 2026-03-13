@@ -1,7 +1,7 @@
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import DialogWrapper from "@/components/dialog-wrapper";
 import Loader from "@/components/loader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import {
   useBackupToDriveMutation,
+  useGetUserInfoQuery,
   useRestoreBackupMutation,
 } from "@/features/backup/data/backup.api";
 import type { ImportPayload } from "@/features/backup/types";
@@ -34,6 +35,9 @@ import {
 } from "@/features/settings/store/settings.slice";
 import type { SettingsInput } from "@/features/settings/types/settings";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/store";
+import { CheckCircle2Icon, CloudUpload, History } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function SettingsContainer() {
   const dispatch = useAppDispatch();
@@ -41,8 +45,17 @@ export function SettingsContainer() {
 
   const importConfirmDialog = useDialog();
 
-  const [restoreBackup] = useRestoreBackupMutation();
-  const [backupToDrive, { isLoading }] = useBackupToDriveMutation();
+  const [restoreBackup, { isLoading: isRestoring }] =
+    useRestoreBackupMutation();
+  const [backupToDrive, { isLoading: isBackingUp }] =
+    useBackupToDriveMutation();
+  const { data: userInfo } = useGetUserInfoQuery();
+
+  const [lastBackup, setLastBackup] = useState<number | null>(null);
+
+  useEffect(() => {
+    storage.getItem<number | null>("local:lastBackup").then(setLastBackup);
+  }, []);
   const [importConfigs] = configApi.useImportConfigsMutation();
   const [importRecords] = recordApi.useImportRecordsMutation();
 
@@ -105,6 +118,8 @@ export function SettingsContainer() {
     try {
       await backupToDrive().unwrap();
 
+      const now = Date.now();
+      setLastBackup(now);
       toast.success("Backup successful");
     } catch (error) {
       toast.error("Backup failed", {
@@ -112,6 +127,19 @@ export function SettingsContainer() {
       });
       console.error("Error backing up settings:", error);
     }
+  };
+
+  const formatRelativeTime = (timestamp: number | null) => {
+    if (!timestamp) return "Never";
+    const diff = Date.now() - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
   };
 
   return (
@@ -127,23 +155,53 @@ export function SettingsContainer() {
             <FieldSeparator />
             <Field orientation="horizontal">
               <FieldContent>
-                <FieldLabel htmlFor="debug-mode">Backup</FieldLabel>
+                <div className="flex items-center gap-2">
+                  <FieldLabel htmlFor="backup">Backup</FieldLabel>
+                  <Badge variant="outline">
+                    <CheckCircle2Icon className="size-2.5 text-green-500" />
+                    Google Drive
+                  </Badge>
+                </div>
                 <FieldDescription>
                   Backup your settings and configurations to Google Drive.
+                  <span className="mt-1 text-xs text-muted-foreground flex items-center gap-1.5">
+                    <History className="size-3" />
+                    Last backup: {formatRelativeTime(lastBackup)}
+                  </span>
                 </FieldDescription>
               </FieldContent>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleRestoreClick}
-              >
-                <Loader isLoading={isLoading} />
-                Restore
-              </Button>
-              <Button type="button" onClick={handleBackup}>
-                <Loader isLoading={isLoading} />
-                Backup
-              </Button>
+              <div>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleRestoreClick}
+                    disabled={isRestoring}
+                  >
+                    <Loader isLoading={isRestoring} />
+                    {!isRestoring && <History className="size-4" />}
+                    Restore
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleBackup}
+                    disabled={isBackingUp}
+                  >
+                    <Loader isLoading={isBackingUp} />
+                    {!isBackingUp && <CloudUpload className="size-4" />}
+                    Backup
+                  </Button>
+                </div>
+                {userInfo && (
+                  <div className="flex items-center gap-2">
+                    <Avatar>
+                      <AvatarImage src={userInfo.picture} />
+                      <AvatarFallback>{userInfo.name[0]}</AvatarFallback>
+                    </Avatar>
+                    {userInfo.email}
+                  </div>
+                )}
+              </div>
             </Field>
             <FieldSeparator />
             <Controller

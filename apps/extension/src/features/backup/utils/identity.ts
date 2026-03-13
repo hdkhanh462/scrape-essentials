@@ -1,4 +1,5 @@
 import type { OAuthTokenResponse } from "@/features/backup/types";
+import { BUFFER_IN_SECONDS } from "../constants";
 
 export function getAuthToken() {
   return new Promise<string>((resolve, reject) => {
@@ -81,8 +82,8 @@ export async function exchangeToken(code: string): Promise<string> {
 
   await browser.storage.local.set<OAuthTokenResponse>({
     accessToken,
-    refreshToken,
     expiresAt,
+    refreshToken,
   });
 
   return accessToken;
@@ -104,9 +105,7 @@ export async function refreshAccessToken(
     },
   );
 
-  if (!response.ok) {
-    throw new Error("Token refresh failed");
-  }
+  if (!response.ok) throw new Error("Token refresh failed");
 
   const { accessToken, expiresAt } = await response.json();
 
@@ -118,7 +117,9 @@ export async function refreshAccessToken(
   return accessToken;
 }
 
-export async function getAccessToken(): Promise<string> {
+export async function getAccessToken(
+  authIfMissing = true,
+): Promise<string | null> {
   const { accessToken, expiresAt, refreshToken } =
     await browser.storage.local.get<OAuthTokenResponse>([
       "accessToken",
@@ -126,12 +127,15 @@ export async function getAccessToken(): Promise<string> {
       "refreshToken",
     ]);
 
-  if (!accessToken) {
+  if (!accessToken || !expiresAt || !refreshToken) {
+    if (!authIfMissing) return null;
+
     const newAccessToken = await launchWebAuthFlow();
     return newAccessToken;
   }
 
-  if (Date.now() < expiresAt) {
+  const now = Math.floor(Date.now() / 1000);
+  if (now < expiresAt - BUFFER_IN_SECONDS) {
     return accessToken;
   }
 

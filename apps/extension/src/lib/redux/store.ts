@@ -1,31 +1,32 @@
-import { configureStore } from "@reduxjs/toolkit";
-import {
-  type TypedUseSelectorHook,
-  useDispatch,
-  useSelector,
-} from "react-redux";
-import { backupReducer } from "@/features/backup/data/backup.api";
+import { backupApi } from "@/features/backup/data/backup.api";
 import { scrapingApi } from "@/features/scraped-records/data/scraping.api";
 import { recordReducer } from "@/features/scraped-records/store/record.slice";
 import { persistSettingsMiddleware } from "@/features/settings/store/settings.middleware";
 import { settingsReducer } from "@/features/settings/store/settings.slice";
 import { sidebarReducer } from "@/features/settings/store/sidebar.slice";
 import { dexieApi } from "@/lib/redux/dexie.api";
+import { configureStore } from "@reduxjs/toolkit";
+import {
+  type TypedUseSelectorHook,
+  useDispatch,
+  useSelector,
+} from "react-redux";
 
 export const store = configureStore({
   reducer: {
     settings: settingsReducer,
     sidebar: sidebarReducer,
     record: recordReducer,
-    backup: backupReducer,
 
     [scrapingApi.reducerPath]: scrapingApi.reducer,
     [dexieApi.reducerPath]: dexieApi.reducer,
+    [backupApi.reducerPath]: backupApi.reducer,
   },
   middleware: (getDefault) =>
     getDefault().concat(
       scrapingApi.middleware,
       dexieApi.middleware,
+      backupApi.middleware,
       persistSettingsMiddleware,
     ),
 });
