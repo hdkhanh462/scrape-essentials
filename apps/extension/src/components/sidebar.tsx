@@ -1,8 +1,9 @@
 import { BoxIcon, SettingsIcon, WrenchIcon } from "lucide-react";
 import { Activity, type PropsWithChildren } from "react";
+
 import { buttonVariants } from "@/components/ui/button";
+import { useAppStore } from "@/features/shared/stores/app.store";
 import { cn } from "@/lib/utils";
-import { useAppStore } from "@/lib/zustand/app.store";
 
 export const sidebarItems = [
   { id: "configs", label: "Configs", icon: WrenchIcon },

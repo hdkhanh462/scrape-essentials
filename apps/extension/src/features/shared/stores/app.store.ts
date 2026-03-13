@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { SidebarTab } from "@/components/sidebar";
-import { wxtStorage } from "@/lib/zustand/wxt-storage";
+import { wxtStorage } from "@/features/shared/stores/wxt-storage";
 
 type AppState = {
   activeTab: SidebarTab;

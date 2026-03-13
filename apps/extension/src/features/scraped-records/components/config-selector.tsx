@@ -34,7 +34,7 @@ export const ConfigSelector = () => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full max-w-[150px] justify-between lg:max-w-[250px]"
+          className="w-full max-w-35 justify-between lg:max-w-62"
         >
           {configId && configs
             ? configs.find((config) => config.id === configId)?.name
@@ -42,7 +42,7 @@ export const ConfigSelector = () => {
           <ChevronsUpDownIcon className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-50 p-0">
         <Command
           filter={(_, search, keywords) => {
             if (keywords?.[0].toLowerCase().includes(search.toLowerCase()))

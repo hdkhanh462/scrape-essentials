@@ -7,7 +7,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { fieldApi } from "@/features/config-fields/data/field.api";
+import { useGetFields } from "@/features/fields/hooks";
 import { configApi } from "@/features/scrape-configs/data/config.api";
 import { ScrapedRecordsCard } from "@/features/scraped-records/components/scraped-records-card";
 import { useGetCurrentPageQuery } from "@/features/scraped-records/data/scraping.api";
@@ -23,10 +23,10 @@ export default function App() {
     useGetCurrentPageQuery({});
   const { data: configs, isFetching: isConfigsLoading } =
     configApi.useGetConfigsQuery({ isActive: true });
-  const { data: fields, isFetching: isFieldsLoading } =
-    fieldApi.useGetFieldsQuery({
-      configId: matchConfig?.config?.id || "",
-    });
+
+  const { data: fields, isFetching: isFieldsLoading } = useGetFields({
+    configId: matchConfig?.config?.id,
+  });
 
   useEffect(() => {
     if (!currentPage || !configs || !fields) return;

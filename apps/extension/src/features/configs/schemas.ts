@@ -4,7 +4,7 @@ import { FieldSchema } from "@/features/fields/schemas";
 import type { FieldInput } from "@/features/fields/types/form-input";
 import type { FieldType } from "@/lib/dexie";
 
-export const configSchema = z
+export const ConfigSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
     domains: z

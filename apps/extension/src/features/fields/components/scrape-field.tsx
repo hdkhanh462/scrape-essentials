@@ -1,6 +1,6 @@
 import { FormInput } from "@/components/form";
 import { FieldError } from "@/components/ui/field";
-import type { FieldTypePropsV2 } from "@/features/config-fields/types/field";
+import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export function ScrapeField({ form, fullErrors }: FieldTypePropsV2) {
   return (

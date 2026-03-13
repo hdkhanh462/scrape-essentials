@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { SettingsInput } from "@/features/settings/types/settings";
-import { wxtStorage } from "@/lib/zustand/wxt-storage";
+import { wxtStorage } from "@/features/shared/stores/wxt-storage";
 
 type SettingsSlice = SettingsInput & {
   updateSettings: (settings: Partial<SettingsInput>) => void;

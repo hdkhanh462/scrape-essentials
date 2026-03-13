@@ -83,7 +83,7 @@ export function buildColumn(fields: ConfigField[]): ColumnDef<ScrapedRecord>[] {
       ),
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <span className="max-w-[300px] truncate font-medium">
+          <span className="max-w-75 truncate font-medium">
             {row.getValue("key")}
           </span>
         </div>

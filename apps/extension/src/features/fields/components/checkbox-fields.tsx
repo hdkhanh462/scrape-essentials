@@ -1,5 +1,5 @@
 import { useWatch } from "react-hook-form";
-import type { FieldTypePropsV2 } from "@/features/config-fields/types/field";
+import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export default function CheckboxFields({ form }: FieldTypePropsV2) {
   const type = useWatch({

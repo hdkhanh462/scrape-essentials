@@ -10,7 +10,7 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { FieldTypePropsV2 } from "@/features/config-fields/types/field";
+import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
   const { fields, append, remove } = useFieldArray({

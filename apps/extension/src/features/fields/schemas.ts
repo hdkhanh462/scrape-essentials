@@ -1,7 +1,7 @@
 import z from "zod";
 import { FieldType } from "@/lib/dexie";
 
-const textSchema = z.object({
+const TextSchema = z.object({
   isPrimary: z.boolean().optional(),
   regex: z.string().optional(),
   spliter: z.string().optional(),
@@ -56,15 +56,15 @@ const typeUnion = z.discriminatedUnion("type", [
       attributeName: z.string().optional(),
       isMultiple: z.boolean().optional(),
     }),
-    ...textSchema.shape,
+    ...TextSchema.shape,
   }),
   z.object({
     type: z.literal(FieldType.PageUrl),
-    ...textSchema.shape,
+    ...TextSchema.shape,
   }),
 ]);
 
-export const fieldSchema = z
+export const FieldSchema = z
   .object({
     parentFieldId: z.string().optional(),
     name: z.string().nonempty("Field name is required"),

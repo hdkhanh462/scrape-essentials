@@ -1,9 +1,10 @@
 import type { FieldErrors } from "react-hook-form";
 import type z from "zod";
-import type { fieldSchema } from "@/features/config-fields/schemas/form-input";
+
+import type { FieldSchema } from "@/features/fields/schemas";
 import type { ConfigField, FieldType } from "@/lib/dexie";
 
-export type FieldInput = z.infer<typeof fieldSchema> & {
+export type FieldInput = z.infer<typeof FieldSchema> & {
   fieldId?: ConfigField["id"];
 };
 

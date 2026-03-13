@@ -17,11 +17,11 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SelectItem } from "@/components/ui/select";
-import type { FieldTypePropsV2 } from "@/features/config-fields/types/field";
+import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 import type {
   FieldInput,
   FullErrors,
-} from "@/features/config-fields/types/form-input";
+} from "@/features/fields/types/form-input";
 import { FieldType } from "@/lib/dexie";
 
 export function UiField({ form, fullErrors }: FieldTypePropsV2) {

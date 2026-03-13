@@ -1,21 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
+
 import type { DialogWrapperProps } from "@/components/dialog-wrapper";
 import { FormInput, FormSelect } from "@/components/form";
 import SheetWrapper from "@/components/sheet-wrapper";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { SelectItem } from "@/components/ui/select";
-import CheckboxFields from "@/features/config-fields/components/checkbox-fields";
-import { ScrapeField } from "@/features/config-fields/components/scrape-field";
-import SelectorFields from "@/features/config-fields/components/selector-fields";
-import TextFields from "@/features/config-fields/components/text-fields";
-import { UiField } from "@/features/config-fields/components/ui-field";
-import { typeLabels } from "@/features/config-fields/const/field";
-import { fieldSchema } from "@/features/config-fields/schemas/form-input";
+import CheckboxFields from "@/features/fields/components/checkbox-fields";
+import { ScrapeField } from "@/features/fields/components/scrape-field";
+import SelectorFields from "@/features/fields/components/selector-fields";
+import TextFields from "@/features/fields/components/text-fields";
+import { UiField } from "@/features/fields/components/ui-field";
+import { typeLabels } from "@/features/fields/constants";
+import { FieldSchema } from "@/features/fields/schemas";
 import type {
   FieldInput,
   FullErrors,
-} from "@/features/config-fields/types/form-input";
+} from "@/features/fields/types/form-input";
 import { DialogFooter } from "@/features/shared/components/dialog-footer";
 import { FieldType } from "@/lib/dexie";
 
@@ -51,7 +52,7 @@ export default function ConfigFieldsSheetForm({
   ...props
 }: Props) {
   const form = useForm<FieldInput>({
-    resolver: zodResolver(fieldSchema),
+    resolver: zodResolver(FieldSchema),
     defaultValues: DEFAULT_VALUES,
   });
 
