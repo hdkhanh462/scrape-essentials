@@ -1,4 +1,4 @@
-import { DAY_IN_MS } from "../constants";
+import { DAY_IN_MS } from "@/features/backup/constants";
 
 export async function shouldBackup() {
   const lastBackup = await storage.getItem<number | null>("local:lastBackup");

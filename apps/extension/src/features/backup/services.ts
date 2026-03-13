@@ -1,7 +1,7 @@
 import { shouldBackup } from "@/features/backup/utils";
-import { getAccessToken, getAuthToken } from "@/features/backup/utils/identity";
+import { getAccessToken } from "@/features/backup/utils/identity";
 import { dexie } from "@/lib/dexie";
-import { GoogleUserInfo, ImportPayload } from "./types";
+import type { GoogleUserInfo, ImportPayload } from "@/features/backup/types";
 
 export async function getOrCreateBackupFolder(token: string): Promise<string> {
   const search = await fetch(
@@ -100,10 +100,7 @@ export async function downloadBackup(token: string, fileId: string) {
 }
 
 export async function restoreBackup(): Promise<ImportPayload> {
-  let token: string | null = null;
-
-  if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
-  else token = await getAuthToken();
+  const token = await getAccessToken();
 
   if (!token) throw new Error("No token found");
 
@@ -114,10 +111,7 @@ export async function restoreBackup(): Promise<ImportPayload> {
 }
 
 export async function backupToDrive(): Promise<void> {
-  let token: string | null = null;
-
-  if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
-  else token = await getAuthToken();
+  const token = await getAccessToken();
 
   if (!token) throw new Error("No token found");
 

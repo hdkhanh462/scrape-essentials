@@ -39,7 +39,6 @@ app.post("/api/auth/token", async (c) => {
   const redirectUri = c.env.GOOGLE_REDIRECT_URI;
 
   const body = await c.req.json();
-  const now = Math.floor(Date.now() / 1000);
 
   try {
     const response = await fetch("https://oauth2.googleapis.com/token", {
@@ -66,7 +65,7 @@ app.post("/api/auth/token", async (c) => {
       return c.json(
         {
           accessToken,
-          expiresAt: now + expiresIn,
+          expiresAt: Date.now() + expiresIn,
           refreshToken,
         },
         200,

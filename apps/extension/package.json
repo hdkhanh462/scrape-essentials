@@ -7,10 +7,8 @@
   "scripts": {
     "dev": "wxt --port 5555",
     "dev:firefox": "wxt -b firefox",
-    "dev:brave": "wxt -b brave",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
-    "build:brave": "wxt build -b brave",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "check-types": "tsc --noEmit",

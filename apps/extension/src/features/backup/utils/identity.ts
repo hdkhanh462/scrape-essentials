@@ -1,21 +1,9 @@
+import { BUFFER_IN_MS } from "@/features/backup/constants";
 import type { OAuthTokenResponse } from "@/features/backup/types";
-import { BUFFER_IN_SECONDS } from "../constants";
-
-export function getAuthToken() {
-  return new Promise<string>((resolve, reject) => {
-    browser.identity.getAuthToken({ interactive: true }, (result) => {
-      if (browser.runtime.lastError || !result.token) {
-        reject(browser.runtime.lastError);
-        return;
-      }
-      resolve(result.token);
-    });
-  });
-}
 
 export async function launchWebAuthFlow(): Promise<string> {
   const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
-  const clientId = import.meta.env.WXT_BRAVE_GOOGLE_CLIENT_ID;
+  const clientId = import.meta.env.WXT_GOOGLE_CLIENT_ID;
   const redirectUri = browser.identity.getRedirectURL();
   const state = crypto.randomUUID();
   const scopes = [
@@ -134,8 +122,7 @@ export async function getAccessToken(
     return newAccessToken;
   }
 
-  const now = Math.floor(Date.now() / 1000);
-  if (now < expiresAt - BUFFER_IN_SECONDS) {
+  if (Date.now() < expiresAt - BUFFER_IN_MS) {
     return accessToken;
   }
 

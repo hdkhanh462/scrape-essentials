@@ -20,12 +20,6 @@ export default defineConfig({
       scopes: ["https://www.googleapis.com/auth/drive.file"],
     },
   }),
-  webExt: {
-    binaries: {
-      brave:
-        "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
-    },
-  },
   vite: () => ({
     plugins: [tailwindcss()],
     resolve: {
