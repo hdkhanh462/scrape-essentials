@@ -1,6 +1,7 @@
 import { initTRPC } from "@trpc/server";
 import { createChromeHandler } from "trpc-chrome/adapter";
 import z from "zod";
+import { backupToDrive } from "@/features/backup/services";
 import { getCurrentPage } from "@/features/scraped-records/utils/scraper";
 
 const t = initTRPC.create({
@@ -24,6 +25,22 @@ export type AppRouter = typeof appRouter;
 
 export default defineBackground(() => {
   console.info("Hello from background!", { id: browser.runtime.id });
+
+  browser.alarms.create("test", { delayInMinutes: 1 });
+
+  browser.alarms.create("dailyBackup", {
+    periodInMinutes: 60 * 24,
+  });
+
+  browser.alarms.onAlarm.addListener(async (alarm) => {
+    if (alarm.name === "test") {
+      console.log("Test alarm triggered");
+    }
+    if (alarm.name === "dailyBackup") {
+      console.log("Running daily backup");
+      await backupToDrive();
+    }
+  });
 
   createChromeHandler({
     router: appRouter,

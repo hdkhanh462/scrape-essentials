@@ -33,7 +33,6 @@ import {
   updateSettings,
 } from "@/features/settings/store/settings.slice";
 import type { SettingsInput } from "@/features/settings/types/settings";
-import { dexie } from "@/lib/dexie";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/store";
 
 export function SettingsContainer() {
@@ -104,14 +103,7 @@ export function SettingsContainer() {
 
   const handleBackup = async () => {
     try {
-      const configs = await dexie.scrapeConfigs.toArray();
-      const fields = await dexie.configFields.toArray();
-      const records = await dexie.scrapedRecords.toArray();
-
-      await backupToDrive({
-        data: { configs, fields, records },
-        version: import.meta.env.VITE_APP_VERSION || "1.0",
-      }).unwrap();
+      await backupToDrive().unwrap();
 
       toast.success("Backup successful");
     } catch (error) {

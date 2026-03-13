@@ -1,9 +1,7 @@
-export function shouldBackup() {
-  const last = localStorage.getItem("last_backup");
+export async function shouldBackup() {
+  const lastBackup = await storage.getItem<number | null>("local:lastBackup");
 
-  if (!last) return true;
+  if (!lastBackup) return true;
 
-  const diff = Date.now() - Number(last);
-
-  return diff > 24 * 60 * 60 * 1000;
+  return Date.now() - lastBackup > DAY;
 }

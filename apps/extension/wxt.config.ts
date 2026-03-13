@@ -13,7 +13,7 @@ export default defineConfig({
     name: "Scrape Essentials",
     description: "A browser extension for web scraping and automation.",
     version: import.meta.env.VITE_APP_VERSION,
-    permissions: ["activeTab", "identity", "storage", "scripting"],
+    permissions: ["activeTab", "identity", "storage", "scripting", "alarms"],
     host_permissions: [`${import.meta.env.VITE_API_URL}/*`],
     oauth2: {
       client_id: import.meta.env.WXT_GOOGLE_CLIENT_ID,

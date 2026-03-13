@@ -1,13 +1,12 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
+  backupToDrive,
   downloadBackup,
   getLatestBackup,
-  getOrCreateBackupFolder,
-  uploadBackup,
 } from "@/features/backup/services";
 import type { ImportPayload } from "@/features/backup/types";
 import { getAccessToken, getAuthToken } from "@/features/backup/utils/identity";
-import { gzipJSON, ungzipJSON } from "@/utils/gzip";
+import { ungzipJSON } from "@/utils/gzip";
 
 export const backupApi = createApi({
   reducerPath: "backupApi",
@@ -30,22 +29,10 @@ export const backupApi = createApi({
         return { data };
       },
     }),
-    backupToDrive: builder.mutation<
-      string,
-      { data: ImportPayload; version: string }
-    >({
+    backupToDrive: builder.mutation<string, void>({
       invalidatesTags: ["Backup"],
-      queryFn: async (payload) => {
-        let token: string | null = null;
-
-        if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
-        else token = await getAuthToken();
-
-        const folderId = await getOrCreateBackupFolder(token);
-
-        const blob = gzipJSON(payload.data);
-
-        await uploadBackup(token, folderId, blob, payload.version);
+      queryFn: async () => {
+        await backupToDrive();
 
         return { data: "success" };
       },

@@ -1,3 +1,7 @@
+import { shouldBackup } from "@/features/backup/utils";
+import { getAccessToken, getAuthToken } from "@/features/backup/utils/identity";
+import { dexie } from "@/lib/dexie";
+
 export async function getOrCreateBackupFolder(token: string): Promise<string> {
   const search = await fetch(
     "https://www.googleapis.com/drive/v3/files?q=name='app_backups' and mimeType='application/vnd.google-apps.folder'",
@@ -32,7 +36,7 @@ export async function uploadBackup(
   token: string,
   folderId: string,
   blob: Blob,
-  version: string,
+  version: string = "0.1.0",
 ) {
   const date = new Date().toISOString().slice(0, 10);
 
@@ -92,4 +96,28 @@ export async function downloadBackup(token: string, fileId: string) {
   );
 
   return await res.arrayBuffer();
+}
+
+export async function backupToDrive() {
+  let token: string | null = null;
+
+  if (import.meta.env.BROWSER === "brave") token = await getAccessToken();
+  else token = await getAuthToken();
+
+  const folderId = await getOrCreateBackupFolder(token);
+
+  const configs = await dexie.scrapeConfigs.toArray();
+  const fields = await dexie.configFields.toArray();
+  const records = await dexie.scrapedRecords.toArray();
+
+  const blob = gzipJSON({ configs, fields, records });
+
+  await uploadBackup(token, folderId, blob, import.meta.env.VITE_APP_VERSION);
+  await storage.setItem("local:lastBackup", Date.now());
+}
+
+export async function autoBackupToDrive() {
+  if (await shouldBackup()) {
+    await backupToDrive();
+  }
 }
