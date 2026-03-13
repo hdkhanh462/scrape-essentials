@@ -153,54 +153,76 @@ export function SettingsContainer() {
 
           <FieldGroup>
             <FieldSeparator />
-            <Field orientation="horizontal">
+            <Field orientation="responsive">
               <FieldContent>
                 <div className="flex items-center gap-2">
                   <FieldLabel htmlFor="backup">Backup</FieldLabel>
-                  <Badge variant="outline">
-                    <CheckCircle2Icon className="size-2.5 text-green-500" />
+                  <Badge
+                    variant="outline"
+                    className="border-green-500/20 bg-green-500/5 text-green-600 dark:text-green-400 gap-1.5 font-normal px-2"
+                  >
+                    <CheckCircle2Icon className="size-3" />
                     Google Drive
                   </Badge>
                 </div>
-                <FieldDescription>
-                  Backup your settings and configurations to Google Drive.
-                  <span className="mt-1 text-xs text-muted-foreground flex items-center gap-1.5">
-                    <History className="size-3" />
-                    Last backup: {formatRelativeTime(lastBackup)}
+                <FieldDescription className="max-w-100">
+                  Securely backup your settings and configurations to your
+                  personal Google Drive account.
+                  <span className="mt-2 flex items-center gap-2 text-xs font-medium text-foreground/80">
+                    <History className="size-3.5 text-muted-foreground" />
+                    Last backup:{" "}
+                    <span className="text-muted-foreground font-normal">
+                      {formatRelativeTime(lastBackup)}
+                    </span>
                   </span>
                 </FieldDescription>
               </FieldContent>
-              <div>
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleRestoreClick}
-                    disabled={isRestoring}
-                  >
-                    <Loader isLoading={isRestoring} />
-                    {!isRestoring && <History className="size-4" />}
-                    Restore
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={handleBackup}
-                    disabled={isBackingUp}
-                  >
-                    <Loader isLoading={isBackingUp} />
-                    {!isBackingUp && <CloudUpload className="size-4" />}
-                    Backup
-                  </Button>
-                </div>
-                {userInfo && (
-                  <div className="flex items-center gap-2">
-                    <Avatar>
-                      <AvatarImage src={userInfo.picture} />
-                      <AvatarFallback>{userInfo.name[0]}</AvatarFallback>
+              <div className="flex flex-col gap-4 min-w-75">
+                <div className="flex items-center justify-between gap-4 p-3 rounded-xl border bg-accent/30 shadow-xs">
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <Avatar className="size-10 border-2 border-background shadow-sm">
+                      {userInfo?.picture && (
+                        <AvatarImage src={userInfo.picture} />
+                      )}
+                      <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+                        {userInfo?.name?.[0] || "N/A"}
+                      </AvatarFallback>
                     </Avatar>
-                    {userInfo.email}
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-semibold truncate">
+                        {userInfo?.name || "Not signed in"}
+                      </span>
+                      <span className="text-xs text-muted-foreground truncate">
+                        {userInfo?.email || "Connect to Google Drive"}
+                      </span>
+                    </div>
                   </div>
-                )}
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleRestoreClick}
+                      disabled={isRestoring}
+                      className="h-8 shadow-none"
+                    >
+                      <Loader isLoading={isRestoring} />
+                      {!isRestoring && <History className="size-3.5" />}
+                      Restore
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={handleBackup}
+                      disabled={isBackingUp}
+                      className="h-8 shadow-none"
+                    >
+                      <Loader isLoading={isBackingUp} />
+                      {!isBackingUp && <CloudUpload className="size-3.5" />}
+                      Backup
+                    </Button>
+                  </div>
+                </div>
               </div>
             </Field>
             <FieldSeparator />
