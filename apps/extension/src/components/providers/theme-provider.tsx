@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useAppSelector } from "@/lib/redux/store";
+import { useSettingsStore } from "@/features/settings/stores/settings.store";
 
 export function ThemeProvider({ children }: React.PropsWithChildren) {
-  const theme = useAppSelector((s) => s.settings.theme);
+  const { theme } = useSettingsStore();
 
   useEffect(() => {
     const root = window.document.documentElement;

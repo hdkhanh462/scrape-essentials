@@ -1,10 +1,8 @@
 import { BoxIcon, SettingsIcon, WrenchIcon } from "lucide-react";
 import { Activity, type PropsWithChildren } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { buttonVariants } from "@/components/ui/button";
-import { selectActiveTab } from "@/features/settings/store/sidebar.selectors";
-import { setActiveTab } from "@/features/settings/store/sidebar.slice";
 import { cn } from "@/lib/utils";
+import { useAppStore } from "@/lib/zustand/app.store";
 
 export const sidebarItems = [
   { id: "configs", label: "Configs", icon: WrenchIcon },
@@ -15,8 +13,7 @@ export const sidebarItems = [
 export type SidebarTab = (typeof sidebarItems)[number]["id"];
 
 export function Sidebar({ children }: PropsWithChildren) {
-  const dispatch = useDispatch();
-  const active = useSelector(selectActiveTab);
+  const { activeTab, setActiveTab } = useAppStore();
 
   return (
     <div className="flex h-screen">
@@ -24,7 +21,7 @@ export function Sidebar({ children }: PropsWithChildren) {
         <ul className="flex flex-col gap-2">
           {sidebarItems.map((item) => {
             const Icon = item.icon;
-            const isActive = active === item.id;
+            const isActive = activeTab === item.id;
 
             return (
               <li
@@ -36,7 +33,7 @@ export function Sidebar({ children }: PropsWithChildren) {
                     isActive && "bg-accent text-accent-foreground",
                   ),
                 })}
-                onClick={() => dispatch(setActiveTab(item.id))}
+                onClick={() => setActiveTab(item.id)}
               >
                 <Icon size={16} /> {item.label}
               </li>
@@ -54,10 +51,10 @@ export function SidebarContent({
   value,
   children,
 }: { value: SidebarTab } & PropsWithChildren) {
-  const active = useSelector(selectActiveTab);
+  const { activeTab } = useAppStore();
 
   return (
-    <Activity mode={value === active ? "visible" : "hidden"}>
+    <Activity mode={value === activeTab ? "visible" : "hidden"}>
       {children}
     </Activity>
   );
