@@ -123,7 +123,7 @@ export async function backupToDrive(): Promise<void> {
 
   const blob = gzipJSON({ configs, fields, records });
 
-  await uploadBackup(token, folderId, blob, import.meta.env.VITE_APP_VERSION);
+  await uploadBackup(token, folderId, blob, browser.runtime.getVersion());
   await storage.setItem("local:lastBackup", Date.now());
 }
 

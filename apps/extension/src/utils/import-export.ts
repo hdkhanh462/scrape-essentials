@@ -4,7 +4,7 @@ type ExportParams = {
 };
 
 export async function exportBlob({ blob, prefix }: ExportParams) {
-  const version = import.meta.env.VITE_APP_VERSION || "1";
+  const version = browser.runtime.getVersion();
   const date = new Date().toISOString().slice(0, 10);
   const fileName = `${prefix}_v${version}_${date}.json`;
   const url = URL.createObjectURL(blob);

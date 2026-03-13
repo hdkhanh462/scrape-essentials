@@ -12,7 +12,7 @@ export default defineConfig({
   manifest: () => ({
     name: "Scrape Essentials",
     description: "A browser extension for web scraping and automation.",
-    version: import.meta.env.VITE_APP_VERSION,
+    version: "0.1.1",
     permissions: ["activeTab", "identity", "storage", "scripting", "alarms"],
     host_permissions: [`${import.meta.env.VITE_API_URL}/*`],
     oauth2: {
