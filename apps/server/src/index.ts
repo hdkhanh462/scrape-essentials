@@ -65,7 +65,7 @@ app.post("/api/auth/token", async (c) => {
       return c.json(
         {
           accessToken,
-          expiresAt: Date.now() + expiresIn,
+          expiresAt: Date.now() + expiresIn * 1000,
           refreshToken,
         },
         200,
@@ -86,7 +86,6 @@ app.post("/api/auth/refresh", async (c) => {
   const clientSecret = c.env.GOOGLE_CLIENT_SECRET;
 
   const body = await c.req.json();
-  const now = Math.floor(Date.now() / 1000);
 
   try {
     const response = await fetch("https://oauth2.googleapis.com/token", {
@@ -114,7 +113,7 @@ app.post("/api/auth/refresh", async (c) => {
     return c.json(
       {
         accessToken,
-        expiresAt: now + expiresIn,
+        expiresAt: Date.now() + expiresIn * 1000,
       },
       200,
     );

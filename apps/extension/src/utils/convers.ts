@@ -1,5 +1,6 @@
 import { map, pick } from "lodash";
-import type { FieldInput } from "@/features/config-fields/types/form-input";
+
+import type { FieldInput } from "@/features/fields/types/form-input";
 import type { ConfigField } from "@/lib/dexie";
 import {
   isInputField,

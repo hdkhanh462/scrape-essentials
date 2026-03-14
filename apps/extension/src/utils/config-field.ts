@@ -1,4 +1,4 @@
-import type { FieldInput } from "@/features/config-fields/types/form-input";
+import type { FieldInput } from "@/features/fields/types/form-input";
 import { FieldType } from "@/lib/dexie";
 
 export function isLargeField(
