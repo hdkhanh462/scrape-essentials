@@ -1,3 +1,7 @@
+import { CheckCircle2Icon, CloudUpload, History } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 import DialogWrapper from "@/components/dialog-wrapper";
 import Loader from "@/components/loader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,14 +20,11 @@ import {
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import {
-  useBackupToDriveMutation,
-  useGetUserInfoQuery,
-  useRestoreBackupMutation,
-} from "@/features/backup/data/backup.api";
+import { useBackupToDrive, useRestoreBackup } from "@/features/backup/hooks";
+import { useGoogleStore } from "@/features/backup/stores/google.store";
 import type { ImportPayload } from "@/features/backup/types";
-import { configApi } from "@/features/scrape-configs/data/config.api";
-import { recordApi } from "@/features/scraped-records/data/record.api";
+import { useImportConfigs } from "@/features/configs/hooks";
+import { useImportRecords } from "@/features/records/hooks";
 import {
   languageOptions,
   settingsSchema,
@@ -31,42 +32,43 @@ import {
 } from "@/features/settings/schemas/settings";
 import {
   DEFAULT_SETTINGS,
-  updateSettings,
-} from "@/features/settings/store/settings.slice";
+  useSettingsStore,
+} from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/store";
-import { CheckCircle2Icon, CloudUpload, History } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { formatRelativeTime } from "@/utils/date";
+import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
-  const dispatch = useAppDispatch();
-  const initalValues = useAppSelector((state) => state.settings);
+  const { debugMode, theme, language, updateSettings } = useSettingsStore();
+  const { userInfo, lastBackup } = useGoogleStore();
 
   const importConfirmDialog = useDialog();
 
-  const [restoreBackup, { isLoading: isRestoring }] =
-    useRestoreBackupMutation();
-  const [backupToDrive, { isLoading: isBackingUp }] =
-    useBackupToDriveMutation();
-  const { data: userInfo } = useGetUserInfoQuery();
+  const { mutate: restoreBackup, isPending: isRestoring } = useRestoreBackup({
+    onSuccess: (data) => {
+      setImportPayload(data);
+      importConfirmDialog.open();
+    },
+    onError: (error) => toastError(error, "Restore failed"),
+  });
+  const { mutate: backupToDrive, isPending: isBackingUp } = useBackupToDrive({
+    onSuccess: () => {
+      toast.success("Backup successful");
+    },
+    onError: (error) => toastError(error, "Backup failed"),
+  });
 
-  const [lastBackup, setLastBackup] = useState<number | null>(null);
-
-  useEffect(() => {
-    storage.getItem<number | null>("local:lastBackup").then(setLastBackup);
-  }, []);
-  const [importConfigs] = configApi.useImportConfigsMutation();
-  const [importRecords] = recordApi.useImportRecordsMutation();
+  const { mutate: importConfigs } = useImportConfigs();
+  const { mutate: importRecords } = useImportRecords();
 
   const [importPayload, setImportPayload] = useState<ImportPayload>();
 
   const form = useForm<SettingsInput>({
-    defaultValues: settingsSchema.parse(initalValues || {}),
+    defaultValues: settingsSchema.parse({ debugMode, theme, language }),
   });
 
   const handleSubmit = (data: SettingsInput) => {
-    dispatch(updateSettings(data));
+    updateSettings(data);
   };
 
   const handleReset = () => {
@@ -74,72 +76,28 @@ export function SettingsContainer() {
   };
 
   const handleRestoreClick = async () => {
-    try {
-      const result = await restoreBackup().unwrap();
-
-      setImportPayload(result);
-      importConfirmDialog.open();
-    } catch (error) {
-      toast.error("Restore failed", {
-        description: "Unable to restore backup. Please try again.",
-      });
-      console.error("Error restoring backup:", error);
-    }
+    restoreBackup();
   };
 
   const handleRestore = async () => {
     if (!importPayload) return;
 
-    const { error: importConfigsError } = await importConfigs(importPayload);
-    if (importConfigsError) {
-      console.error("Error importing configs:", importConfigsError);
-      toast.error("Import failed", {
-        description: "Please check the file and try again.",
-      });
-      return;
-    }
-
-    const { error: importRecordsError } = await importRecords(
-      importPayload.records,
-    );
-    if (importRecordsError) {
-      console.error("Error importing records:", importRecordsError);
-      toast.error("Import failed", {
-        description: "Please check the file and try again.",
-      });
-      return;
-    }
-
-    importConfirmDialog.close();
-    toast.success("Import successful");
+    importConfigs(importPayload, {
+      onSuccess: () => {
+        importRecords(importPayload.records, {
+          onSuccess: () => {
+            importConfirmDialog.close();
+            toast.success("Restore successful");
+          },
+          onError: (error) => toastError(error, "Import records failed"),
+        });
+      },
+      onError: (error) => toastError(error, "Import configs failed"),
+    });
   };
 
   const handleBackup = async () => {
-    try {
-      await backupToDrive().unwrap();
-
-      const now = Date.now();
-      setLastBackup(now);
-      toast.success("Backup successful");
-    } catch (error) {
-      toast.error("Backup failed", {
-        description: "Unable to backup settings. Please try again.",
-      });
-      console.error("Error backing up settings:", error);
-    }
-  };
-
-  const formatRelativeTime = (timestamp: number | null) => {
-    if (!timestamp) return "Never";
-    const diff = Date.now() - timestamp;
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (minutes < 1) return "Just now";
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    return `${days}d ago`;
+    backupToDrive();
   };
 
   return (
@@ -159,7 +117,7 @@ export function SettingsContainer() {
                   <FieldLabel htmlFor="backup">Backup</FieldLabel>
                   <Badge
                     variant="outline"
-                    className="border-green-500/20 bg-green-500/5 text-green-600 dark:text-green-400 gap-1.5 font-normal px-2"
+                    className="gap-1.5 border-green-500/20 bg-green-500/5 px-2 font-normal text-green-600 dark:text-green-400"
                   >
                     <CheckCircle2Icon className="size-3" />
                     Google Drive
@@ -168,31 +126,31 @@ export function SettingsContainer() {
                 <FieldDescription className="max-w-100">
                   Securely backup your settings and configurations to your
                   personal Google Drive account.
-                  <span className="mt-2 flex items-center gap-2 text-xs font-medium text-foreground/80">
+                  <span className="mt-2 flex items-center gap-2 font-medium text-foreground/80 text-xs">
                     <History className="size-3.5 text-muted-foreground" />
                     Last backup:{" "}
-                    <span className="text-muted-foreground font-normal">
+                    <span className="font-normal text-muted-foreground">
                       {formatRelativeTime(lastBackup)}
                     </span>
                   </span>
                 </FieldDescription>
               </FieldContent>
-              <div className="flex flex-col gap-4 min-w-75">
-                <div className="flex items-center justify-between gap-4 p-3 rounded-xl border bg-accent/30 shadow-xs">
+              <div className="flex min-w-75 flex-col gap-4">
+                <div className="flex items-center justify-between gap-4 rounded-xl border bg-accent/30 p-3 shadow-xs">
                   <div className="flex items-center gap-3 overflow-hidden">
                     <Avatar className="size-10 border-2 border-background shadow-sm">
                       {userInfo?.picture && (
                         <AvatarImage src={userInfo.picture} />
                       )}
-                      <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+                      <AvatarFallback className="bg-primary/10 font-bold text-primary text-xs">
                         {userInfo?.name?.[0] || "N/A"}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-sm font-semibold truncate">
+                    <div className="flex min-w-0 flex-col">
+                      <span className="truncate font-semibold text-sm">
                         {userInfo?.name || "Not signed in"}
                       </span>
-                      <span className="text-xs text-muted-foreground truncate">
+                      <span className="truncate text-muted-foreground text-xs">
                         {userInfo?.email || "Connect to Google Drive"}
                       </span>
                     </div>

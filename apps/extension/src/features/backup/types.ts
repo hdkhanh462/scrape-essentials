@@ -6,6 +6,11 @@ export type OAuthTokenResponse = {
   expiresAt: number | null;
 };
 
+export type OAuthRefreshResponse = {
+  accessToken: string;
+  expiresAt: number;
+};
+
 export type ImportPayload = {
   configs: ScrapeConfig[];
   fields: ConfigField[];
