@@ -1,5 +1,5 @@
-import type { ScrapeConfig, ScrapedRecord } from "@/lib/dexie";
 import type { RecordInput } from "@/features/records/types/form-input";
+import type { ScrapeConfig, ScrapedRecord } from "@/lib/dexie";
 
 export type GetScrapedRecordsPayload = {
   configId?: ScrapeConfig["id"];

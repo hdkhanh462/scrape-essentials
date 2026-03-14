@@ -1,4 +1,3 @@
-import { dexie, type ScrapedRecord } from "@/lib/dexie";
 import type {
   AddScrapedRecordPayload,
   EditScrapedRecordPayload,
@@ -6,6 +5,7 @@ import type {
   GetScrapedRecordsPayload,
   ImportRecordsPayload,
 } from "@/features/records/types";
+import { dexie, type ScrapedRecord } from "@/lib/dexie";
 
 export const getRecords = async (
   payload: GetScrapedRecordsPayload,

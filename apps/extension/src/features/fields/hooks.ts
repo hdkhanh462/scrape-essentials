@@ -1,10 +1,10 @@
 import {
   type UseMutationOptions,
-  UseQueryOptions,
+  type UseQueryOptions,
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
-
+import { configQueryKey } from "@/features/configs/hooks";
 import {
   addField,
   deleteField,
@@ -17,7 +17,6 @@ import type {
   GetFieldsPayload,
 } from "@/features/fields/types";
 import type { ConfigField } from "@/lib/dexie";
-import { configQueryKey } from "@/features/configs/hooks";
 
 export const fieldQueryKey = {
   all: ["fields"] as const,

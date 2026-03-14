@@ -30,6 +30,9 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { ScrapeConfigsDialogFormFooter } from "@/features/configs/components/scrape-configs-dialog-form-footer";
+import { ConfigSchema as configSchema } from "@/features/configs/schemas";
+import type { ConfigInput } from "@/features/configs/types/form-input";
 import ConfigFieldsSheetForm from "@/features/fields/components/config-fields-sheet-form";
 import {
   useAddField,
@@ -37,9 +40,6 @@ import {
   useEditField,
 } from "@/features/fields/hooks";
 import type { FieldInput } from "@/features/fields/types/form-input";
-import { ScrapeConfigsDialogFormFooter } from "@/features/configs/components/scrape-configs-dialog-form-footer";
-import { ConfigSchema as configSchema } from "@/features/configs/schemas";
-import type { ConfigInput } from "@/features/configs/types/form-input";
 import { useDialog } from "@/hooks/use-dialog";
 import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
 

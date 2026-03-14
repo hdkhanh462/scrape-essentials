@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import { useDeleteRecord } from "@/features/records/hooks";
 import type { ScrapedDataInput } from "@/features/records/types/form-input";
 import type { MatchConfig } from "@/features/records/types/scrape";
 import { processCopyData } from "@/features/records/utils/copy";
 import type { ScrapedRecord } from "@/lib/dexie";
 import { toastError } from "@/utils/toast";
-import { useDeleteRecord } from "@/features/records/hooks";
 
 interface FooterProps {
   id: string;

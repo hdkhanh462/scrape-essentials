@@ -1,3 +1,6 @@
+import type { Table } from "@tanstack/react-table";
+import { XIcon } from "lucide-react";
+import { toast } from "sonner";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
@@ -14,9 +17,6 @@ import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapedRecord } from "@/lib/dexie";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
 import { toastError } from "@/utils/toast";
-import type { Table } from "@tanstack/react-table";
-import { XIcon } from "lucide-react";
-import { toast } from "sonner";
 
 interface DataTableToolbarProps {
   table: Table<ScrapedRecord>;

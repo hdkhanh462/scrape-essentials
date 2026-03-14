@@ -1,8 +1,8 @@
 import type { Row } from "@tanstack/react-table";
+import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToggleConfigActive } from "@/features/configs/hooks";
 import type { ScrapeConfig } from "@/lib/dexie";
-import { toast } from "sonner";
 
 interface Props {
   row: Row<ScrapeConfig>;
@@ -15,7 +15,7 @@ export const ConfigActiveCell = ({ row }: Props) => {
 
   const handleCheckChange = async () => {
     const isActive = row.getValue("isActive");
-    const toUpdate = isActive ? false : true;
+    const toUpdate = !isActive;
 
     await toggleActive(
       {

@@ -1,6 +1,7 @@
 import { BUFFER_IN_MS } from "@/features/backup/constants";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
 import type {
+  GoogleUserInfo,
   OAuthRefreshResponse,
   OAuthTokenResponse,
 } from "@/features/backup/types";
@@ -96,16 +97,25 @@ export async function refreshAccessToken(
 export async function getAccessToken(
   { authIfMissing } = { authIfMissing: true },
 ): Promise<string | null> {
-  const store = useGoogleStore.getState();
-
-  const { accessToken, accessTokenExpiry, refreshToken, login, refresh } =
-    store;
+  const {
+    accessToken,
+    accessTokenExpiry,
+    refreshToken,
+    userInfo,
+    login,
+    refresh,
+  } = useGoogleStore.getState();
 
   if (!accessToken || !accessTokenExpiry || !refreshToken) {
     if (!authIfMissing) return null;
 
     const res = await launchWebAuthFlow();
     login(res);
+
+    if (!userInfo && res.accessToken) {
+      await getUserInfo(res.accessToken);
+    }
+
     return res.accessToken;
   }
 
@@ -116,5 +126,29 @@ export async function getAccessToken(
   const res = await refreshAccessToken(refreshToken);
   refresh(res);
 
+  if (!userInfo && res.accessToken) {
+    await getUserInfo(res.accessToken);
+  }
+
   return res.accessToken;
 }
+
+const getUserInfo = async (
+  accessToken: string,
+): Promise<GoogleUserInfo | null> => {
+  const { userInfo, setUserInfo } = useGoogleStore.getState();
+
+  if (userInfo) return userInfo;
+
+  const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) return null;
+
+  const newUserInfo = await res.json();
+  setUserInfo(newUserInfo);
+
+  return newUserInfo;
+};

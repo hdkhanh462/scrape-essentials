@@ -1,3 +1,6 @@
+import type { Row } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import { toast } from "sonner";
 import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,9 +16,6 @@ import { processCopyData } from "@/features/records/utils/copy";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapedRecord } from "@/lib/dexie";
 import { toastError } from "@/utils/toast";
-import type { Row } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import { toast } from "sonner";
 
 interface Props {
   row: Row<ScrapedRecord>;

@@ -8,7 +8,7 @@ import type {
   Operator,
 } from "@/features/records/types/filter";
 
-function splitOrAtRoot(input: string): string[] {
+function _splitOrAtRoot(input: string): string[] {
   const result: string[] = [];
   let depth = 0;
   let current = "";

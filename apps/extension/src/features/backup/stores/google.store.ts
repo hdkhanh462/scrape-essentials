@@ -1,11 +1,11 @@
-import {
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import type {
   GoogleUserInfo,
   OAuthRefreshResponse,
   OAuthTokenResponse,
 } from "@/features/backup/types";
 import { wxtStorage } from "@/features/shared/stores/wxt-storage";
-import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 
 type GoogleState = {
   refreshToken: string | null;

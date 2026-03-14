@@ -19,8 +19,8 @@ import type {
   GetScrapedRecordsPayload,
   ImportRecordsPayload,
 } from "@/features/records/types";
+import type { CurrentPage } from "@/features/records/types/scrape";
 import type { ScrapedRecord } from "@/lib/dexie";
-import { CurrentPage } from "@/features/records/types/scrape";
 import { sendMessage } from "@/lib/messaging";
 
 export const scrapedRecordQueryKey = {

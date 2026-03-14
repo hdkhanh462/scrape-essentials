@@ -21,6 +21,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { useBackupToDrive, useRestoreBackup } from "@/features/backup/hooks";
+import { useGoogleStore } from "@/features/backup/stores/google.store";
 import type { ImportPayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
 import { useImportRecords } from "@/features/records/hooks";
@@ -34,9 +35,8 @@ import {
   useSettingsStore,
 } from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
-import { toastError } from "@/utils/toast";
-import { useGoogleStore } from "@/features/backup/stores/google.store";
 import { formatRelativeTime } from "@/utils/date";
+import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
   const { debugMode, theme, language, updateSettings } = useSettingsStore();

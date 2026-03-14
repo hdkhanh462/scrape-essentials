@@ -1,3 +1,5 @@
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -15,8 +17,6 @@ import {
 import { useGetConfigs } from "@/features/configs/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { cn } from "@/lib/utils";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { useState } from "react";
 
 export const ConfigSelector = () => {
   const [open, setOpen] = useState(false);

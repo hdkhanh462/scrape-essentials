@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Field } from "@/components/ui/field";
+import ScrapeConfigsDialogForm from "@/features/configs/components/scrape-configs-dialog-form";
 import {
   useDeleteConfig,
   useDuplicateConfig,
@@ -20,7 +21,6 @@ import {
 } from "@/features/configs/hooks";
 import { ConfigSchema } from "@/features/configs/schemas";
 import type { ConfigInput } from "@/features/configs/types/form-input";
-import ScrapeConfigsDialogForm from "@/features/configs/components/scrape-configs-dialog-form";
 import { useGetFields } from "@/features/fields/hooks";
 import { useDialog } from "@/hooks/use-dialog";
 import type { ScrapeConfig } from "@/lib/dexie";

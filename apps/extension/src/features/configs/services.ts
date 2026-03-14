@@ -1,6 +1,3 @@
-import { dexie, type ScrapeConfig } from "@/lib/dexie";
-import { fieldInputToDb } from "@/utils/convers";
-
 import type {
   AddConfigPayload,
   EditConfigPayload,
@@ -8,6 +5,8 @@ import type {
   ImportConfigsPayload,
   ToggleConfigActivePayload,
 } from "@/features/configs/types";
+import { dexie, type ScrapeConfig } from "@/lib/dexie";
+import { fieldInputToDb } from "@/utils/convers";
 
 export const getConfigs = async (
   payload: GetConfigsPayload,

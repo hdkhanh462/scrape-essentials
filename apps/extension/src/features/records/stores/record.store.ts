@@ -1,6 +1,6 @@
-import { wxtStorage } from "@/features/shared/stores/wxt-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { wxtStorage } from "@/features/shared/stores/wxt-storage";
 
 type RecordState = {
   configId?: string;

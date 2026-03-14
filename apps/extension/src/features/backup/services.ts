@@ -4,7 +4,7 @@ import {
 } from "@/features/backup/constants";
 import { getAccessToken } from "@/features/backup/identity";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
-import { ImportPayload } from "@/features/backup/types";
+import type { ImportPayload } from "@/features/backup/types";
 import { driveApiUrl } from "@/features/backup/utils";
 import { dexie } from "@/lib/dexie";
 
@@ -112,7 +112,8 @@ export async function downloadBackup(token: string, fileId: string) {
 export async function backupToDrive(
   { authIfMissing } = { authIfMissing: true },
 ) {
-  const store = useGoogleStore.getState();
+  const { backupFolderId, setBackupFolderId, setLastBackup } =
+    useGoogleStore.getState();
 
   const accessToken = await getAccessToken({ authIfMissing });
   if (!accessToken) {
@@ -120,10 +121,10 @@ export async function backupToDrive(
     return;
   }
 
-  let folderId = store.backupFolderId;
+  let folderId = backupFolderId;
   if (!folderId) {
     folderId = await getOrCreateBackupFolder(accessToken);
-    store.setBackupFolderId(folderId);
+    setBackupFolderId(folderId);
   }
 
   const [configs, fields, records] = await Promise.all([
@@ -135,32 +136,29 @@ export async function backupToDrive(
   const blob = gzipJSON({ configs, fields, records });
   await uploadBackup(accessToken, folderId, blob, browser.runtime.getVersion());
 
-  store.setLastBackup(Date.now());
+  setLastBackup(Date.now());
 }
 
 export async function restoreBackup(): Promise<ImportPayload> {
-  const store = useGoogleStore.getState();
+  const { backupFolderId, setBackupFolderId, setLastRestore } =
+    useGoogleStore.getState();
 
-  const accessToken = await getAccessToken({ authIfMissing: false });
-  if (!accessToken) {
-    throw new Error("No access token found");
-  }
+  const accessToken = await getAccessToken();
+  if (!accessToken) throw new Error("No access token found");
 
-  let folderId = store.backupFolderId;
+  let folderId = backupFolderId;
   if (!folderId) {
     folderId = await getOrCreateBackupFolder(accessToken);
-    store.setBackupFolderId(folderId);
+    setBackupFolderId(folderId);
   }
 
   const latest = await getLatestBackup(accessToken, folderId);
-  if (!latest) {
-    throw new Error("No backup found");
-  }
+  if (!latest) throw new Error("No backup found");
 
   const buffer = await downloadBackup(accessToken, latest.id);
   const payload = ungzipJSON<ImportPayload>(buffer);
 
-  store.setLastRestore(Date.now());
+  setLastRestore(Date.now());
 
   return payload;
 }

@@ -1,3 +1,7 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Activity } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import CardWrapper from "@/components/card-wrapper";
 import {
   Accordion,
@@ -24,10 +28,6 @@ import { type ConfigField, FieldType } from "@/lib/dexie";
 import { cn } from "@/lib/utils";
 import { isLargeField } from "@/utils/config-field";
 import { toastError } from "@/utils/toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Activity } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 interface Props {
   fields: ConfigField[];
