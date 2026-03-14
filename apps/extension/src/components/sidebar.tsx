@@ -2,7 +2,7 @@ import { BoxIcon, SettingsIcon, WrenchIcon } from "lucide-react";
 import { Activity, type PropsWithChildren } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
-import { useAppStore } from "@/features/shared/stores/app.store";
+import { useOptionsStore } from "@/features/shared/stores/options.store";
 import { cn } from "@/lib/utils";
 
 export const sidebarItems = [
@@ -14,7 +14,7 @@ export const sidebarItems = [
 export type SidebarTab = (typeof sidebarItems)[number]["id"];
 
 export function Sidebar({ children }: PropsWithChildren) {
-  const { activeTab, setActiveTab } = useAppStore();
+  const { activeTab, setActiveTab } = useOptionsStore();
 
   return (
     <div className="flex h-screen">
@@ -52,7 +52,7 @@ export function SidebarContent({
   value,
   children,
 }: { value: SidebarTab } & PropsWithChildren) {
-  const { activeTab } = useAppStore();
+  const { activeTab } = useOptionsStore();
 
   return (
     <Activity mode={value === activeTab ? "visible" : "hidden"}>

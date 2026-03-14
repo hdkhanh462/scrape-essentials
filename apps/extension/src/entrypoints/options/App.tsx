@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent } from "@/components/sidebar";
-import { ConfigsContainer } from "@/features/scrape-configs/components/scrape-configs-container";
+import { ConfigsContainer } from "@/features/configs/components/scrape-configs-container";
 import { RecordsContainer } from "@/features/scraped-records/components/scrape-records-container";
 import { SettingsContainer } from "@/features/settings/components/settings-container";
 

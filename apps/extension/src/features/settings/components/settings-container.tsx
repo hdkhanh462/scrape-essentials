@@ -26,7 +26,7 @@ import {
   useRestoreBackupMutation,
 } from "@/features/backup/data/backup.api";
 import type { ImportPayload } from "@/features/backup/types";
-import { configApi } from "@/features/scrape-configs/data/config.api";
+import { useImportConfigs } from "@/features/configs/hooks";
 import { recordApi } from "@/features/scraped-records/data/record.api";
 import {
   languageOptions,
@@ -55,7 +55,7 @@ export function SettingsContainer() {
   useEffect(() => {
     storage.getItem<number | null>("local:lastBackup").then(setLastBackup);
   }, []);
-  const [importConfigs] = configApi.useImportConfigsMutation();
+  const { mutateAsync: importConfigs } = useImportConfigs();
   const [importRecords] = recordApi.useImportRecordsMutation();
 
   const [importPayload, setImportPayload] = useState<ImportPayload>();
@@ -89,8 +89,9 @@ export function SettingsContainer() {
   const handleRestore = async () => {
     if (!importPayload) return;
 
-    const { error: importConfigsError } = await importConfigs(importPayload);
-    if (importConfigsError) {
+    try {
+      await importConfigs(importPayload);
+    } catch (importConfigsError) {
       console.error("Error importing configs:", importConfigsError);
       toast.error("Import failed", {
         description: "Please check the file and try again.",

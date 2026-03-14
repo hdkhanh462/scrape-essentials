@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import App from "@/entrypoints/options/App";
 import { queryClient } from "@/features/shared/query-client";
 import { store } from "@/lib/redux/store.ts";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <App />
           <Toaster richColors />
         </ThemeProvider>
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>,

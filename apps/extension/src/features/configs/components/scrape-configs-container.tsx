@@ -5,10 +5,10 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 import { Badge } from "@/components/ui/badge";
 import { BadgeOverflow } from "@/components/ui/badge-overflow";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ConfigActiveCell } from "@/features/scrape-configs/components/config-active-cell";
-import { ConfigTableRowActions } from "@/features/scrape-configs/components/config-table-row-actions";
-import { ConfigTableToolbar } from "@/features/scrape-configs/components/config-table-toolbar";
-import { configApi } from "@/features/scrape-configs/data/config.api";
+import { ConfigActiveCell } from "@/features/configs/components/config-active-cell";
+import { ConfigTableRowActions } from "@/features/configs/components/config-table-row-actions";
+import { ConfigTableToolbar } from "@/features/configs/components/config-table-toolbar";
+import { useGetConfigs } from "@/features/configs/hooks";
 import type { ScrapeConfig } from "@/lib/dexie";
 
 const columns: ColumnDef<ScrapeConfig>[] = [
@@ -87,7 +87,7 @@ const columns: ColumnDef<ScrapeConfig>[] = [
 ];
 
 export function ConfigsContainer() {
-  const { data } = configApi.useGetConfigsQuery({});
+  const { data } = useGetConfigs({});
 
   return (
     <div>

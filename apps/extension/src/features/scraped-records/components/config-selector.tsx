@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { configApi } from "@/features/scrape-configs/data/config.api";
+import { useGetConfigs } from "@/features/configs/hooks";
 import { selectConfigId } from "@/features/scraped-records/store/record.selectors";
 import { setConfigId } from "@/features/scraped-records/store/record.slice";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,7 @@ export const ConfigSelector = () => {
   const dispatch = useDispatch();
   const configId = useSelector(selectConfigId);
 
-  const { data: configs } = configApi.useGetConfigsQuery({});
+  const { data: configs } = useGetConfigs({});
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

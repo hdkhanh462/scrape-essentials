@@ -2,8 +2,8 @@ import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
-import { configSchema } from "@/features/scrape-configs/schemas/form-input";
-import type { ConfigInput } from "@/features/scrape-configs/types/form-input";
+import { ConfigSchema } from "@/features/configs/schemas";
+import type { ConfigInput } from "@/features/configs/types/form-input";
 
 interface Props {
   id: string;
@@ -14,7 +14,7 @@ interface Props {
 export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
   const handlePaste = () => {
     navigator.clipboard.readText().then((text) => {
-      const { data, error } = configSchema.safeParse(JSON.parse(text));
+      const { data, error } = ConfigSchema.safeParse(JSON.parse(text));
       if (error) {
         console.error("Error parsing config from clipboard:", error);
         toast.error("Paste failed", {

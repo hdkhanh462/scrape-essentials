@@ -1,20 +1,21 @@
 import type { Column, Table } from "@tanstack/react-table";
 import { CheckIcon, PlusIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
+
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import ScrapeConfigsDialogForm from "@/features/scrape-configs/components/scrape-configs-dialog-form";
-import {
-  configApi,
-  type ImportConfigsPayload,
-} from "@/features/scrape-configs/data/config.api";
-import type { ConfigInput } from "@/features/scrape-configs/types/form-input";
+import { useState } from "react";
+import ScrapeConfigsDialogForm from "@/features/configs/components/scrape-configs-dialog-form";
+import { useAddConfig, useImportConfigs } from "@/features/configs/hooks";
+import type { ConfigInput } from "@/features/configs/types/form-input";
+import type { ImportConfigsPayload } from "@/features/configs/types";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapeConfig } from "@/lib/dexie";
+import { exportBlob, importFromJSON } from "@/utils/import-export";
 
 interface DataTableToolbarProps {
   table: Table<ScrapeConfig>;
@@ -26,20 +27,33 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
   const dialog = useDialog();
   const importConfirmDialog = useDialog();
 
-  const [addConfig] = configApi.useAddConfigMutation({});
-  const [importConfigs] = configApi.useImportConfigsMutation({});
+  const { mutate: addConfig } = useAddConfig({
+    onSuccess: () => {
+      toast.success("Config added successfully");
+      dialog.close();
+    },
+    onError: (error) => {
+      console.error("Error adding config:", error);
+      toast.error("Config add failed");
+    },
+  });
+  const { mutate: importConfigs } = useImportConfigs({
+    onSuccess: () => {
+      toast.success("Import successful");
+      importConfirmDialog.close();
+    },
+    onError: (error) => {
+      console.error("Error importing configs:", error);
+      toast.error("Import failed", {
+        description: "Please check the file and try again.",
+      });
+    },
+  });
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
-  async function onSubmit(input: ConfigInput) {
-    const { error } = await addConfig(input);
-    if (error) {
-      console.error("Error adding config:", error);
-      toast.error("Config add failed");
-      return;
-    }
-    toast.success("Config added successfully");
-    dialog.close();
+  function onSubmit(input: ConfigInput) {
+    addConfig(input);
   }
 
   async function handleExport() {
@@ -75,7 +89,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-35 lg:w-62"
         />
         {table.getColumn("isActive") && (
           <DataTableFacetedFilter
@@ -135,18 +149,9 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={async () => {
+                onClick={() => {
                   if (!importPayload) return;
-                  const { error } = await importConfigs(importPayload);
-                  if (error) {
-                    console.error("Error importing configs:", error);
-                    toast.error("Import failed", {
-                      description: "Please check the file and try again.",
-                    });
-                    return;
-                  }
-                  importConfirmDialog.close();
-                  toast.success("Import successful");
+                  importConfigs(importPayload);
                 }}
               >
                 Continue

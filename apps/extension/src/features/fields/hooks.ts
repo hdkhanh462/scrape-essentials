@@ -1,5 +1,6 @@
 import {
   type UseMutationOptions,
+  UseQueryOptions,
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
@@ -16,16 +17,21 @@ import type {
   GetFieldsPayload,
 } from "@/features/fields/types";
 import type { ConfigField } from "@/lib/dexie";
+import { configQueryKey } from "@/features/configs/hooks";
 
-const fieldQueryKey = {
+export const fieldQueryKey = {
   all: ["fields"] as const,
-  byId: (id: string) => [...fieldQueryKey.all, id] as const,
+  list: (payload: GetFieldsPayload) =>
+    [...configQueryKey.all, ...fieldQueryKey.all, payload] as const,
 };
 
-export const useGetFields = (payload: GetFieldsPayload) => {
+export const useGetFields = (
+  payload: GetFieldsPayload,
+  options?: Pick<UseQueryOptions<ConfigField[]>, "enabled">,
+) => {
   return useQuery<ConfigField[]>({
-    enabled: !!payload.configId,
-    queryKey: fieldQueryKey.all,
+    enabled: options?.enabled ?? !!payload.configId,
+    queryKey: fieldQueryKey.list(payload),
     queryFn: () => getFields(payload),
   });
 };
@@ -37,7 +43,7 @@ export const useAddField = (
     ...options,
     mutationFn: (payload) => addField(payload),
     meta: {
-      invalidateQueries: fieldQueryKey.all,
+      invalidateQueries: configQueryKey.all,
     },
   });
 };
@@ -49,7 +55,7 @@ export const useEditField = (
     ...options,
     mutationFn: (payload) => editField(payload),
     meta: {
-      invalidateQueries: fieldQueryKey.all,
+      invalidateQueries: configQueryKey.all,
     },
   });
 };
@@ -61,7 +67,7 @@ export const useDeleteField = (
     ...options,
     mutationFn: (payload) => deleteField(payload),
     meta: {
-      invalidateQueries: fieldQueryKey.all,
+      invalidateQueries: configQueryKey.all,
     },
   });
 };

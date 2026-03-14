@@ -8,7 +8,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { useGetFields } from "@/features/fields/hooks";
-import { configApi } from "@/features/scrape-configs/data/config.api";
+import { useGetConfigs } from "@/features/configs/hooks";
 import { ScrapedRecordsCard } from "@/features/scraped-records/components/scraped-records-card";
 import { useGetCurrentPageQuery } from "@/features/scraped-records/data/scraping.api";
 import type { ScrapedDataInput } from "@/features/scraped-records/types/form-input";
@@ -21,8 +21,9 @@ export default function App() {
 
   const { data: currentPage, isFetching: isCurrentPageLoading } =
     useGetCurrentPageQuery({});
-  const { data: configs, isFetching: isConfigsLoading } =
-    configApi.useGetConfigsQuery({ isActive: true });
+  const { data: configs, isFetching: isConfigsLoading } = useGetConfigs({
+    isActive: true,
+  });
 
   const { data: fields, isFetching: isFieldsLoading } = useGetFields({
     configId: matchConfig?.config?.id,

@@ -13,36 +13,70 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Field } from "@/components/ui/field";
+import {
+  useDeleteConfig,
+  useDuplicateConfig,
+  useEditConfig,
+} from "@/features/configs/hooks";
+import { ConfigSchema } from "@/features/configs/schemas";
+import type { ConfigInput } from "@/features/configs/types/form-input";
+import ScrapeConfigsDialogForm from "@/features/configs/components/scrape-configs-dialog-form";
 import { useGetFields } from "@/features/fields/hooks";
-import ScrapeConfigsDialogForm from "@/features/scrape-configs/components/scrape-configs-dialog-form";
-import { configApi } from "@/features/scrape-configs/data/config.api";
-import { configSchema } from "@/features/scrape-configs/schemas/form-input";
-import type { ConfigInput } from "@/features/scrape-configs/types/form-input";
 import { useDialog } from "@/hooks/use-dialog";
 import type { ScrapeConfig } from "@/lib/dexie";
+import { dbFieldToFieldInput } from "@/utils/convers";
 
 interface Props {
   row: Row<ScrapeConfig>;
 }
 
 export function ConfigTableRowActions({ row }: Props) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const deleteConfirmDialog = useDialog();
 
-  const [editConfig] = configApi.useEditConfigMutation({});
-  const [duplicateConfig] = configApi.useDuplicateConfigMutation({});
-  const [deleteConfig] = configApi.useDeleteConfigMutation({});
-
-  const { data: originalFields } = useGetFields({ configId: row.original.id });
-
-  async function handleSubmit(data: ConfigInput) {
-    const { error } = await editConfig({ id: row.original.id, data });
-    if (error) {
+  const { mutate: editConfig } = useEditConfig({
+    onSuccess: () => {
+      toast.success("Config updated successfully");
+    },
+    onError: (error) => {
       console.error("Error editing config:", error);
-      toast.error("Config update failed");
-      return;
-    }
+      toast.error("Config update failed", {
+        description: error.message,
+      });
+    },
+  });
+  const { mutate: duplicateConfig } = useDuplicateConfig({
+    onSuccess: () => {
+      toast.success("Config duplicated successfully");
+    },
+    onError: (error) => {
+      console.error("Error duplicating config:", error);
+      toast.error("Config duplication failed", {
+        description: error.message,
+      });
+    },
+  });
+  const { mutate: deleteConfig } = useDeleteConfig({
+    onSuccess: () => {
+      toast.success("Config deleted successfully");
+      deleteConfirmDialog.close();
+    },
+    onError: (error) => {
+      console.error("Error deleting config:", error);
+      toast.error("Config deletion failed", {
+        description: error.message,
+      });
+    },
+  });
 
-    toast.success("Config updated successfully");
+  const { data: originalFields } = useGetFields(
+    { configId: row.original.id },
+    { enabled: modalOpen },
+  );
+
+  function handleSubmit(data: ConfigInput) {
+    editConfig({ id: row.original.id, data });
   }
 
   function handleCopyId() {
@@ -59,7 +93,7 @@ export function ConfigTableRowActions({ row }: Props) {
       })),
       fields: originalFields?.map((field) => dbFieldToFieldInput(field)),
     };
-    const result = configSchema.safeParse(configData);
+    const result = ConfigSchema.safeParse(configData);
     if (!result.success) {
       console.error("Error copying config:", result.error);
       toast.error("Failed to copy config", {
@@ -105,6 +139,7 @@ export function ConfigTableRowActions({ row }: Props) {
               : [],
           }}
           onSubmit={handleSubmit}
+          onOpenChange={setModalOpen}
           trigger={
             <DialogTrigger type="button" className="w-full">
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
@@ -122,45 +157,41 @@ export function ConfigTableRowActions({ row }: Props) {
           Duplicate
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DialogWrapper
-          title="Are you absolutely sure?"
-          description="This action cannot be undone. This will permanently delete your
-          selected config."
-          open={deleteConfirmDialog.isOpen}
-          onOpenChange={deleteConfirmDialog.onChange}
-          footer={
-            <Field orientation="horizontal">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={deleteConfirmDialog.close}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={async () => {
-                  await deleteConfig(row.original.id).unwrap();
-                  deleteConfirmDialog.close();
-                }}
-              >
-                Continue
-              </Button>
-            </Field>
-          }
-        />
+
         <DropdownMenuItem
           variant="destructive"
-          onSelect={(e) => {
-            e.preventDefault();
-            deleteConfirmDialog.open();
-          }}
+          onSelect={deleteConfirmDialog.open}
         >
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
+
+      <DialogWrapper
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your
+          selected config."
+        open={deleteConfirmDialog.isOpen}
+        onOpenChange={deleteConfirmDialog.onChange}
+        footer={
+          <Field orientation="horizontal">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={deleteConfirmDialog.close}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => deleteConfig(row.original.id)}
+            >
+              Continue
+            </Button>
+          </Field>
+        }
+      />
     </DropdownMenu>
   );
 }

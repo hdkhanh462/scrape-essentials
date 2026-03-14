@@ -37,9 +37,9 @@ import {
   useEditField,
 } from "@/features/fields/hooks";
 import type { FieldInput } from "@/features/fields/types/form-input";
-import { ScrapeConfigsDialogFormFooter } from "@/features/scrape-configs/components/scrape-configs-dialog-form-footer";
-import { configSchema } from "@/features/scrape-configs/schemas/form-input";
-import type { ConfigInput } from "@/features/scrape-configs/types/form-input";
+import { ScrapeConfigsDialogFormFooter } from "@/features/configs/components/scrape-configs-dialog-form-footer";
+import { ConfigSchema as configSchema } from "@/features/configs/schemas";
+import type { ConfigInput } from "@/features/configs/types/form-input";
 import { useDialog } from "@/hooks/use-dialog";
 import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
 
@@ -58,7 +58,7 @@ type Props = Omit<DialogWrapperProps, "title"> & {
   id: string;
   configId?: ScrapeConfig["id"];
   config?: ConfigInput;
-  onSubmit?: (input: ConfigInput) => Promise<void>;
+  onSubmit?: (input: ConfigInput) => Promise<void> | void;
 };
 
 export default function ScrapeConfigsDialogForm({

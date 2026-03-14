@@ -3,26 +3,26 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import type { SidebarTab } from "@/components/sidebar";
 import { wxtStorage } from "@/features/shared/stores/wxt-storage";
 
-type AppState = {
+type OptionsState = {
   activeTab: SidebarTab;
 };
 
-const initialApp: AppState = {
+const initialOptions: OptionsState = {
   activeTab: "configs",
 };
 
-type AppSlice = AppState & {
+type OptionsSlice = OptionsState & {
   setActiveTab: (tab: SidebarTab) => void;
 };
 
-export const useAppStore = create<AppSlice>()(
+export const useOptionsStore = create<OptionsSlice>()(
   persist(
     (set) => ({
-      ...initialApp,
+      ...initialOptions,
       setActiveTab: (tab) => set(() => ({ activeTab: tab })),
     }),
     {
-      name: "app-storage",
+      name: "options-storage",
       storage: createJSONStorage(() => wxtStorage),
     },
   ),
