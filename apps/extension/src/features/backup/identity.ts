@@ -1,3 +1,5 @@
+import { BUFFER_IN_MS } from "@/features/backup/constants";
+import { useGoogleStore } from "@/features/backup/stores/google.store";
 import type {
   OAuthRefreshResponse,
   OAuthTokenResponse,
@@ -89,4 +91,30 @@ export async function refreshAccessToken(
   if (!response.ok) throw new Error("Token refresh failed");
 
   return await response.json();
+}
+
+export async function getAccessToken(
+  { authIfMissing } = { authIfMissing: true },
+): Promise<string | null> {
+  const store = useGoogleStore.getState();
+
+  const { accessToken, accessTokenExpiry, refreshToken, login, refresh } =
+    store;
+
+  if (!accessToken || !accessTokenExpiry || !refreshToken) {
+    if (!authIfMissing) return null;
+
+    const res = await launchWebAuthFlow();
+    login(res);
+    return res.accessToken;
+  }
+
+  if (Date.now() < accessTokenExpiry - BUFFER_IN_MS) {
+    return accessToken;
+  }
+
+  const res = await refreshAccessToken(refreshToken);
+  refresh(res);
+
+  return res.accessToken;
 }

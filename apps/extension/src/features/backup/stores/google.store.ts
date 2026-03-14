@@ -18,9 +18,6 @@ type GoogleState = {
 };
 
 type GoogleSlice = GoogleState & {
-  setRefreshToken: (refreshToken: string | null) => void;
-  setAccessToken: (accessToken: string | null) => void;
-  setAccessTokenExpiry: (accessTokenExpiry: number | null) => void;
   setUserInfo: (userInfo: GoogleUserInfo | null) => void;
   setLastBackup: (lastBackup: number | null) => void;
   setLastRestore: (lastRestore: number | null) => void;
@@ -44,10 +41,6 @@ export const useGoogleStore = create<GoogleSlice>()(
   persist(
     (set) => ({
       ...DEFAULT_GOOGLE,
-      setRefreshToken: (refreshToken) => set(() => ({ refreshToken })),
-      setAccessToken: (accessToken) => set(() => ({ accessToken })),
-      setAccessTokenExpiry: (accessTokenExpiry) =>
-        set(() => ({ accessTokenExpiry })),
       setUserInfo: (userInfo) => set(() => ({ userInfo })),
       setLastBackup: (lastBackup) => set(() => ({ lastBackup })),
       setLastRestore: (lastRestore) => set(() => ({ lastRestore })),

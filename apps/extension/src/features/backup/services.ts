@@ -2,7 +2,11 @@ import {
   BACKUP_FILE_NAME_PREFIX,
   BACKUP_FOLDER_NAME,
 } from "@/features/backup/constants";
+import { getAccessToken } from "@/features/backup/identity";
+import { useGoogleStore } from "@/features/backup/stores/google.store";
+import { ImportPayload } from "@/features/backup/types";
 import { driveApiUrl } from "@/features/backup/utils";
+import { dexie } from "@/lib/dexie";
 
 export async function getOrCreateBackupFolder(token: string): Promise<string> {
   const searchUrl = driveApiUrl("files", {
@@ -103,4 +107,60 @@ export async function downloadBackup(token: string, fileId: string) {
   });
 
   return await res.arrayBuffer();
+}
+
+export async function backupToDrive(
+  { authIfMissing } = { authIfMissing: true },
+) {
+  const store = useGoogleStore.getState();
+
+  const accessToken = await getAccessToken({ authIfMissing });
+  if (!accessToken) {
+    if (authIfMissing) throw new Error("No access token found");
+    return;
+  }
+
+  let folderId = store.backupFolderId;
+  if (!folderId) {
+    folderId = await getOrCreateBackupFolder(accessToken);
+    store.setBackupFolderId(folderId);
+  }
+
+  const [configs, fields, records] = await Promise.all([
+    dexie.scrapeConfigs.toArray(),
+    dexie.configFields.toArray(),
+    dexie.scrapedRecords.toArray(),
+  ]);
+
+  const blob = gzipJSON({ configs, fields, records });
+  await uploadBackup(accessToken, folderId, blob, browser.runtime.getVersion());
+
+  store.setLastBackup(Date.now());
+}
+
+export async function restoreBackup(): Promise<ImportPayload> {
+  const store = useGoogleStore.getState();
+
+  const accessToken = await getAccessToken({ authIfMissing: false });
+  if (!accessToken) {
+    throw new Error("No access token found");
+  }
+
+  let folderId = store.backupFolderId;
+  if (!folderId) {
+    folderId = await getOrCreateBackupFolder(accessToken);
+    store.setBackupFolderId(folderId);
+  }
+
+  const latest = await getLatestBackup(accessToken, folderId);
+  if (!latest) {
+    throw new Error("No backup found");
+  }
+
+  const buffer = await downloadBackup(accessToken, latest.id);
+  const payload = ungzipJSON<ImportPayload>(buffer);
+
+  store.setLastRestore(Date.now());
+
+  return payload;
 }

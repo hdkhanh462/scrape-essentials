@@ -1,3 +1,5 @@
+import { DAILY_BACKUP_ALARM_NAME } from "@/features/backup/constants";
+
 export function driveApiUrl(
   path: string,
   params?: Record<string, string | number | boolean>,
@@ -14,3 +16,17 @@ export function driveApiUrl(
 
   return `${base}?${search.toString()}`;
 }
+
+export const createDailyBackupAlarm = async () => {
+  const alarm = await browser.alarms.get(DAILY_BACKUP_ALARM_NAME);
+
+  if (!alarm) {
+    browser.alarms.create(
+      DAILY_BACKUP_ALARM_NAME,
+      {
+        periodInMinutes: 60 * 24, // 24 hours
+      },
+      () => console.log(`Alarm "${DAILY_BACKUP_ALARM_NAME}" created`),
+    );
+  }
+};

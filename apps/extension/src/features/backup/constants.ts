@@ -5,3 +5,5 @@ export const BUFFER_IN_MS = 60 * 1000; // Milliseconds
 export const BACKUP_FILE_NAME_PREFIX = "backup_";
 
 export const BACKUP_FOLDER_NAME = `${browser.runtime.getManifest().name} Backups`;
+
+export const DAILY_BACKUP_ALARM_NAME = "dailyBackup";
