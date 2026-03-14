@@ -1,7 +1,7 @@
 import { initTRPC } from "@trpc/server";
 import { createChromeHandler } from "trpc-chrome/adapter";
 import z from "zod";
-import { backupToDrive } from "@/features/backup/services";
+// import { backupToDrive } from "@/features/backup/services";
 import { getCurrentPage } from "@/features/records/utils/scraper";
 import { onMessage } from "@/lib/messaging";
 
@@ -37,10 +37,10 @@ export default defineBackground(() => {
     if (alarm.name === "test") {
       console.log("Test alarm triggered");
     }
-    if (alarm.name === "dailyBackup") {
-      console.log("Running daily backup");
-      await backupToDrive();
-    }
+    // if (alarm.name === "dailyBackup") {
+    //   console.log("Running daily backup");
+    //   await backupToDrive();
+    // }
   });
 
   onMessage("getCurrentPage", async () => {

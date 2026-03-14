@@ -1,8 +1,7 @@
 import type { Row } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { ScrapedRecord } from "@/lib/dexie";
-import { useEditRecord } from "../hooks";
-import { toast } from "sonner";
+import { useEditRecord } from "@/features/records/hooks";
 import { toastError } from "@/utils/toast";
 
 interface Props {

@@ -5,7 +5,7 @@ import type { MatchConfig } from "@/features/records/types/scrape";
 import { processCopyData } from "@/features/records/utils/copy";
 import type { ScrapedRecord } from "@/lib/dexie";
 import { toastError } from "@/utils/toast";
-import { useDeleteRecord } from "../hooks";
+import { useDeleteRecord } from "@/features/records/hooks";
 
 interface FooterProps {
   id: string;

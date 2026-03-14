@@ -1,7 +1,3 @@
-import type { Table } from "@tanstack/react-table";
-import { XIcon } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
@@ -12,19 +8,21 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useImportRecords } from "@/features/records/hooks";
+import { useRecordStore } from "@/features/records/stores/record.store";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapedRecord } from "@/lib/dexie";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
-import { useRecordStore } from "@/features/records/stores/record.store";
-import { useImportRecords } from "@/features/records/hooks";
 import { toastError } from "@/utils/toast";
+import type { Table } from "@tanstack/react-table";
+import { XIcon } from "lucide-react";
+import { toast } from "sonner";
 
 interface DataTableToolbarProps {
   table: Table<ScrapedRecord>;
 }
 
 export function RecordTableToolbar({ table }: DataTableToolbarProps) {
-  const dispatch = useDispatch();
   const { filterString, setFilterString } = useRecordStore();
 
   const [importPayload, setImportPayload] = useState<ScrapedRecord[]>();

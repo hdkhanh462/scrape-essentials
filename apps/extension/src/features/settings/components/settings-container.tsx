@@ -20,13 +20,10 @@ import {
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import {
-  useBackupToDriveMutation,
-  useGetUserInfoQuery,
-  useRestoreBackupMutation,
-} from "@/features/backup/data/backup.api";
+import { useBackupToDrive, useRestoreBackup } from "@/features/backup/hooks";
 import type { ImportPayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
+import { useImportRecords } from "@/features/records/hooks";
 import {
   languageOptions,
   settingsSchema,
@@ -37,25 +34,30 @@ import {
   useSettingsStore,
 } from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
-import { useImportRecords } from "@/features/records/hooks";
 import { toastError } from "@/utils/toast";
+import { useGoogleStore } from "@/features/backup/stores/google.store";
+import { formatRelativeTime } from "@/utils/date";
 
 export function SettingsContainer() {
   const { debugMode, theme, language, updateSettings } = useSettingsStore();
+  const { userInfo, lastBackup } = useGoogleStore();
 
   const importConfirmDialog = useDialog();
 
-  const [restoreBackup, { isLoading: isRestoring }] =
-    useRestoreBackupMutation();
-  const [backupToDrive, { isLoading: isBackingUp }] =
-    useBackupToDriveMutation();
-  const { data: userInfo } = useGetUserInfoQuery();
+  const { mutate: restoreBackup, isPending: isRestoring } = useRestoreBackup({
+    onSuccess: (data) => {
+      setImportPayload(data);
+      importConfirmDialog.open();
+    },
+    onError: (error) => toastError(error, "Restore failed"),
+  });
+  const { mutate: backupToDrive, isPending: isBackingUp } = useBackupToDrive({
+    onSuccess: () => {
+      toast.success("Backup successful");
+    },
+    onError: (error) => toastError(error, "Backup failed"),
+  });
 
-  const [lastBackup, setLastBackup] = useState<number | null>(null);
-
-  useEffect(() => {
-    storage.getItem<number | null>("local:lastBackup").then(setLastBackup);
-  }, []);
   const { mutate: importConfigs } = useImportConfigs();
   const { mutate: importRecords } = useImportRecords();
 
@@ -74,17 +76,7 @@ export function SettingsContainer() {
   };
 
   const handleRestoreClick = async () => {
-    try {
-      const result = await restoreBackup().unwrap();
-
-      setImportPayload(result);
-      importConfirmDialog.open();
-    } catch (error) {
-      toast.error("Restore failed", {
-        description: "Unable to restore backup. Please try again.",
-      });
-      console.error("Error restoring backup:", error);
-    }
+    restoreBackup();
   };
 
   const handleRestore = async () => {
@@ -105,31 +97,7 @@ export function SettingsContainer() {
   };
 
   const handleBackup = async () => {
-    try {
-      await backupToDrive().unwrap();
-
-      const now = Date.now();
-      setLastBackup(now);
-      toast.success("Backup successful");
-    } catch (error) {
-      toast.error("Backup failed", {
-        description: "Unable to backup settings. Please try again.",
-      });
-      console.error("Error backing up settings:", error);
-    }
-  };
-
-  const formatRelativeTime = (timestamp: number | null) => {
-    if (!timestamp) return "Never";
-    const diff = Date.now() - timestamp;
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (minutes < 1) return "Just now";
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    return `${days}d ago`;
+    backupToDrive();
   };
 
   return (

@@ -1,7 +1,9 @@
-import { BUFFER_IN_MS } from "@/features/backup/constants";
-import type { OAuthTokenResponse } from "@/features/backup/types";
+import type {
+  OAuthRefreshResponse,
+  OAuthTokenResponse,
+} from "@/features/backup/types";
 
-export async function launchWebAuthFlow(): Promise<string> {
+export async function launchWebAuthFlow(): Promise<OAuthTokenResponse> {
   const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
   const clientId = import.meta.env.WXT_GOOGLE_CLIENT_ID;
   const redirectUri = browser.identity.getRedirectURL();
@@ -40,7 +42,6 @@ export async function launchWebAuthFlow(): Promise<string> {
   });
 
   const url = new URL(redirectUrl);
-
   const code = url.searchParams.get("code");
 
   if (!code) {
@@ -50,7 +51,7 @@ export async function launchWebAuthFlow(): Promise<string> {
   return exchangeToken(code);
 }
 
-export async function exchangeToken(code: string): Promise<string> {
+export async function exchangeToken(code: string): Promise<OAuthTokenResponse> {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/api/auth/token`,
     {
@@ -66,20 +67,12 @@ export async function exchangeToken(code: string): Promise<string> {
     throw new Error("Token exchange failed");
   }
 
-  const { accessToken, expiresAt, refreshToken } = await response.json();
-
-  await browser.storage.local.set<OAuthTokenResponse>({
-    accessToken,
-    expiresAt,
-    refreshToken,
-  });
-
-  return accessToken;
+  return await response.json();
 }
 
 export async function refreshAccessToken(
   refreshToken: string,
-): Promise<string> {
+): Promise<OAuthRefreshResponse> {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
     {
@@ -95,36 +88,5 @@ export async function refreshAccessToken(
 
   if (!response.ok) throw new Error("Token refresh failed");
 
-  const { accessToken, expiresAt } = await response.json();
-
-  await browser.storage.local.set({
-    accessToken,
-    expiresAt,
-  });
-
-  return accessToken;
-}
-
-export async function getAccessToken(
-  authIfMissing = true,
-): Promise<string | null> {
-  const { accessToken, expiresAt, refreshToken } =
-    await browser.storage.local.get<OAuthTokenResponse>([
-      "accessToken",
-      "expiresAt",
-      "refreshToken",
-    ]);
-
-  if (!accessToken || !expiresAt || !refreshToken) {
-    if (!authIfMissing) return null;
-
-    const newAccessToken = await launchWebAuthFlow();
-    return newAccessToken;
-  }
-
-  if (Date.now() < expiresAt - BUFFER_IN_MS) {
-    return accessToken;
-  }
-
-  return refreshAccessToken(refreshToken);
+  return await response.json();
 }
