@@ -1,5 +1,5 @@
-import type { ScrapedDataInput } from "@/features/scraped-records/types/form-input";
-import type { MatchConfig } from "@/features/scraped-records/types/scrape";
+import type { ScrapedDataInput } from "@/features/records/types/form-input";
+import type { MatchConfig } from "@/features/records/types/scrape";
 import type { ScrapedRecord } from "@/lib/dexie";
 
 type CopyDataOptions = {

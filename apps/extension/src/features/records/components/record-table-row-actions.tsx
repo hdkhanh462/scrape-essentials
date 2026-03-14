@@ -1,6 +1,3 @@
-import type { Row } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import { toast } from "sonner";
 import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,10 +8,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Field } from "@/components/ui/field";
-import { recordApi } from "@/features/scraped-records/data/record.api";
-import { processCopyData } from "@/features/scraped-records/utils/copy";
+import { useDeleteRecord } from "@/features/records/hooks";
+import { processCopyData } from "@/features/records/utils/copy";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapedRecord } from "@/lib/dexie";
+import { toastError } from "@/utils/toast";
+import type { Row } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import { toast } from "sonner";
 
 interface Props {
   row: Row<ScrapedRecord>;
@@ -23,7 +24,7 @@ interface Props {
 export function RecordTableRowActions({ row }: Props) {
   const deleteConfirmDialog = useDialog();
   const { copyToClipboard } = useCopyToClipboard();
-  const [deleteRecord] = recordApi.useDeleteScrapedRecordMutation();
+  const { mutate: deleteRecord } = useDeleteRecord();
 
   async function handleCopyRecord() {
     const config = await dexie.scrapeConfigs
@@ -45,6 +46,16 @@ export function RecordTableRowActions({ row }: Props) {
       toast.success("Record copied to clipboard");
     }
   }
+
+  const handleDeleteRecord = () => {
+    deleteRecord(row.original.id, {
+      onSuccess: () => {
+        toast.success("Record deleted successfully");
+        deleteConfirmDialog.close();
+      },
+      onError: (error) => toastError(error, "Delete record failed"),
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -80,10 +91,7 @@ export function RecordTableRowActions({ row }: Props) {
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={async () => {
-                  await deleteRecord(row.original.id).unwrap();
-                  deleteConfirmDialog.close();
-                }}
+                onClick={handleDeleteRecord}
               >
                 Continue
               </Button>

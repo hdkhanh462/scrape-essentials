@@ -1,7 +1,7 @@
 import type { Control } from "react-hook-form";
 
 import { SelectItem } from "@/components/ui/select";
-import type { ScrapedDataInput } from "@/features/scraped-records/types/form-input";
+import type { ScrapedDataInput } from "@/features/records/types/form-input";
 import { type ConfigField, FieldType } from "@/lib/dexie";
 
 interface UiFieldProps {

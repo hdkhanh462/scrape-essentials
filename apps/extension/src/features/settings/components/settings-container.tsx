@@ -27,7 +27,6 @@ import {
 } from "@/features/backup/data/backup.api";
 import type { ImportPayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
-import { recordApi } from "@/features/scraped-records/data/record.api";
 import {
   languageOptions,
   settingsSchema,
@@ -38,6 +37,8 @@ import {
   useSettingsStore,
 } from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
+import { useImportRecords } from "@/features/records/hooks";
+import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
   const { debugMode, theme, language, updateSettings } = useSettingsStore();
@@ -55,8 +56,8 @@ export function SettingsContainer() {
   useEffect(() => {
     storage.getItem<number | null>("local:lastBackup").then(setLastBackup);
   }, []);
-  const { mutateAsync: importConfigs } = useImportConfigs();
-  const [importRecords] = recordApi.useImportRecordsMutation();
+  const { mutate: importConfigs } = useImportConfigs();
+  const { mutate: importRecords } = useImportRecords();
 
   const [importPayload, setImportPayload] = useState<ImportPayload>();
 
@@ -89,29 +90,18 @@ export function SettingsContainer() {
   const handleRestore = async () => {
     if (!importPayload) return;
 
-    try {
-      await importConfigs(importPayload);
-    } catch (importConfigsError) {
-      console.error("Error importing configs:", importConfigsError);
-      toast.error("Import failed", {
-        description: "Please check the file and try again.",
-      });
-      return;
-    }
-
-    const { error: importRecordsError } = await importRecords(
-      importPayload.records,
-    );
-    if (importRecordsError) {
-      console.error("Error importing records:", importRecordsError);
-      toast.error("Import failed", {
-        description: "Please check the file and try again.",
-      });
-      return;
-    }
-
-    importConfirmDialog.close();
-    toast.success("Import successful");
+    importConfigs(importPayload, {
+      onSuccess: () => {
+        importRecords(importPayload.records, {
+          onSuccess: () => {
+            importConfirmDialog.close();
+            toast.success("Restore successful");
+          },
+          onError: (error) => toastError(error, "Import records failed"),
+        });
+      },
+      onError: (error) => toastError(error, "Import configs failed"),
+    });
   };
 
   const handleBackup = async () => {

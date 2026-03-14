@@ -7,20 +7,20 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { useGetFields } from "@/features/fields/hooks";
 import { useGetConfigs } from "@/features/configs/hooks";
-import { ScrapedRecordsCard } from "@/features/scraped-records/components/scraped-records-card";
-import { useGetCurrentPageQuery } from "@/features/scraped-records/data/scraping.api";
-import type { ScrapedDataInput } from "@/features/scraped-records/types/form-input";
-import type { MatchConfig } from "@/features/scraped-records/types/scrape";
-import { processField } from "@/features/scraped-records/utils/processor";
+import { useGetFields } from "@/features/fields/hooks";
+import { ScrapedRecordsCard } from "@/features/records/components/scraped-records-card";
+import { useGetCurrentPage } from "@/features/records/hooks";
+import type { ScrapedDataInput } from "@/features/records/types/form-input";
+import type { MatchConfig } from "@/features/records/types/scrape";
+import { processField } from "@/features/records/utils/processor";
 
 export default function App() {
   const [matchConfig, setMatchConfig] = useState<MatchConfig>();
   const [rawScrapedData, setRawScrapedData] = useState<ScrapedDataInput>();
 
   const { data: currentPage, isFetching: isCurrentPageLoading } =
-    useGetCurrentPageQuery({});
+    useGetCurrentPage();
   const { data: configs, isFetching: isConfigsLoading } = useGetConfigs({
     isActive: true,
   });
@@ -31,10 +31,12 @@ export default function App() {
 
   useEffect(() => {
     if (!currentPage || !configs || !fields) return;
+
     const { hostname } = new URL(currentPage.url);
     const _matchConfig = configs.find((config) =>
       config.domains.some((domain) => new RegExp(domain).test(hostname)),
     );
+
     if (_matchConfig && fields) {
       setMatchConfig({
         config: _matchConfig,

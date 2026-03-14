@@ -12,12 +12,12 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { recordApi } from "@/features/scraped-records/data/record.api";
-import { selectFilterString } from "@/features/scraped-records/store/record.selectors";
-import { setFilterString } from "@/features/scraped-records/store/record.slice";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapedRecord } from "@/lib/dexie";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
+import { useRecordStore } from "@/features/records/stores/record.store";
+import { useImportRecords } from "@/features/records/hooks";
+import { toastError } from "@/utils/toast";
 
 interface DataTableToolbarProps {
   table: Table<ScrapedRecord>;
@@ -25,13 +25,13 @@ interface DataTableToolbarProps {
 
 export function RecordTableToolbar({ table }: DataTableToolbarProps) {
   const dispatch = useDispatch();
-  const filterString = useSelector(selectFilterString);
+  const { filterString, setFilterString } = useRecordStore();
 
   const [importPayload, setImportPayload] = useState<ScrapedRecord[]>();
   const [filterValue, setFilterValue] = useState(filterString);
 
   const importConfirmDialog = useDialog();
-  const [importRecords] = recordApi.useImportRecordsMutation();
+  const { mutate: importRecords } = useImportRecords();
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -44,10 +44,10 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
       blob,
       prefix: "records-export",
     });
-    toast.success("Export successful");
+    toast.success("Export records successful");
   }
 
-  async function handleImport() {
+  async function handleImportClick() {
     await importFromJSON(async (file) => {
       const text = await file.text();
       const data = JSON.parse(text);
@@ -55,6 +55,18 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
       importConfirmDialog.open();
     });
   }
+
+  const handleImportConfirm = async () => {
+    if (!importPayload) return;
+
+    importRecords(importPayload, {
+      onSuccess: () => {
+        toast.success("Import records successful");
+        importConfirmDialog.close();
+      },
+      onError: (error) => toastError(error, "Import records failed"),
+    });
+  };
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -72,7 +84,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
                 size="icon-xs"
                 onClick={() => {
                   setFilterValue("");
-                  dispatch(setFilterString(undefined));
+                  setFilterString(undefined);
                 }}
               >
                 <XIcon className="text-destructive" />
@@ -80,7 +92,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
             )}
             <InputGroupButton
               variant="secondary"
-              onClick={() => dispatch(setFilterString(filterValue))}
+              onClick={() => setFilterString(filterValue)}
             >
               Search
             </InputGroupButton>
@@ -99,7 +111,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
         )}
       </div>
       <div className="flex items-center gap-2">
-        <Button size="sm" variant="outline" onClick={handleImport}>
+        <Button size="sm" variant="outline" onClick={handleImportClick}>
           Import
         </Button>
         <Button size="sm" variant="outline" onClick={handleExport}>
@@ -123,19 +135,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={async () => {
-                  if (!importPayload) return;
-                  const { error } = await importRecords(importPayload);
-                  if (error) {
-                    console.error("Error importing records:", error);
-                    toast.error("Import failed", {
-                      description: "Please check the file and try again.",
-                    });
-                    return;
-                  }
-                  toast.success("Import successful");
-                  importConfirmDialog.close();
-                }}
+                onClick={handleImportConfirm}
               >
                 Continue
               </Button>

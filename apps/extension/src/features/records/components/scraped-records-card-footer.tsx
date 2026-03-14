@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
-import { recordApi } from "@/features/scraped-records/data/record.api";
-import type { ScrapedDataInput } from "@/features/scraped-records/types/form-input";
-import type { MatchConfig } from "@/features/scraped-records/types/scrape";
-import { processCopyData } from "@/features/scraped-records/utils/copy";
+import type { ScrapedDataInput } from "@/features/records/types/form-input";
+import type { MatchConfig } from "@/features/records/types/scrape";
+import { processCopyData } from "@/features/records/utils/copy";
 import type { ScrapedRecord } from "@/lib/dexie";
+import { toastError } from "@/utils/toast";
+import { useDeleteRecord } from "../hooks";
 
 interface FooterProps {
   id: string;
@@ -26,7 +27,30 @@ export function ScrapedRecordsCardFooter({
   onDeleteSuccess,
 }: FooterProps) {
   const { copyToClipboard } = useCopyToClipboard();
-  const [deleteScrapedRecord] = recordApi.useDeleteScrapedRecordMutation();
+  const { mutate: deleteRecord } = useDeleteRecord();
+
+  const handleDelete = async () => {
+    if (!scrapedRecord) return;
+
+    deleteRecord(scrapedRecord.id, {
+      onSuccess: () => {
+        onDeleteSuccess?.();
+      },
+      onError: (error) => toastError(error, "Delete record failed"),
+    });
+  };
+
+  const handleCopy = () => {
+    if (!matchConfig || rawScrapedData) return;
+
+    const copyData = processCopyData({
+      matchConfig,
+      scrapedData: rawScrapedData,
+      scrapedRecord,
+      key: rawKey,
+    });
+    copyToClipboard(copyData);
+  };
 
   return (
     <Field orientation="horizontal">
@@ -36,12 +60,7 @@ export function ScrapedRecordsCardFooter({
           variant="destructive"
           size="sm"
           disabled={!scrapedRecord}
-          onClick={async () => {
-            if (scrapedRecord) {
-              await deleteScrapedRecord(scrapedRecord.id);
-              onDeleteSuccess?.();
-            }
-          }}
+          onClick={handleDelete}
         >
           Delete
         </Button>
@@ -51,17 +70,7 @@ export function ScrapedRecordsCardFooter({
         variant="outline"
         size="sm"
         disabled={!matchConfig || !rawScrapedData}
-        onClick={() => {
-          if (matchConfig && rawScrapedData) {
-            const copyData = processCopyData({
-              matchConfig,
-              scrapedData: rawScrapedData,
-              scrapedRecord,
-              key: rawKey,
-            });
-            copyToClipboard(copyData);
-          }
-        }}
+        onClick={handleCopy}
       >
         Copy
       </Button>

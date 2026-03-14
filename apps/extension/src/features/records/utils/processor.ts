@@ -1,4 +1,4 @@
-import type { CurrentPage } from "@/features/scraped-records/types/scrape";
+import type { CurrentPage } from "@/features/records/types/scrape";
 import { type ConfigField, dexie, FieldType } from "@/lib/dexie";
 
 function processElement(element: Element, field: ConfigField) {

@@ -3,9 +3,9 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 import { Badge } from "@/components/ui/badge";
 import { BadgeOverflow } from "@/components/ui/badge-overflow";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RecordCell } from "@/features/scraped-records/components/record-boolean-cell";
-import { RecordTableRowActions } from "@/features/scraped-records/components/record-table-row-actions";
-import { getFieldType } from "@/features/scraped-records/utils/helpers";
+import { RecordCell } from "@/features/records/components/record-boolean-cell";
+import { RecordTableRowActions } from "@/features/records/components/record-table-row-actions";
+import { getFieldType } from "@/features/records/utils/helpers";
 import type { ConfigField, ScrapedRecord } from "@/lib/dexie";
 
 export function buildColumn(fields: ConfigField[]): ColumnDef<ScrapedRecord>[] {

@@ -112,8 +112,7 @@ export async function restoreBackup(): Promise<ImportPayload> {
 
 export async function backupToDrive(): Promise<void> {
   const token = await getAccessToken();
-
-  if (!token) throw new Error("No token found");
+  if (!token) return;
 
   const folderId = await getOrCreateBackupFolder(token);
 

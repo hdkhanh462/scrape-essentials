@@ -2,7 +2,8 @@ import { initTRPC } from "@trpc/server";
 import { createChromeHandler } from "trpc-chrome/adapter";
 import z from "zod";
 import { backupToDrive } from "@/features/backup/services";
-import { getCurrentPage } from "@/features/scraped-records/utils/scraper";
+import { getCurrentPage } from "@/features/records/utils/scraper";
+import { onMessage } from "@/lib/messaging";
 
 const t = initTRPC.create({
   isServer: false,
@@ -40,6 +41,11 @@ export default defineBackground(() => {
       console.log("Running daily backup");
       await backupToDrive();
     }
+  });
+
+  onMessage("getCurrentPage", async () => {
+    const result = await getCurrentPage();
+    return result;
   });
 
   createChromeHandler({

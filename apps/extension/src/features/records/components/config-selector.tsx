@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -16,16 +13,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useGetConfigs } from "@/features/configs/hooks";
-import { selectConfigId } from "@/features/scraped-records/store/record.selectors";
-import { setConfigId } from "@/features/scraped-records/store/record.slice";
+import { useRecordStore } from "@/features/records/stores/record.store";
 import { cn } from "@/lib/utils";
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { useState } from "react";
 
 export const ConfigSelector = () => {
   const [open, setOpen] = useState(false);
 
-  const dispatch = useDispatch();
-  const configId = useSelector(selectConfigId);
-
+  const { configId, setConfigId } = useRecordStore();
   const { data: configs } = useGetConfigs({});
 
   return (
@@ -61,7 +57,7 @@ export const ConfigSelector = () => {
                   value={config.id}
                   keywords={[config.name]}
                   onSelect={(currentValue) => {
-                    dispatch(setConfigId(currentValue));
+                    setConfigId(currentValue);
                     setOpen(false);
                   }}
                 >

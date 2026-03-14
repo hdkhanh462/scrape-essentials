@@ -6,7 +6,7 @@ import type {
   Condition,
   Expression,
   Operator,
-} from "@/features/scraped-records/types/filter";
+} from "@/features/records/types/filter";
 
 function splitOrAtRoot(input: string): string[] {
   const result: string[] = [];

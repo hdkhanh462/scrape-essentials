@@ -1,4 +1,4 @@
-import type { CurrentPage } from "@/features/scraped-records/types/scrape";
+import type { CurrentPage } from "@/features/records/types/scrape";
 
 export async function getCurrentPage(): Promise<CurrentPage | undefined> {
   try {

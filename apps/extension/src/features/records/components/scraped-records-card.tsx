@@ -1,7 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Activity } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import CardWrapper from "@/components/card-wrapper";
 import {
   Accordion,
@@ -10,19 +6,28 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { FieldGroup } from "@/components/ui/field";
-import ScrapeField from "@/features/scraped-records/components/scrape-field";
-import { ScrapedRecordsCardFooter } from "@/features/scraped-records/components/scraped-records-card-footer";
-import UiField from "@/features/scraped-records/components/ui-field";
-import { recordApi } from "@/features/scraped-records/data/record.api";
-import type { ScrapedDataInput } from "@/features/scraped-records/types/form-input";
-import type { MatchConfig } from "@/features/scraped-records/types/scrape";
+import ScrapeField from "@/features/records/components/scrape-field";
+import { ScrapedRecordsCardFooter } from "@/features/records/components/scraped-records-card-footer";
+import UiField from "@/features/records/components/ui-field";
+import {
+  useAddRecord,
+  useEditRecord,
+  useGetRecordById,
+} from "@/features/records/hooks";
+import type { ScrapedDataInput } from "@/features/records/types/form-input";
+import type { MatchConfig } from "@/features/records/types/scrape";
 import {
   buildDefaultScrapedData,
   buildScrapedDataSchema,
-} from "@/features/scraped-records/utils/helpers";
+} from "@/features/records/utils/helpers";
 import { type ConfigField, FieldType } from "@/lib/dexie";
 import { cn } from "@/lib/utils";
 import { isLargeField } from "@/utils/config-field";
+import { toastError } from "@/utils/toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Activity } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   fields: ConfigField[];
@@ -36,9 +41,9 @@ export function ScrapedRecordsCard({
   rawScrapedData,
 }: Props) {
   const [rawKey, setRawKey] = useState<string>();
-  const [addScrapedRecord] = recordApi.useAddScrapedRecordMutation({});
-  const [editScrapedRecord] = recordApi.useEditScrapedRecordMutation({});
-  const { data: scrapedRecord } = recordApi.useGetScrapedRecordQuery({
+  const { mutate: addRecord } = useAddRecord();
+  const { mutate: editRecord } = useEditRecord();
+  const { data: scrapedRecord } = useGetRecordById({
     id: matchConfig?.config.id,
     key: rawKey,
   });
@@ -89,38 +94,41 @@ export function ScrapedRecordsCard({
     }
   }, [scrapedRecord, form, schema, fields]);
 
-  const addRecord = async (key: string, data: Record<string, unknown>) => {
-    const { error } = await addScrapedRecord({
-      id: matchConfig.config.id,
-      data: {
-        configId: matchConfig.config.id,
-        key,
-        data,
+  const handleAddRecord = async (
+    key: string,
+    data: Record<string, unknown>,
+  ) => {
+    addRecord(
+      {
+        id: matchConfig.config.id,
+        data: {
+          configId: matchConfig.config.id,
+          key,
+          data,
+        },
       },
-    });
-
-    if (error) {
-      console.error("Error adding scraped record:", error);
-      toast.error("Add record failed");
-      return;
-    }
-
-    toast.success("Record added successfully");
+      {
+        onSuccess: () => {
+          toast.success("Record added successfully");
+        },
+        onError: (error) => toastError(error, "Add record failed"),
+      },
+    );
   };
 
-  const editRecord = async (id: string, data: Record<string, unknown>) => {
-    const { error } = await editScrapedRecord({
-      id,
-      data: { data },
-    });
-
-    if (error) {
-      console.error("Error editing scraped record:", error);
-      toast.error("Edit record failed");
-      return;
-    }
-
-    toast.success("Record edited successfully");
+  const handleEditRecord = async (
+    id: string,
+    data: Record<string, unknown>,
+  ) => {
+    editRecord(
+      { id, data: { data } },
+      {
+        onSuccess: () => {
+          toast.success("Record edited successfully");
+        },
+        onError: (error) => toastError(error, "Edit record failed"),
+      },
+    );
   };
 
   const handleSubmit = async (input: ScrapedDataInput) => {
@@ -139,11 +147,11 @@ export function ScrapedRecordsCard({
 
     if (matchConfig && rawKey) {
       if (scrapedRecord) {
-        await editRecord(scrapedRecord.id, merged);
+        handleEditRecord(scrapedRecord.id, merged);
         return;
       }
 
-      await addRecord(rawKey, merged);
+      handleAddRecord(rawKey, merged);
     }
   };
 
