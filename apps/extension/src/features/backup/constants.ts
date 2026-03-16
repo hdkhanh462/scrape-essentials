@@ -8,4 +8,4 @@ export const BACKUP_FOLDER_NAME = `${browser.runtime.getManifest().name} Backups
 
 export const CHECK_BACKUP_ALARM_NAME = "checkBackup";
 
-export const CHECK_BACKUP_ALARM_INTERVAL = 10; // Minutes
+export const CHECK_BACKUP_ALARM_INTERVAL = 60; // Minutes

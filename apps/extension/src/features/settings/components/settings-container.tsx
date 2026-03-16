@@ -73,7 +73,8 @@ export function SettingsContainer() {
   });
 
   const handleSubmit = async (data: SettingsInput) => {
-    await sendMessage("autoBackupChange", data.autoBackup);
+    if (data.autoBackup !== autoBackup)
+      await sendMessage("autoBackupChange", data.autoBackup);
     updateSettings(data);
   };
 
