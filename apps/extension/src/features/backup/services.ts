@@ -139,7 +139,7 @@ export async function backupToDrive(
   await uploadBackup(accessToken, folderId, blob, browser.runtime.getVersion());
 
   setLastBackup(Date.now());
-  logger.log("Backup successful at:", Date.now().toLocaleString());
+  logger.log("Backup successful at:", Date.toLocaleString());
 }
 
 export async function restoreBackup(): Promise<ImportPayload> {

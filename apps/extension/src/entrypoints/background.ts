@@ -1,4 +1,7 @@
-import { CHECK_BACKUP_ALARM_NAME } from "@/features/backup/constants";
+import {
+  CHECK_BACKUP_ALARM_INTERVAL,
+  CHECK_BACKUP_ALARM_NAME,
+} from "@/features/backup/constants";
 import { autoBackup } from "@/features/backup/services";
 import { createCheckBackupAlarm } from "@/features/backup/utils";
 import { getCurrentPage } from "@/features/records/utils/scraper";
@@ -12,18 +15,20 @@ export default defineBackground(() => {
 
   onMessage("autoBackupChange", async ({ data: newValue }) => {
     if (!newValue) {
-      logger.log("Clearing backup alarm...");
+      logger.log("Clearing check backup alarm...");
       browser.alarms.clear(CHECK_BACKUP_ALARM_NAME, () => {
-        logger.log("Check backup alarm cleared successfully.");
+        if (browser.runtime.lastError)
+          logger.error("Error clearing alarm:", browser.runtime.lastError);
+        else logger.log("Check backup alarm cleared.");
       });
       return;
     }
 
-    createCheckBackupAlarm(60);
+    createCheckBackupAlarm(CHECK_BACKUP_ALARM_INTERVAL);
   });
 
   // Ensure the backup alarm is created on startup if autoBackup is enabled
-  createCheckBackupAlarm(60);
+  createCheckBackupAlarm(CHECK_BACKUP_ALARM_INTERVAL);
 
   browser.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === CHECK_BACKUP_ALARM_NAME) {
