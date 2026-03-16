@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: SettingsInput = {
   debugMode: false,
   theme: "system",
   language: "english",
+  autoBackup: false,
 };
 
 export const useSettingsStore = create<SettingsSlice>()(

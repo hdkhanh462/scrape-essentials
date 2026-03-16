@@ -27,12 +27,8 @@ export const ConfigActiveCell = ({ row }: Props) => {
           setChecked(toUpdate);
           toast.success("Config active state toggled successfully");
         },
-        onError: (error) => {
-          console.error("Error toggling config active state:", error);
-          toast.error("Error toggling config active state", {
-            description: error.message,
-          });
-        },
+        onError: (error) =>
+          toastError(error, "Failed to toggle config active state"),
       },
     );
   };

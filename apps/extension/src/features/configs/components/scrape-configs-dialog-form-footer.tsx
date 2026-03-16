@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { ConfigSchema } from "@/features/configs/schemas";
 import type { ConfigInput } from "@/features/configs/types/form-input";
+import { logger } from "@/utils/logger";
 
 interface Props {
   id: string;
@@ -16,7 +17,7 @@ export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
     navigator.clipboard.readText().then((text) => {
       const { data, error } = ConfigSchema.safeParse(JSON.parse(text));
       if (error) {
-        console.error("Error parsing config from clipboard:", error);
+        logger.error("Error parsing config from clipboard:", error);
         toast.error("Paste failed", {
           description: () => (
             <ul>

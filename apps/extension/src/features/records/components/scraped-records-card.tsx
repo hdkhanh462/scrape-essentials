@@ -27,6 +27,7 @@ import {
 import { type ConfigField, FieldType } from "@/lib/dexie";
 import { cn } from "@/lib/utils";
 import { isLargeField } from "@/utils/config-field";
+import { logger } from "@/utils/logger";
 import { toastError } from "@/utils/toast";
 
 interface Props {
@@ -86,7 +87,7 @@ export function ScrapedRecordsCard({
       });
 
       if (error) {
-        console.error("Error parsing scraped record data:", error);
+        logger.error("Error parsing scraped record data:", error);
         return;
       }
 

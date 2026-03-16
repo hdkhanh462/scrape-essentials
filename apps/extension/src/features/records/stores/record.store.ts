@@ -1,6 +1,4 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
-import { wxtStorage } from "@/features/shared/stores/wxt-storage";
 
 type RecordState = {
   configId?: string;
@@ -17,16 +15,8 @@ export const DEFAULT_RECORD: RecordState = {
   filterString: undefined,
 };
 
-export const useRecordStore = create<RecordSlice>()(
-  persist(
-    (set) => ({
-      ...DEFAULT_RECORD,
-      setConfigId: (configId) => set(() => ({ configId })),
-      setFilterString: (filterString) => set(() => ({ filterString })),
-    }),
-    {
-      name: "record-storage",
-      storage: createJSONStorage(() => wxtStorage),
-    },
-  ),
-);
+export const useRecordStore = create<RecordSlice>()((set) => ({
+  ...DEFAULT_RECORD,
+  setConfigId: (configId) => set(() => ({ configId })),
+  setFilterString: (filterString) => set(() => ({ filterString })),
+}));

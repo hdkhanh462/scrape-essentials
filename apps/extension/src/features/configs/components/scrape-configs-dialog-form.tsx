@@ -122,12 +122,7 @@ export default function ScrapeConfigsDialogForm({
           fieldsFieldArray.append(toAdd);
           addFieldDialog.close();
         },
-        onError: (error) => {
-          console.error("Error adding field:", error);
-          toast.error("Field add failed", {
-            description: error.message,
-          });
-        },
+        onError: (error) => toastError(error, "Failed to add field"),
       },
     );
   }
@@ -152,12 +147,7 @@ export default function ScrapeConfigsDialogForm({
           form.setValue(`fields.${index}`, data);
           toast.success("Field updated successfully");
         },
-        onError: (error) => {
-          console.error("Error editing field:", error);
-          toast.error("Field update failed", {
-            description: error.message,
-          });
-        },
+        onError: (error) => toastError(error, "Failed to update field"),
       },
     );
   }
@@ -170,12 +160,7 @@ export default function ScrapeConfigsDialogForm({
         fieldsFieldArray.remove(index);
         toast.success("Field deleted successfully");
       },
-      onError: (error) => {
-        console.error("Error deleting field:", error);
-        toast.error("Field delete failed", {
-          description: error.message,
-        });
-      },
+      onError: (error) => toastError(error, "Failed to delete field"),
     });
   }
 

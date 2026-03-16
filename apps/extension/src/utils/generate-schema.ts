@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import z from "zod";
 
 import { ConfigSchema } from "@/features/configs/schemas";
+import { logger } from "@/utils/logger";
 
 async function generateSchema() {
   const json = z.toJSONSchema(ConfigSchema);
@@ -11,9 +12,9 @@ async function generateSchema() {
       "public/config-schema.json",
       JSON.stringify(json, null, 2),
     );
-    console.info("Schema generated successfully.");
+    logger.log("Schema generated successfully.");
   } catch (error) {
-    console.error("Error writing schema to file:", error);
+    logger.error("Error writing schema to file:", error);
   }
 }
 
