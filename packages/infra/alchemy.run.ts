@@ -3,7 +3,8 @@ import { Worker } from "alchemy/cloudflare";
 import { config } from "dotenv";
 
 config({ path: "./.env" });
-config({ path: "../../apps/server/.env" });
+config({ path: "../../apps/server/.env.development" });
+config({ path: "../../apps/server/.env.production" });
 
 const app = await alchemy("scrape-essentials");
 

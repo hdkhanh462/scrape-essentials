@@ -1,4 +1,5 @@
 import type { CurrentPage } from "@/features/records/types/scrape";
+import { logger } from "@/utils/logger";
 
 export async function getCurrentPage(): Promise<CurrentPage | undefined> {
   try {
@@ -39,13 +40,8 @@ export async function getCurrentPage(): Promise<CurrentPage | undefined> {
 
     if (!bodyHtml) return;
 
-    // const sanitizedHtml = bodyHtml.replace(
-    //   /<[^>]*\s+src\s*=\s*["'][^"']*["'][^>]*>/gi,
-    //   "",
-    // );
-
     return { bodyHtml, url: tab.url };
   } catch (error) {
-    console.error("Error when scrape current tab:", error);
+    logger.error("Error when scrape current tab:", error);
   }
 }

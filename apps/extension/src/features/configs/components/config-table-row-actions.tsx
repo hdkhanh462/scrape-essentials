@@ -25,6 +25,7 @@ import { useGetFields } from "@/features/fields/hooks";
 import { useDialog } from "@/hooks/use-dialog";
 import type { ScrapeConfig } from "@/lib/dexie";
 import { dbFieldToFieldInput } from "@/utils/convers";
+import { logger } from "@/utils/logger";
 
 interface Props {
   row: Row<ScrapeConfig>;
@@ -39,35 +40,20 @@ export function ConfigTableRowActions({ row }: Props) {
     onSuccess: () => {
       toast.success("Config updated successfully");
     },
-    onError: (error) => {
-      console.error("Error editing config:", error);
-      toast.error("Config update failed", {
-        description: error.message,
-      });
-    },
+    onError: (error) => toastError(error, "Failed to update config"),
   });
   const { mutate: duplicateConfig } = useDuplicateConfig({
     onSuccess: () => {
       toast.success("Config duplicated successfully");
     },
-    onError: (error) => {
-      console.error("Error duplicating config:", error);
-      toast.error("Config duplication failed", {
-        description: error.message,
-      });
-    },
+    onError: (error) => toastError(error, "Failed to duplicate config"),
   });
   const { mutate: deleteConfig } = useDeleteConfig({
     onSuccess: () => {
       toast.success("Config deleted successfully");
       deleteConfirmDialog.close();
     },
-    onError: (error) => {
-      console.error("Error deleting config:", error);
-      toast.error("Config deletion failed", {
-        description: error.message,
-      });
-    },
+    onError: (error) => toastError(error, "Failed to delete config"),
   });
 
   const { data: originalFields } = useGetFields(
@@ -95,7 +81,7 @@ export function ConfigTableRowActions({ row }: Props) {
     };
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {
-      console.error("Error copying config:", result.error);
+      logger.error("Error copying config:", result.error);
       toast.error("Failed to copy config", {
         description: () => (
           <ul>

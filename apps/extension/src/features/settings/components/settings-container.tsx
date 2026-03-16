@@ -35,11 +35,13 @@ import {
   useSettingsStore,
 } from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
+import { sendMessage } from "@/lib/messaging";
 import { formatRelativeTime } from "@/utils/date";
 import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
-  const { debugMode, theme, language, updateSettings } = useSettingsStore();
+  const { debugMode, theme, language, autoBackup, updateSettings } =
+    useSettingsStore();
   const { userInfo, lastBackup } = useGoogleStore();
 
   const importConfirmDialog = useDialog();
@@ -52,9 +54,7 @@ export function SettingsContainer() {
     onError: (error) => toastError(error, "Restore failed"),
   });
   const { mutate: backupToDrive, isPending: isBackingUp } = useBackupToDrive({
-    onSuccess: () => {
-      toast.success("Backup successful");
-    },
+    onSuccess: () => toast.success("Backup successful"),
     onError: (error) => toastError(error, "Backup failed"),
   });
 
@@ -64,10 +64,16 @@ export function SettingsContainer() {
   const [importPayload, setImportPayload] = useState<ImportPayload>();
 
   const form = useForm<SettingsInput>({
-    defaultValues: settingsSchema.parse({ debugMode, theme, language }),
+    defaultValues: settingsSchema.parse({
+      debugMode,
+      theme,
+      language,
+      autoBackup,
+    }),
   });
 
-  const handleSubmit = (data: SettingsInput) => {
+  const handleSubmit = async (data: SettingsInput) => {
+    await sendMessage("autoBackupChange", data.autoBackup);
     updateSettings(data);
   };
 
@@ -183,6 +189,40 @@ export function SettingsContainer() {
                 </div>
               </div>
             </Field>
+
+            {userInfo && (
+              <>
+                <FieldSeparator />
+                <Controller
+                  name="autoBackup"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      orientation="horizontal"
+                      data-invalid={fieldState.invalid}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor="auto-backup">
+                          Auto Backup
+                        </FieldLabel>
+                        <FieldDescription>
+                          Automatically backup your data to Google Drive
+                          periodically every day.
+                        </FieldDescription>
+                      </FieldContent>
+                      <Switch
+                        id="auto-backup"
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        aria-invalid={fieldState.invalid}
+                      />
+                    </Field>
+                  )}
+                />
+              </>
+            )}
+
             <FieldSeparator />
             <Controller
               name="debugMode"

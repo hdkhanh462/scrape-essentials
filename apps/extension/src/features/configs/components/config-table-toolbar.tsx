@@ -31,22 +31,14 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
       toast.success("Config added successfully");
       dialog.close();
     },
-    onError: (error) => {
-      console.error("Error adding config:", error);
-      toast.error("Config add failed");
-    },
+    onError: (error) => toastError(error, "Failed to add config"),
   });
   const { mutate: importConfigs } = useImportConfigs({
     onSuccess: () => {
       toast.success("Import successful");
       importConfirmDialog.close();
     },
-    onError: (error) => {
-      console.error("Error importing configs:", error);
-      toast.error("Import failed", {
-        description: "Please check the file and try again.",
-      });
-    },
+    onError: (error) => toastError(error, "Failed to import configs"),
   });
 
   const isFiltered = table.getState().columnFilters.length > 0;

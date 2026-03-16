@@ -14,6 +14,7 @@ import { useGetCurrentPage } from "@/features/records/hooks";
 import type { ScrapedDataInput } from "@/features/records/types/form-input";
 import type { MatchConfig } from "@/features/records/types/scrape";
 import { processField } from "@/features/records/utils/processor";
+import { logger } from "@/utils/logger";
 
 export default function App() {
   const [matchConfig, setMatchConfig] = useState<MatchConfig>();
@@ -55,7 +56,7 @@ export default function App() {
         try {
           result[field.name] = await processField(currentPage, field);
         } catch (error) {
-          console.error(`Error processing field "${field.name}":`, error);
+          logger.error(`Error processing field "${field.name}":`, error);
         }
       }
 

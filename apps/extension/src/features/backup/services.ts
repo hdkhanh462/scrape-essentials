@@ -5,8 +5,10 @@ import {
 import { getAccessToken } from "@/features/backup/identity";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
 import type { ImportPayload } from "@/features/backup/types";
-import { driveApiUrl } from "@/features/backup/utils";
+import { driveApiUrl, shouldBackup } from "@/features/backup/utils";
+import { useSettingsStore } from "@/features/settings/stores/settings.store";
 import { dexie } from "@/lib/dexie";
+import { logger } from "@/utils/logger";
 
 export async function getOrCreateBackupFolder(token: string): Promise<string> {
   const searchUrl = driveApiUrl("files", {
@@ -137,6 +139,7 @@ export async function backupToDrive(
   await uploadBackup(accessToken, folderId, blob, browser.runtime.getVersion());
 
   setLastBackup(Date.now());
+  logger.log("Backup successful at:", Date.now().toLocaleString());
 }
 
 export async function restoreBackup(): Promise<ImportPayload> {
@@ -162,3 +165,11 @@ export async function restoreBackup(): Promise<ImportPayload> {
 
   return payload;
 }
+
+export const autoBackup = async () => {
+  const { autoBackup } = useSettingsStore.getState();
+  if (!autoBackup || !shouldBackup(60)) return;
+
+  logger.log("Auto backup triggered");
+  await backupToDrive({ authIfMissing: false });
+};

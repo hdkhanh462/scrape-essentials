@@ -4,6 +4,7 @@ import { AutoComplete, type Item } from "@/components/auto-complete";
 import { Badge } from "@/components/ui/badge";
 import { Field } from "@/components/ui/field";
 import useDebounce from "@/hooks/use-debounce";
+import { logger } from "@/utils/logger";
 
 type FetchReturnItem = {
   id: string;
@@ -39,7 +40,7 @@ export default function FieldSelector(props: FieldSelectorProps) {
           })),
         );
       } catch (error) {
-        console.error("Error fetching search results:", error);
+        logger.error("Error fetching search results:", error);
       } finally {
         setLoading(false);
       }

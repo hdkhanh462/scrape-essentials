@@ -7,6 +7,7 @@ import type {
   Expression,
   Operator,
 } from "@/features/records/types/filter";
+import { logger } from "@/utils/logger";
 
 function _splitOrAtRoot(input: string): string[] {
   const result: string[] = [];
@@ -198,7 +199,7 @@ export const advancedGlobalFilter: FilterFn<any> = (
   const expression = parseFilter(filterValue);
 
   if (!expression || expression.type === "ERROR") {
-    console.error("Filter parse error:", expression?.message);
+    logger.error("Filter parse error:", expression?.message);
     return true; // fail-safe
   }
 
