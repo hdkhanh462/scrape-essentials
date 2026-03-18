@@ -108,6 +108,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           <Button
             variant="ghost"
             size="sm"
+            className="h-8"
             onClick={() => table.resetColumnFilters()}
           >
             Reset
@@ -116,10 +117,20 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
         )}
       </div>
       <div className="flex items-center gap-2">
-        <Button size="sm" variant="outline" onClick={handleImport}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-8"
+          onClick={handleImport}
+        >
           Import
         </Button>
-        <Button size="sm" variant="outline" onClick={handleExport}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-8"
+          onClick={handleExport}
+        >
           Export
         </Button>
         <DialogWrapper
@@ -133,6 +144,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
                 type="button"
                 variant="outline"
                 size="sm"
+                className="h-8"
                 onClick={importConfirmDialog.close}
               >
                 Cancel
@@ -140,6 +152,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
               <Button
                 variant="destructive"
                 size="sm"
+                className="h-8"
                 onClick={() => {
                   if (!importPayload) return;
                   importConfigs(importPayload);
@@ -157,7 +170,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           onOpenChange={dialog.onChange}
           onSubmit={onSubmit}
           trigger={
-            <Button size="sm" onClick={dialog.open}>
+            <Button size="sm" className="h-8" onClick={dialog.open}>
               <PlusIcon />
               Add Config
             </Button>

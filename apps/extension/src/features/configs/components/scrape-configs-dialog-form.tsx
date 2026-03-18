@@ -165,7 +165,10 @@ export default function ScrapeConfigsDialogForm({
   }
 
   async function handleDeleteField(index: number, id?: ConfigField["id"]) {
-    if (!configId || !id) return;
+    if (!configId || !id) {
+      fieldsFieldArray.remove(index);
+      return;
+    }
 
     await deleteField(id, {
       onSuccess: () => {
@@ -239,6 +242,7 @@ export default function ScrapeConfigsDialogForm({
             <Button
               variant="secondary"
               size="sm"
+              className="h-8"
               onClick={() => domainsFieldArray.append({ value: "" })}
             >
               Add Domain
@@ -314,7 +318,7 @@ export default function ScrapeConfigsDialogForm({
                 type="button"
                 variant="secondary"
                 size="sm"
-                className="w-full"
+                className="h-8 w-full"
                 onClick={addFieldDialog.open}
               >
                 Add Field

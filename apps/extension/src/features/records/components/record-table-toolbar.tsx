@@ -101,6 +101,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           <Button
             variant="ghost"
             size="sm"
+            className="h-8"
             onClick={() => table.resetColumnFilters()}
           >
             Reset
@@ -109,10 +110,20 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
         )}
       </div>
       <div className="flex items-center gap-2">
-        <Button size="sm" variant="outline" onClick={handleImportClick}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-8"
+          onClick={handleImportClick}
+        >
           Import
         </Button>
-        <Button size="sm" variant="outline" onClick={handleExport}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-8"
+          onClick={handleExport}
+        >
           Export
         </Button>
         <DialogWrapper
@@ -126,6 +137,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
                 type="button"
                 variant="outline"
                 size="sm"
+                className="h-8"
                 onClick={importConfirmDialog.close}
               >
                 Cancel
@@ -133,6 +145,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
               <Button
                 variant="destructive"
                 size="sm"
+                className="h-8"
                 onClick={handleImportConfirm}
               >
                 Continue

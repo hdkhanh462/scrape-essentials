@@ -80,6 +80,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         <Button
           variant="secondary"
           size="sm"
+          className="h-8"
           onClick={() => append({ value: "" })}
         >
           Add Remover

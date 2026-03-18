@@ -22,11 +22,18 @@ export function DialogFooter({
         type="button"
         variant="outline"
         size="sm"
+        className="h-8"
         onClick={() => onReset?.()}
       >
         Reset
       </Button>
-      <Button type="submit" size="sm" form={formId} disabled={!isDirty}>
+      <Button
+        type="submit"
+        size="sm"
+        className="h-8"
+        form={formId}
+        disabled={!isDirty}
+      >
         {submitText}
       </Button>
       {children}
