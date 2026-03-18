@@ -84,6 +84,7 @@ export function RecordTableRowActions({ row }: Props) {
                 type="button"
                 variant="outline"
                 size="sm"
+                className="h-8"
                 onClick={deleteConfirmDialog.close}
               >
                 Cancel
@@ -91,6 +92,7 @@ export function RecordTableRowActions({ row }: Props) {
               <Button
                 variant="destructive"
                 size="sm"
+                className="h-8"
                 onClick={handleDeleteRecord}
               >
                 Continue

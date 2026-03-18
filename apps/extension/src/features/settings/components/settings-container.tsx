@@ -167,9 +167,9 @@ export function SettingsContainer() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={handleRestoreClick}
-                      disabled={isRestoring}
                       className="h-8 shadow-none"
+                      disabled={isRestoring}
+                      onClick={handleRestoreClick}
                     >
                       <Loader isLoading={isRestoring} />
                       {!isRestoring && <History className="size-3.5" />}
@@ -178,9 +178,9 @@ export function SettingsContainer() {
                     <Button
                       type="button"
                       size="sm"
-                      onClick={handleBackup}
-                      disabled={isBackingUp}
                       className="h-8 shadow-none"
+                      disabled={isBackingUp}
+                      onClick={handleBackup}
                     >
                       <Loader isLoading={isBackingUp} />
                       {!isBackingUp && <CloudUpload className="size-3.5" />}
@@ -359,11 +359,17 @@ export function SettingsContainer() {
               type="button"
               variant="outline"
               size="sm"
+              className="h-8"
               onClick={importConfirmDialog.close}
             >
               Cancel
             </Button>
-            <Button variant="destructive" size="sm" onClick={handleRestore}>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="h-8"
+              onClick={handleRestore}
+            >
               Continue
             </Button>
           </Field>

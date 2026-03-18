@@ -44,6 +44,7 @@ export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
           type="button"
           variant="outline"
           size="sm"
+          className="h-8"
           onClick={() => handlePaste()}
         >
           Paste
@@ -53,6 +54,7 @@ export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
         type="button"
         variant="outline"
         size="sm"
+        className="h-8"
         onClick={() => form.reset()}
       >
         Reset
@@ -60,6 +62,7 @@ export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
       <Button
         type="submit"
         size="sm"
+        className="h-8"
         form={id}
         disabled={!form.formState.isDirty}
       >

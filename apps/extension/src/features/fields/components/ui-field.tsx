@@ -135,6 +135,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <Button
             variant="secondary"
             size="sm"
+            className="h-8"
             onClick={() => append({ label: "", value: "" })}
           >
             Add Option

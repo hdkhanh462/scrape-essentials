@@ -164,6 +164,7 @@ export function ConfigTableRowActions({ row }: Props) {
               type="button"
               variant="outline"
               size="sm"
+              className="h-8"
               onClick={deleteConfirmDialog.close}
             >
               Cancel
@@ -171,6 +172,7 @@ export function ConfigTableRowActions({ row }: Props) {
             <Button
               variant="destructive"
               size="sm"
+              className="h-8"
               onClick={() => deleteConfig(row.original.id)}
             >
               Continue

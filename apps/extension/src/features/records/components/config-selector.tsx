@@ -30,8 +30,9 @@ export const ConfigSelector = () => {
         <Button
           variant="outline"
           role="combobox"
+          size="sm"
           aria-expanded={open}
-          className="w-full max-w-35 justify-between lg:max-w-62"
+          className="h-8 w-full max-w-35 justify-between lg:max-w-62"
         >
           {configId && configs
             ? configs.find((config) => config.id === configId)?.name

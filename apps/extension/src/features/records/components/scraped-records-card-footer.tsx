@@ -59,6 +59,7 @@ export function ScrapedRecordsCardFooter({
           type="button"
           variant="destructive"
           size="sm"
+          className="h-8"
           disabled={!scrapedRecord}
           onClick={handleDelete}
         >
@@ -69,6 +70,7 @@ export function ScrapedRecordsCardFooter({
         type="button"
         variant="outline"
         size="sm"
+        className="h-8"
         disabled={!matchConfig || !rawScrapedData}
         onClick={handleCopy}
       >
@@ -77,6 +79,7 @@ export function ScrapedRecordsCardFooter({
       <Button
         type="submit"
         size="sm"
+        className="h-8"
         form={id}
         disabled={!isDirty && !!scrapedRecord}
       >
