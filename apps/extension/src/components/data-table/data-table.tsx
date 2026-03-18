@@ -9,6 +9,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  OnChangeFn,
   type SortingState,
   type Table as TableType,
   useReactTable,
@@ -31,6 +32,8 @@ interface DataTableProps<TData, TValue> {
   globalFilter?: string;
   // biome-ignore lint/suspicious/noExplicitAny: <>
   globalFilterFn?: FilterFnOption<any>;
+  columnVisibility?: VisibilityState;
+  onColumnVisibilityChange?: OnChangeFn<VisibilityState>;
   children?: (table: TableType<TData>) => React.ReactNode;
 }
 
@@ -39,11 +42,11 @@ export function DataTable<TData, TValue>({
   data,
   globalFilter,
   globalFilterFn,
+  columnVisibility,
   children,
+  onColumnVisibilityChange,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -67,14 +70,14 @@ export function DataTable<TData, TValue>({
     globalFilterFn,
     initialState: {
       pagination: {
-        pageSize: 25,
+        pageSize: 10,
       },
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    onColumnVisibilityChange,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
