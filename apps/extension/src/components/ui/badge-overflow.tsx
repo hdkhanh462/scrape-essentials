@@ -4,6 +4,7 @@ import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
 import { useComposedRefs } from "@/lib/compose-refs";
 import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface GetBadgeLabel<T> {
   /**
@@ -223,9 +224,18 @@ function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
             (renderOverflow ? (
               renderOverflow(hiddenCount)
             ) : (
-              <div className="inline-flex h-5 shrink-0 items-center rounded-md border px-1.5 font-semibold text-xs">
-                +{hiddenCount}
-              </div>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div className="inline-flex h-5 shrink-0 items-center rounded-md border px-1.5 font-semibold text-xs">
+                    +{hiddenCount}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-sm text-wrap">
+                    {items.filter((i) => !visibleItems.includes(i)).join(", ")}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
             ))}
         </Comp>
       ) : (
