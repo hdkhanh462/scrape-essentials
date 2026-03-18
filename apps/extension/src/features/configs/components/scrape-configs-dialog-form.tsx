@@ -104,23 +104,31 @@ export default function ScrapeConfigsDialogForm({
       ...data,
       order: fieldsFieldArray.fields.length,
     };
-    if (!configId) return;
+
+    logger.log("Adding field with data:", {
+      data,
+      toAdd,
+    });
+
+    if (!configId) {
+      fieldsFieldArray.append(toAdd);
+      addFieldDialog.close();
+      return;
+    }
 
     await addField(
-      {
-        ...toAdd,
-        configId,
-      },
+      { ...toAdd, configId },
       {
         onSuccess: (newFieldId) => {
-          toAdd = {
-            ...toAdd,
-            fieldId: newFieldId,
-          };
+          toAdd = { ...toAdd, fieldId: newFieldId };
 
-          toast.success("Field added successfully");
           fieldsFieldArray.append(toAdd);
           addFieldDialog.close();
+          toast.success("Field added successfully");
+          logger.log("Added field with id:", {
+            newFieldId,
+            toAdd,
+          });
         },
         onError: (error) => toastError(error, "Failed to add field"),
       },
@@ -132,20 +140,24 @@ export default function ScrapeConfigsDialogForm({
     data: FieldInput,
     id?: ConfigField["id"],
   ) {
-    if (!configId || !id) return;
+    logger.log("Editing field with data:", {
+      index,
+      data,
+      id,
+    });
+
+    if (!configId || !id) {
+      form.setValue(`fields.${index}`, data);
+      return;
+    }
 
     await editField(
-      {
-        id,
-        data: {
-          ...data,
-          configId,
-        },
-      },
+      { id, data: { ...data, configId } },
       {
         onSuccess: () => {
           form.setValue(`fields.${index}`, data);
           toast.success("Field updated successfully");
+          logger.log("Updated field with id:", id);
         },
         onError: (error) => toastError(error, "Failed to update field"),
       },
@@ -159,6 +171,7 @@ export default function ScrapeConfigsDialogForm({
       onSuccess: () => {
         fieldsFieldArray.remove(index);
         toast.success("Field deleted successfully");
+        logger.log("Deleted field with id:", id);
       },
       onError: (error) => toastError(error, "Failed to delete field"),
     });

@@ -101,11 +101,7 @@ export default function ConfigFieldsSheetForm({
       <form
         id={formId}
         className="px-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(handleSubmit)();
-          e.stopPropagation();
-        }}
+        onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FieldGroup>
           <div className="grid grid-cols-2 gap-2">
