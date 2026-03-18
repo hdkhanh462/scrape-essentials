@@ -73,8 +73,8 @@ export function SettingsContainer() {
   });
 
   const handleSubmit = async (data: SettingsInput) => {
-    if (data.autoBackup !== autoBackup)
-      await sendMessage("autoBackupChange", data.autoBackup);
+    // if (data.autoBackup !== autoBackup)
+    //   await sendMessage("autoBackupChange", data.autoBackup);
     updateSettings(data);
   };
 
@@ -191,7 +191,7 @@ export function SettingsContainer() {
               </div>
             </Field>
 
-            {userInfo && (
+            {/* {userInfo && (
               <>
                 <FieldSeparator />
                 <Controller
@@ -222,7 +222,7 @@ export function SettingsContainer() {
                   )}
                 />
               </>
-            )}
+            )} */}
 
             <FieldSeparator />
             <Controller

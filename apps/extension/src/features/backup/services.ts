@@ -139,7 +139,7 @@ export async function backupToDrive(
   await uploadBackup(accessToken, folderId, blob, browser.runtime.getVersion());
 
   setLastBackup(Date.now());
-  logger.log("Backup successful at:", Date.toLocaleString());
+  logger.log("Backup successfully uploaded to Google Drive");
 }
 
 export async function restoreBackup(): Promise<ImportPayload> {
