@@ -11,7 +11,7 @@ interface FooterProps {
   id: string;
   matchConfig: MatchConfig | undefined;
   rawScrapedData: ScrapedDataInput | undefined;
-  scrapedRecord?: ScrapedRecord;
+  scrapedRecord?: ScrapedRecord | null;
   rawKey?: string;
   isDirty?: boolean;
   onDeleteSuccess?: () => void;

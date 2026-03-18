@@ -5,7 +5,7 @@ import type { ScrapedRecord } from "@/lib/dexie";
 type CopyDataOptions = {
   matchConfig: MatchConfig;
   scrapedData?: ScrapedDataInput;
-  scrapedRecord?: ScrapedRecord;
+  scrapedRecord?: ScrapedRecord | null;
   key?: ScrapedRecord["key"];
 };
 

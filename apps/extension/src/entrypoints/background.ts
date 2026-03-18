@@ -13,26 +13,26 @@ export default defineBackground(() => {
 
   onMessage("getCurrentPage", getCurrentPage);
 
-  onMessage("autoBackupChange", async ({ data: newValue }) => {
-    if (!newValue) {
-      logger.log("Clearing check backup alarm...");
-      browser.alarms.clear(CHECK_BACKUP_ALARM_NAME, () => {
-        if (browser.runtime.lastError)
-          logger.error("Error clearing alarm:", browser.runtime.lastError);
-        else logger.log("Check backup alarm cleared.");
-      });
-      return;
-    }
+  // onMessage("autoBackupChange", async ({ data: newValue }) => {
+  //   if (!newValue) {
+  //     logger.log("Clearing check backup alarm...");
+  //     browser.alarms.clear(CHECK_BACKUP_ALARM_NAME, () => {
+  //       if (browser.runtime.lastError)
+  //         logger.error("Error clearing alarm:", browser.runtime.lastError);
+  //       else logger.log("Check backup alarm cleared.");
+  //     });
+  //     return;
+  //   }
 
-    createCheckBackupAlarm(CHECK_BACKUP_ALARM_INTERVAL);
-  });
+  //   createCheckBackupAlarm(CHECK_BACKUP_ALARM_INTERVAL);
+  // });
 
-  // Ensure the backup alarm is created on startup if autoBackup is enabled
-  createCheckBackupAlarm(CHECK_BACKUP_ALARM_INTERVAL);
+  // // Ensure the backup alarm is created on startup if autoBackup is enabled
+  // createCheckBackupAlarm(CHECK_BACKUP_ALARM_INTERVAL);
 
-  browser.alarms.onAlarm.addListener((alarm) => {
-    if (alarm.name === CHECK_BACKUP_ALARM_NAME) {
-      autoBackup();
-    }
-  });
+  // browser.alarms.onAlarm.addListener((alarm) => {
+  //   if (alarm.name === CHECK_BACKUP_ALARM_NAME) {
+  //     autoBackup();
+  //   }
+  // });
 });

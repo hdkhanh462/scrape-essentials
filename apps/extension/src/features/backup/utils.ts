@@ -24,13 +24,17 @@ export const shouldBackup = (minutes: number): boolean => {
   logger.log("Checking if backup is needed...");
 
   const { lastBackup } = useGoogleStore.getState();
+  logger.log(
+    "Last backup timestamp:",
+    lastBackup ? new Date(lastBackup).toLocaleString() : "Never",
+  );
   if (!lastBackup) return true;
 
   const interval = minutes * 60 * 1000;
   const diff = Date.now() - lastBackup;
 
   logger.log(
-    `Next backup in ${Math.max(0, Math.round((interval - diff) / 60000))} minutes`,
+    `Next check backup in ${Math.max(0, Math.round((interval - diff) / 60000))} minutes`,
   );
 
   return Date.now() - lastBackup >= interval;

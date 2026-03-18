@@ -40,7 +40,7 @@ export const useGetRecords = (payload: GetScrapedRecordsPayload) => {
 };
 
 export const useGetRecordById = (payload: GetScrapedRecordPayload) => {
-  return useQuery<ScrapedRecord | undefined>({
+  return useQuery<ScrapedRecord | null>({
     queryKey: scrapedRecordQueryKey.detail(payload),
     queryFn: () => getRecordById(payload),
   });

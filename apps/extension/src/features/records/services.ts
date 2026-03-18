@@ -20,12 +20,14 @@ export const getRecords = async (
 
 export const getRecordById = async (
   payload: GetScrapedRecordPayload,
-): Promise<ScrapedRecord | undefined> => {
-  if (!payload.id || !payload.key) return undefined;
+): Promise<ScrapedRecord | null> => {
+  if (!payload.id || !payload.key) return null;
 
-  return await dexie.scrapedRecords
+  const result = await dexie.scrapedRecords
     .where({ configId: payload.id, key: payload.key })
     .first();
+
+  return result || null;
 };
 
 export const importRecords = async (
