@@ -8,12 +8,15 @@ import { queryClient } from "@/features/shared/query-client";
 import "@/global.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <App />
+        <TooltipProvider>
+          <App />
+        </TooltipProvider>
         <Toaster richColors />
       </ThemeProvider>
       <ReactQueryDevtools />
