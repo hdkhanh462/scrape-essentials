@@ -6,9 +6,11 @@ import { useGetRecords } from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { advancedGlobalFilter } from "@/features/records/utils/filter";
 import { buildColumn } from "@/features/records/utils/table";
+import { useColumnVisibility } from "@/utils/table";
 
 export function RecordsContainer() {
   const { configId, filterString } = useRecordStore();
+  const columnVisibility = useColumnVisibility();
 
   const { data: fields } = useGetFields({
     configId,
@@ -26,6 +28,8 @@ export function RecordsContainer() {
         data={records ?? []}
         globalFilter={filterString}
         globalFilterFn={advancedGlobalFilter}
+        columnVisibility={columnVisibility.value}
+        onColumnVisibilityChange={columnVisibility.onChange}
       >
         {(table) => <RecordTableToolbar table={table} />}
       </DataTable>
