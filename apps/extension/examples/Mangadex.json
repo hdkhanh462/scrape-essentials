@@ -57,7 +57,7 @@
       "isFilterable": true,
       "type": "page-url",
       "isPrimary": true,
-      "regex": "/title\\/([\\w-]{36})/",
+      "regex": "/title\\/([\\w-]{36})",
       "spliter": "",
       "removers": []
     },
@@ -120,9 +120,9 @@
     },
     {
       "parentFieldId": "",
-      "name": "Info (MangaDex)",
+      "name": "Mangadex Info",
       "order": 7,
-      "isRequired": true,
+      "isRequired": false,
       "type": "text",
       "isParent": true,
       "scrapeOptions": {

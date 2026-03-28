@@ -77,7 +77,7 @@ export function ConfigTableRowActions({ row }: Props) {
       domains: row.original.domains.map((domain) => ({
         value: domain,
       })),
-      fields: originalFields?.map((field) => dbFieldToFieldInput(field)),
+      fields: originalFields?.map((field) => dbFieldToFieldInput(field)) || [],
     };
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {
