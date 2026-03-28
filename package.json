@@ -23,6 +23,7 @@
     "dev:server": "turbo -F server dev",
     "deploy": "turbo -F @scrape-essentials/infra deploy",
     "destroy": "turbo -F @scrape-essentials/infra destroy",
+    "generate-schema": "turbo -F extension generate-schema",
     "lint": "biome check --write",
     "lint:unsafe": "biome check --write --unsafe",
     "format": "biome format --write"
