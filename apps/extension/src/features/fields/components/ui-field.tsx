@@ -133,6 +133,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
             )}
           </FieldGroup>
           <Button
+            type="button"
             variant="secondary"
             size="sm"
             className="h-8"
