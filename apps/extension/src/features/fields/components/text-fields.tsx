@@ -78,6 +78,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
           ))}
         </FieldGroup>
         <Button
+          type="button"
           variant="secondary"
           size="sm"
           className="h-8"

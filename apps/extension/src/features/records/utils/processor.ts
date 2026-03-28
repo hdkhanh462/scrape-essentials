@@ -77,9 +77,10 @@ function processTextField(value: string, field: ConfigField) {
   }
 
   if (field.removers) {
-    value = field.removers
-      .reduce((acc, item) => acc.replace(item, ""), value)
-      .trim();
+    value = field.removers.reduce(
+      (acc, remover) => acc.split(remover).join(""),
+      value,
+    );
   }
 
   return value;
@@ -120,11 +121,11 @@ export async function processField(
     !isInputFieldType(field.type) &&
     !isSelectFieldType(field.type) &&
     Array.isArray(value) &&
-    value.length === 1
+    value.length > 0
   ) {
-    value = value.map((item) =>
-      typeof item === "string" ? processTextField(item, field) : item,
-    );
+    value = value
+      .map((item) => processTextField(item, field))
+      .filter((item) => item.length > 0);
   }
 
   if (
