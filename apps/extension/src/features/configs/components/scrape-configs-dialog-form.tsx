@@ -1,6 +1,10 @@
+import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MoreHorizontalIcon, XIcon } from "lucide-react";
-import { Dialog } from "radix-ui";
+import { XIcon } from "lucide-react";
 import { Activity, useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -11,12 +15,6 @@ import DialogWrapper, {
 import { FormInput, FormSwitch } from "@/components/form";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Field,
   FieldError,
   FieldGroup,
@@ -24,12 +22,6 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { ScrapeConfigsDialogFormFooter } from "@/features/configs/components/scrape-configs-dialog-form-footer";
 import { ConfigSchema as configSchema } from "@/features/configs/schemas";
 import type { ConfigInput } from "@/features/configs/types/form-input";
@@ -42,6 +34,9 @@ import {
 import type { FieldInput } from "@/features/fields/types/form-input";
 import { useDialog } from "@/hooks/use-dialog";
 import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
+import { logger } from "@/utils/logger";
+import { toastError } from "@/utils/toast";
+import SortableFieldItem from "./sortable-field-item";
 
 const DEFAULT_VALUES: Partial<ConfigInput> = {
   name: "",
@@ -94,6 +89,8 @@ export default function ScrapeConfigsDialogForm({
   }, [config, form]);
 
   async function handleSubmit(input: ConfigInput) {
+    logger.log("Submitting form with input:", input);
+
     await onSubmit?.(input);
     if (!configId) form.reset();
     else form.reset(input);
@@ -180,6 +177,27 @@ export default function ScrapeConfigsDialogForm({
     });
   }
 
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const activeIndex = fieldsFieldArray.fields.findIndex(
+      (field) => field.id === active.id,
+    );
+    const overIndex = fieldsFieldArray.fields.findIndex(
+      (field) => field.id === over.id,
+    );
+
+    if (activeIndex === -1 || overIndex === -1) return;
+
+    fieldsFieldArray.move(activeIndex, overIndex);
+
+    fieldsFieldArray.fields.forEach((_, index) => {
+      form.setValue(`fields.${index}.order`, index);
+    });
+  }
+
   return (
     <DialogWrapper
       title={config ? "Edit Config" : "Add Config"}
@@ -251,79 +269,43 @@ export default function ScrapeConfigsDialogForm({
 
           <FieldSet>
             <FieldLegend className="text-sm!">Config Fields</FieldLegend>
-            <FieldGroup className="gap-3">
-              {fieldsFieldArray.fields.map((item, index) => (
-                <Controller
-                  key={item.id}
-                  name={`fields.${index}.name`}
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <InputGroup>
-                        <InputGroupInput value={field.value} readOnly />
-                        <InputGroupAddon align="inline-end">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <InputGroupButton
-                                variant="ghost"
-                                aria-label="More"
-                                size="icon-xs"
-                              >
-                                <MoreHorizontalIcon />
-                              </InputGroupButton>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <ConfigFieldsSheetForm
-                                formId="edit-field-sheet-form"
-                                field={form.getValues(`fields.${index}`)}
-                                onSubmit={(data) =>
-                                  handleEditField(index, data, item.fieldId)
-                                }
-                                trigger={
-                                  <Dialog.Trigger
-                                    className="w-full"
-                                    type="button"
-                                  >
-                                    <DropdownMenuItem
-                                      onSelect={(e) => e.preventDefault()}
-                                    >
-                                      Edit
-                                    </DropdownMenuItem>
-                                  </Dialog.Trigger>
-                                }
-                              />
-
-                              <DropdownMenuItem
-                                variant="destructive"
-                                onClick={() =>
-                                  handleDeleteField(index, item.fieldId)
-                                }
-                              >
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </InputGroupAddon>
-                      </InputGroup>
-                    </Field>
-                  )}
-                />
-              ))}
-              <Activity
-                mode={form.formState.errors.fields ? "visible" : "hidden"}
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={fieldsFieldArray.fields.map((field) => field.id)}
+                strategy={verticalListSortingStrategy}
               >
-                <FieldError errors={[form.formState.errors.fields]} />
-              </Activity>
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="h-8 w-full"
-                onClick={addFieldDialog.open}
-              >
-                Add Field
-              </Button>
-            </FieldGroup>
+                <FieldGroup className="gap-3">
+                  {fieldsFieldArray.fields.map((item, index) => (
+                    <SortableFieldItem
+                      key={item.id}
+                      id={item.id}
+                      index={index}
+                      field={item}
+                      control={form.control}
+                      onEdit={handleEditField}
+                      onDelete={handleDeleteField}
+                    />
+                  ))}
+                </FieldGroup>
+              </SortableContext>
+            </DndContext>
+            <Activity
+              mode={form.formState.errors.fields ? "visible" : "hidden"}
+            >
+              <FieldError errors={[form.formState.errors.fields]} />
+            </Activity>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="h-8 w-full"
+              onClick={addFieldDialog.open}
+            >
+              Add Field
+            </Button>
           </FieldSet>
           <FormSwitch control={form.control} name="isActive" label="Active" />
         </FieldGroup>
