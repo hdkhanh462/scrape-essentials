@@ -65,13 +65,32 @@ export const addConfig = async (
 export const editConfig = async (
   payload: EditConfigPayload,
 ): Promise<boolean> => {
-  const row = await dexie.scrapeConfigs.update(payload.id, {
-    name: payload.data.name,
-    isActive: payload.data.isActive,
-    domains: payload.data.domains.map((d) => d.value),
-    updatedAt: new Date().toISOString(),
-  });
-  return row > 0;
+  const isSuccess = await dexie.transaction(
+    "rw",
+    dexie.scrapeConfigs,
+    dexie.configFields,
+    async (tx) => {
+      const row = await tx.scrapeConfigs.update(payload.id, {
+        name: payload.data.name,
+        isActive: payload.data.isActive,
+        domains: payload.data.domains.map((d) => d.value),
+        updatedAt: new Date().toISOString(),
+      });
+
+      // Delete fields of the config
+      await tx.configFields.where("configId").equals(payload.id).delete();
+
+      // Add new fields
+      const fields = payload.data.fields.map((field) =>
+        fieldInputToDb(field, payload.id),
+      );
+      await tx.configFields.bulkAdd(fields);
+
+      return row > 0;
+    },
+  );
+
+  return isSuccess;
 };
 
 export const toggleConfigActive = async (

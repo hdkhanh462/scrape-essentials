@@ -9,7 +9,7 @@ export type ImportConfigsPayload = Omit<ImportPayload, "records">;
 
 export type AddConfigPayload = ConfigInput;
 
-export type EditConfigPayload = PayloadWithId<Omit<ConfigInput, "fields">>;
+export type EditConfigPayload = PayloadWithId<ConfigInput>;
 
 export type ToggleConfigActivePayload = PayloadWithId<
   Pick<ScrapeConfig, "isActive">
