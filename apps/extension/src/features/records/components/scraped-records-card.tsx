@@ -184,25 +184,28 @@ export function ScrapedRecordsCard({
             }
           >
             <div className="grid grid-cols-2 gap-2">
-              {fields.map((field, index) => {
-                const isLarge =
-                  isLargeField(field.type) ||
-                  (index % 2 === 0 &&
-                    !isLargeField(fields[index + 1]?.type) &&
-                    fields[index + 1]?.type === FieldType.InputCheckbox) ||
-                  (index % 2 === 0 &&
-                    isScrapeFieldType(fields[index + 1]?.type));
+              {fields
+                .filter(
+                  (field) =>
+                    (isInputFieldType(field.type) ||
+                      isSelectFieldType(field.type)) &&
+                    !field.isParent,
+                )
+                .map((field, index) => {
+                  const isLarge =
+                    isLargeField(field.type) ||
+                    (index % 2 === 0 &&
+                      !isLargeField(fields[index + 1]?.type) &&
+                      fields[index + 1]?.type === FieldType.InputCheckbox) ||
+                    (index % 2 === 0 &&
+                      isScrapeFieldType(fields[index + 1]?.type));
 
-                return (
-                  (isInputFieldType(field.type) ||
-                    isSelectFieldType(field.type)) &&
-                  !field.isParent && (
+                  return (
                     <div key={field.id} className={cn(isLarge && "col-span-2")}>
                       <UiField field={field} control={form.control} />
                     </div>
-                  )
-                );
-              })}
+                  );
+                })}
             </div>
           </Activity>
           <Activity>
