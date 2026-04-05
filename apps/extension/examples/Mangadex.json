@@ -5,8 +5,20 @@
   "fields": [
     {
       "parentFieldId": "",
-      "name": "Point",
+      "name": "Code",
       "order": 0,
+      "isRequired": true,
+      "isFilterable": true,
+      "type": "page-url",
+      "isPrimary": true,
+      "regex": "/title\\/([\\w-]{36})",
+      "spliter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "",
+      "name": "Point",
+      "order": 1,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
@@ -32,7 +44,7 @@
     {
       "parentFieldId": "",
       "name": "Chapter",
-      "order": 1,
+      "order": 2,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
@@ -41,25 +53,21 @@
     },
     {
       "parentFieldId": "",
-      "name": "Read Later",
-      "order": 2,
+      "name": "Status",
+      "order": 3,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
-      "type": "input-checkbox",
-      "uiOptions": { "label": "Read Later", "defaultValue": "false" }
-    },
-    {
-      "parentFieldId": "",
-      "name": "Code",
-      "order": 3,
-      "isRequired": true,
-      "isFilterable": true,
-      "type": "page-url",
-      "isPrimary": true,
-      "regex": "/title\\/([\\w-]{36})",
-      "spliter": "",
-      "removers": []
+      "type": "input-select",
+      "uiOptions": {
+        "label": "Status",
+        "options": [
+          { "label": "Reading", "value": "Reading" },
+          { "label": "Read Later", "value": "Read Later" },
+          { "label": "Completed", "value": "Completed" },
+          { "label": "Dropped", "value": "Dropped" }
+        ]
+      }
     },
     {
       "parentFieldId": "",
@@ -137,7 +145,7 @@
       "removers": []
     },
     {
-      "parentFieldId": "38b207e7-9679-4a9b-9f4f-84b5b27a72c1",
+      "parentFieldId": "2ec9165c-ab0c-44f8-9e6c-f7af263dee54",
       "name": "Genres",
       "order": 8,
       "isRequired": false,
@@ -157,9 +165,9 @@
       "removers": []
     },
     {
-      "parentFieldId": "38b207e7-9679-4a9b-9f4f-84b5b27a72c1",
+      "parentFieldId": "2ec9165c-ab0c-44f8-9e6c-f7af263dee54",
       "name": "Artists",
-      "order": 10,
+      "order": 9,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
@@ -176,9 +184,9 @@
       "removers": []
     },
     {
-      "parentFieldId": "38b207e7-9679-4a9b-9f4f-84b5b27a72c1",
+      "parentFieldId": "2ec9165c-ab0c-44f8-9e6c-f7af263dee54",
       "name": "Authors",
-      "order": 11,
+      "order": 10,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
