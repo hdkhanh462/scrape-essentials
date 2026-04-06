@@ -51,8 +51,8 @@
         "label": "Status",
         "options": [
           { "label": "Watching", "value": "Watching" },
-          { "label": "Completed", "value": "Completed" },
           { "label": "Watch Later", "value": "Watch Later" },
+          { "label": "Completed", "value": "Completed" },
           { "label": "Dropped", "value": "Dropped" }
         ]
       }
@@ -82,7 +82,7 @@
       "order": 4,
       "isRequired": false,
       "isFilterable": true,
-      "isShowOnTable": true,
+      "isShowOnTable": false,
       "type": "text",
       "scrapeOptions": {
         "cssSelector": "h2.SubTitle",
@@ -97,7 +97,7 @@
     },
     {
       "parentFieldId": "",
-      "name": "InfoLeft (AnimeVietsub)",
+      "name": "AnimeVietsub InfoLeft",
       "order": 5,
       "isRequired": false,
       "type": "text",
@@ -135,7 +135,7 @@
     },
     {
       "parentFieldId": "",
-      "name": "InfoRight (AnimeVietsub)",
+      "name": "AnimeVietsub InfoRight",
       "order": 7,
       "isRequired": false,
       "type": "text",

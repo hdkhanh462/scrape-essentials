@@ -41,7 +41,17 @@ export function ScrapedRecordsCardFooter({
   };
 
   const handleCopy = () => {
-    if (!matchConfig || rawScrapedData) return;
+    logger.log("Copying data with", {
+      matchConfig,
+      rawScrapedData,
+      scrapedRecord,
+      rawKey,
+    });
+
+    if (!matchConfig || !rawScrapedData) {
+      logger.error("Missing matchConfig or rawScrapedData, cannot copy");
+      return;
+    }
 
     const copyData = processCopyData({
       matchConfig,
@@ -49,6 +59,9 @@ export function ScrapedRecordsCardFooter({
       scrapedRecord,
       key: rawKey,
     });
+
+    logger.log("Processed copy data", { copyData });
+
     copyToClipboard(copyData);
   };
 

@@ -145,7 +145,7 @@
       "removers": []
     },
     {
-      "parentFieldId": "2ec9165c-ab0c-44f8-9e6c-f7af263dee54",
+      "parentFieldId": "126763f0-6ad0-402a-a642-40e39c07689a",
       "name": "Genres",
       "order": 8,
       "isRequired": false,
@@ -165,7 +165,7 @@
       "removers": []
     },
     {
-      "parentFieldId": "2ec9165c-ab0c-44f8-9e6c-f7af263dee54",
+      "parentFieldId": "126763f0-6ad0-402a-a642-40e39c07689a",
       "name": "Artists",
       "order": 9,
       "isRequired": false,
@@ -184,7 +184,7 @@
       "removers": []
     },
     {
-      "parentFieldId": "2ec9165c-ab0c-44f8-9e6c-f7af263dee54",
+      "parentFieldId": "126763f0-6ad0-402a-a642-40e39c07689a",
       "name": "Authors",
       "order": 10,
       "isRequired": false,

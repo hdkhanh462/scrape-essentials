@@ -23,7 +23,7 @@ import { ConfigSchema } from "@/features/configs/schemas";
 import type { ConfigInput } from "@/features/configs/types/form-input";
 import { useGetFields } from "@/features/fields/hooks";
 import { useDialog } from "@/hooks/use-dialog";
-import type { ScrapeConfig } from "@/lib/dexie";
+import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
 import { dbFieldToFieldInput } from "@/utils/convers";
 import { logger } from "@/utils/logger";
 
@@ -56,7 +56,7 @@ export function ConfigTableRowActions({ row }: Props) {
     onError: (error) => toastError(error, "Failed to delete config"),
   });
 
-  const { data: originalFields } = useGetFields(
+  const { data: originalFields, refetch: refetchOriginalFields } = useGetFields(
     { configId: row.original.id },
     { enabled: modalOpen },
   );
@@ -70,14 +70,20 @@ export function ConfigTableRowActions({ row }: Props) {
     toast.success("Config ID copied to clipboard");
   }
 
-  function handleCopyConfig(_e: Event) {
+  async function handleCopyConfig(_e: Event) {
+    let fields: ConfigField[] = originalFields || [];
+    if (!originalFields) {
+      const { data } = await refetchOriginalFields();
+      fields = data || [];
+    }
+
     const configData = {
       name: row.original.name,
       isActive: row.original.isActive,
       domains: row.original.domains.map((domain) => ({
         value: domain,
       })),
-      fields: originalFields?.map((field) => dbFieldToFieldInput(field)) || [],
+      fields: fields.map((field) => dbFieldToFieldInput(field)),
     };
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {

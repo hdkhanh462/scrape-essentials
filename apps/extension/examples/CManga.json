@@ -41,18 +41,26 @@
     },
     {
       "parentFieldId": "",
-      "name": "Read Later",
+      "name": "Status",
       "order": 2,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
-      "type": "input-checkbox",
-      "uiOptions": { "label": "Read Later", "defaultValue": "false" }
+      "type": "input-select",
+      "uiOptions": {
+        "label": "Status",
+        "options": [
+          { "label": "Reading", "value": "Reading" },
+          { "label": "Read Later", "value": "Read Later" },
+          { "label": "Completed", "value": "Completed" },
+          { "label": "Dropped", "value": "Dropped" }
+        ]
+      }
     },
     {
       "parentFieldId": "",
       "name": "Title",
-      "order": 3,
+      "order": 4,
       "isRequired": true,
       "isFilterable": true,
       "isShowOnTable": true,
@@ -70,17 +78,17 @@
     },
     {
       "parentFieldId": "",
-      "name": "Alternative",
-      "order": 4,
+      "name": "Alternatives",
+      "order": 5,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": false,
       "type": "text",
       "scrapeOptions": {
-        "cssSelector": ".name_other > span",
+        "cssSelector": "div.name_other > span",
         "condition": "",
         "attributeName": "",
-        "isMultiple": false
+        "isMultiple": true
       },
       "isPrimary": false,
       "regex": "",
@@ -90,7 +98,7 @@
     {
       "parentFieldId": "",
       "name": "Genres",
-      "order": 5,
+      "order": 6,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
