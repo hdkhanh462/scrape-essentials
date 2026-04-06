@@ -41,17 +41,25 @@
     },
     {
       "parentFieldId": "",
-      "name": "Read Later",
+      "name": "Status",
       "order": 2,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
-      "type": "input-checkbox",
-      "uiOptions": { "label": "Read Later", "defaultValue": "false" }
+      "type": "input-select",
+      "uiOptions": {
+        "label": "Status",
+        "options": [
+          { "label": "Reading", "value": "Reading" },
+          { "label": "Read Later", "value": "Read Later" },
+          { "label": "Completed", "value": "Completed" },
+          { "label": "Dropped", "value": "Dropped" }
+        ]
+      }
     },
     {
       "name": "Title",
-      "order": 3,
+      "order": 4,
       "type": "text",
       "scrapeOptions": { "cssSelector": "h1" },
       "isPrimary": true,
@@ -59,7 +67,7 @@
     },
     {
       "name": "Genres",
-      "order": 4,
+      "order": 5,
       "isShowOnTable": true,
       "type": "text",
       "scrapeOptions": {
@@ -70,7 +78,7 @@
     },
     {
       "name": "Authors",
-      "order": 5,
+      "order": 6,
       "isShowOnTable": true,
       "type": "text",
       "scrapeOptions": {
