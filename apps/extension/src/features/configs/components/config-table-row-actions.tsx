@@ -73,6 +73,7 @@ export function ConfigTableRowActions({ row }: Props) {
   async function handleCopyConfig(_e: Event) {
     let fields: ConfigField[] = originalFields || [];
     if (!originalFields) {
+      logger.log("Fields not loaded, refetching...");
       const { data } = await refetchOriginalFields();
       fields = data || [];
     }
@@ -85,6 +86,9 @@ export function ConfigTableRowActions({ row }: Props) {
       })),
       fields: fields.map((field) => dbFieldToFieldInput(field)),
     };
+
+    logger.log("Copying config with fields:", { configData });
+
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {
       logger.error("Error copying config:", result.error);
@@ -101,6 +105,7 @@ export function ConfigTableRowActions({ row }: Props) {
       });
       return;
     }
+
     navigator.clipboard.writeText(JSON.stringify(result.data));
     toast.success("Config copied to clipboard");
   }
