@@ -36,9 +36,8 @@ app.get("/", (c) => {
 app.post("/api/auth/token", async (c) => {
   const clientId = c.env.GOOGLE_CLIENT_ID;
   const clientSecret = c.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = c.env.GOOGLE_REDIRECT_URI;
 
-  const body = await c.req.json();
+  const { code, redirectUri } = await c.req.json();
 
   try {
     const response = await fetch("https://oauth2.googleapis.com/token", {
@@ -47,10 +46,10 @@ app.post("/api/auth/token", async (c) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        code: body.code,
+        code: code,
         client_id: clientId,
         client_secret: clientSecret,
-        redirect_uri: redirectUri,
+        redirect_uri: redirectUri || c.env.GOOGLE_REDIRECT_URI,
         grant_type: "authorization_code",
       }),
     });

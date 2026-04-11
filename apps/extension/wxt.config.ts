@@ -15,10 +15,6 @@ export default defineConfig({
     version: "0.1.7",
     permissions: ["activeTab", "identity", "storage", "scripting", "alarms"],
     host_permissions: [`${import.meta.env.VITE_API_URL}/*`],
-    oauth2: {
-      client_id: import.meta.env.WXT_GOOGLE_CLIENT_ID,
-      scopes: ["https://www.googleapis.com/auth/drive.file"],
-    },
   }),
   vite: () => ({
     plugins: [tailwindcss()],
