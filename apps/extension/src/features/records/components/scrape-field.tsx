@@ -15,7 +15,7 @@ interface ScrapeFieldProps {
 }
 
 export default function ScrapeField({ field, value }: ScrapeFieldProps) {
-  const { copyToClipboard, isCopied } = useCopyToClipboard();
+  const copyField = useCopyToClipboard();
 
   return (
     <Field orientation="horizontal">
@@ -28,10 +28,10 @@ export default function ScrapeField({ field, value }: ScrapeFieldProps) {
             title="Copy"
             size="icon-xs"
             onClick={() => {
-              copyToClipboard(value || "");
+              copyField.copy(value || "");
             }}
           >
-            {isCopied ? <CheckIcon /> : <CopyIcon />}
+            {copyField.isCopied ? <CheckIcon /> : <CopyIcon />}
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>

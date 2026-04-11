@@ -1,5 +1,8 @@
+import { CheckIcon, ClipboardPasteIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+
+import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { ConfigSchema } from "@/features/configs/schemas";
@@ -12,10 +15,21 @@ interface Props {
   form: UseFormReturn<ConfigInput>;
 }
 
-export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
-  const handlePaste = () => {
-    navigator.clipboard.readText().then((text) => {
-      const { data, error } = ConfigSchema.safeParse(JSON.parse(text));
+export function ConfigDialogFormFooter({ id, mode, form }: Props) {
+  const pasteConfig = usePasteFromClipboard({
+    onPaste: (text) => {
+      let valueFromClipboard: unknown;
+
+      try {
+        valueFromClipboard = JSON.parse(text);
+      } catch (error) {
+        toast.error("Invalid JSON format in clipboard", {
+          description: error instanceof Error ? error.message : "Unknown error",
+        });
+        return;
+      }
+
+      const { data, error } = ConfigSchema.safeParse(valueFromClipboard);
       if (error) {
         logger.error("Error parsing config from clipboard:", error);
         toast.error("Paste failed", {
@@ -34,8 +48,8 @@ export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
       form.reset(data, {
         keepDefaultValues: true,
       });
-    });
-  };
+    },
+  });
 
   return (
     <Field orientation="horizontal">
@@ -45,9 +59,20 @@ export function ScrapeConfigsDialogFormFooter({ id, mode, form }: Props) {
           variant="outline"
           size="sm"
           className="h-8"
-          onClick={() => handlePaste()}
+          onClick={pasteConfig.paste}
         >
-          Paste
+          <Loader
+            isLoading={pasteConfig.isPasted}
+            fallback={
+              <>
+                <CheckIcon />
+                Pasted
+              </>
+            }
+          >
+            <ClipboardPasteIcon />
+            Paste
+          </Loader>
         </Button>
       )}
       <Button

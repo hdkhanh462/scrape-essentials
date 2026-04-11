@@ -8,7 +8,7 @@ import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import ScrapeConfigsDialogForm from "@/features/configs/components/scrape-configs-dialog-form";
+import ConfigDialogForm from "@/features/configs/components/config-dialog-form";
 import { useAddConfig, useImportConfigs } from "@/features/configs/hooks";
 import type { ImportConfigsPayload } from "@/features/configs/types";
 import type { ConfigInput } from "@/features/configs/types/form-input";
@@ -164,7 +164,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           }
         />
         <DataTableViewOptions table={table} />
-        <ScrapeConfigsDialogForm
+        <ConfigDialogForm
           id="add-config-dialog-form"
           open={dialog.isOpen}
           onOpenChange={dialog.onChange}

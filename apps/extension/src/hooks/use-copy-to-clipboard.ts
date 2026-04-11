@@ -1,16 +1,15 @@
 import React from "react";
 import { logger } from "@/utils/logger";
 
-export function useCopyToClipboard({
-  timeout = 2000,
-  onCopy,
-}: {
+type Options = {
   timeout?: number;
   onCopy?: () => void;
-} = {}) {
+};
+
+export function useCopyToClipboard(options: Options = { timeout: 2000 }) {
   const [isCopied, setIsCopied] = React.useState(false);
 
-  const copyToClipboard = (value: string) => {
+  const copy = (value: string) => {
     if (typeof window === "undefined" || !navigator.clipboard.writeText) {
       return;
     }
@@ -19,18 +18,15 @@ export function useCopyToClipboard({
 
     navigator.clipboard.writeText(value).then(() => {
       setIsCopied(true);
+      options.onCopy?.();
 
-      if (onCopy) {
-        onCopy();
-      }
-
-      if (timeout !== 0) {
+      if (options.timeout !== 0) {
         setTimeout(() => {
           setIsCopied(false);
-        }, timeout);
+        }, options.timeout);
       }
     }, logger.error);
   };
 
-  return { isCopied, copyToClipboard };
+  return { isCopied, copy };
 }

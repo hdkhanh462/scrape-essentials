@@ -26,7 +26,7 @@ export function ScrapedRecordsCardFooter({
   isDirty,
   onDeleteSuccess,
 }: FooterProps) {
-  const { copyToClipboard } = useCopyToClipboard();
+  const copyScrapedData = useCopyToClipboard();
   const { mutate: deleteRecord } = useDeleteRecord();
 
   const handleDelete = async () => {
@@ -62,7 +62,7 @@ export function ScrapedRecordsCardFooter({
 
     logger.log("Processed copy data", { copyData });
 
-    copyToClipboard(copyData);
+    copyScrapedData.copy(copyData);
   };
 
   return (

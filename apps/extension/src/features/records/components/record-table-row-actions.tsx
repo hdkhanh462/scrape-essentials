@@ -23,7 +23,7 @@ interface Props {
 
 export function RecordTableRowActions({ row }: Props) {
   const deleteConfirmDialog = useDialog();
-  const { copyToClipboard } = useCopyToClipboard();
+  const copyRecord = useCopyToClipboard();
   const { mutate: deleteRecord } = useDeleteRecord();
 
   async function handleCopyRecord() {
@@ -42,7 +42,7 @@ export function RecordTableRowActions({ row }: Props) {
         scrapedData: row.original.data,
         key: row.original.key,
       });
-      copyToClipboard(copyData);
+      copyRecord.copy(copyData);
       toast.success("Record copied to clipboard");
     }
   }

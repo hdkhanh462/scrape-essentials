@@ -18,7 +18,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import type { ConfigInput } from "@/features/configs/types/form-input";
-import ConfigFieldsSheetForm from "@/features/fields/components/config-fields-sheet-form";
+import FieldSheetForm from "@/features/fields/components/field-sheet-form";
 import type { FieldInput } from "@/features/fields/types/form-input";
 import type { ConfigField } from "@/lib/dexie";
 
@@ -94,7 +94,7 @@ export default function SortableFieldItem({
                     </InputGroupButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <ConfigFieldsSheetForm
+                    <FieldSheetForm
                       formId={`edit-field-sheet-form-${id}`}
                       field={field}
                       onSubmit={async (data) =>
