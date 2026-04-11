@@ -7,6 +7,7 @@ import SheetWrapper from "@/components/sheet-wrapper";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { SelectItem } from "@/components/ui/select";
 import CheckboxFields from "@/features/fields/components/checkbox-fields";
+import { FieldSheetFooter } from "@/features/fields/components/field-sheet-footer";
 import { ScrapeField } from "@/features/fields/components/scrape-field";
 import SelectorFields from "@/features/fields/components/selector-fields";
 import TextFields from "@/features/fields/components/text-fields";
@@ -17,7 +18,6 @@ import type {
   FieldInput,
   FullErrors,
 } from "@/features/fields/types/form-input";
-import { DialogFooter } from "@/features/shared/components/dialog-footer";
 import { FieldType } from "@/lib/dexie";
 
 const DEFAULT_VALUES: FieldInput = {
@@ -45,7 +45,7 @@ type Props = Omit<DialogWrapperProps, "title"> & {
   onSubmit?: (input: FieldInput) => Promise<void>;
 };
 
-export default function ConfigFieldsSheetForm({
+export default function FieldSheetForm({
   formId,
   field,
   onSubmit,
@@ -90,11 +90,10 @@ export default function ConfigFieldsSheetForm({
       {...props}
       title={field ? "Edit Field" : "Add Field"}
       footer={
-        <DialogFooter
-          formId={formId}
-          isDirty={form.formState.isDirty}
-          submitText={field ? "Save" : "Add"}
-          onReset={form.reset}
+        <FieldSheetFooter
+          id={formId}
+          form={form}
+          mode={field ? "edit" : "add"}
         />
       }
     >

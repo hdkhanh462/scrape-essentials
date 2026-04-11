@@ -22,10 +22,10 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ScrapeConfigsDialogFormFooter } from "@/features/configs/components/scrape-configs-dialog-form-footer";
+import { ConfigDialogFormFooter } from "@/features/configs/components/config-dialog-form-footer";
 import { ConfigSchema as configSchema } from "@/features/configs/schemas";
 import type { ConfigInput } from "@/features/configs/types/form-input";
-import ConfigFieldsSheetForm from "@/features/fields/components/config-fields-sheet-form";
+import FieldSheetForm from "@/features/fields/components/field-sheet-form";
 import {
   useAddField,
   useDeleteField,
@@ -56,7 +56,7 @@ type Props = Omit<DialogWrapperProps, "title"> & {
   onSubmit?: (input: ConfigInput) => Promise<void> | void;
 };
 
-export default function ScrapeConfigsDialogForm({
+export default function ConfigDialogForm({
   id,
   configId,
   config,
@@ -202,7 +202,7 @@ export default function ScrapeConfigsDialogForm({
     <DialogWrapper
       title={config ? "Edit Config" : "Add Config"}
       footer={
-        <ScrapeConfigsDialogFormFooter
+        <ConfigDialogFormFooter
           id={id}
           mode={configId ? "edit" : "add"}
           form={form}
@@ -310,7 +310,7 @@ export default function ScrapeConfigsDialogForm({
           <FormSwitch control={form.control} name="isActive" label="Active" />
         </FieldGroup>
       </form>
-      <ConfigFieldsSheetForm
+      <FieldSheetForm
         formId="add-field-sheet-form"
         open={addFieldDialog.isOpen}
         onOpenChange={addFieldDialog.onChange}

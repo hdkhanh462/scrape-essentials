@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Field } from "@/components/ui/field";
-import ScrapeConfigsDialogForm from "@/features/configs/components/scrape-configs-dialog-form";
+import ConfigDialogForm from "@/features/configs/components/config-dialog-form";
 import {
   useDeleteConfig,
   useDuplicateConfig,
@@ -123,7 +123,7 @@ export function ConfigTableRowActions({ row }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <ScrapeConfigsDialogForm
+        <ConfigDialogForm
           id="edit-config-dialog-form"
           configId={row.original.id}
           config={{
