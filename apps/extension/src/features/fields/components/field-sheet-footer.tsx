@@ -82,7 +82,13 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
           </Loader>
         </Button>
       ) : (
-        <Button type="button" variant="outline" size="sm" onClick={handleCopy}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-8"
+          onClick={handleCopy}
+        >
           <Loader
             isLoading={copyField.isCopied}
             fallback={
