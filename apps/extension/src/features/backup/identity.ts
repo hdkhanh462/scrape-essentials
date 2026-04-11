@@ -51,10 +51,13 @@ export async function launchWebAuthFlow(): Promise<OAuthTokenResponse> {
     throw new Error("Authorization code missing");
   }
 
-  return exchangeToken(code);
+  return exchangeToken(code, redirectUri);
 }
 
-export async function exchangeToken(code: string): Promise<OAuthTokenResponse> {
+export async function exchangeToken(
+  code: string,
+  redirectUri: string,
+): Promise<OAuthTokenResponse> {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/api/auth/token`,
     {
@@ -62,7 +65,7 @@ export async function exchangeToken(code: string): Promise<OAuthTokenResponse> {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code, redirectUri }),
     },
   );
 
