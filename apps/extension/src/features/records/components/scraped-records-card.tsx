@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Activity } from "react";
-import { useForm } from "react-hook-form";
+import { type Control, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CardWrapper from "@/components/card-wrapper";
 import {
@@ -190,24 +190,7 @@ export function ScrapedRecordsCard({
                 : "hidden"
             }
           >
-            <div className="grid grid-cols-2 gap-2">
-              {uiFields.map((field, index) => {
-                const nextField = uiFields[index + 1];
-                const isLarge =
-                  isLargeField(field.type) ||
-                  !nextField ||
-                  (index % 2 === 0 &&
-                    !isLargeField(nextField.type) &&
-                    nextField.type === FieldType.InputCheckbox) ||
-                  (index % 2 === 0 && isScrapeFieldType(nextField.type));
-
-                return (
-                  <div key={field.id} className={cn(isLarge && "col-span-2")}>
-                    <UiField field={field} control={form.control} />
-                  </div>
-                );
-              })}
-            </div>
+            <UIInputs control={form.control} fields={uiFields} />
           </Activity>
           <Activity>
             <Accordion type="single" defaultValue="item-1" collapsible>
@@ -237,3 +220,61 @@ export function ScrapedRecordsCard({
     </CardWrapper>
   );
 }
+
+const UIInputs = ({
+  control,
+  fields,
+}: {
+  control: Control<ScrapedDataInput>;
+  fields: ConfigField[];
+}) => {
+  const rows: ConfigField[][] = [];
+  let i = 0;
+
+  while (i < fields.length) {
+    const current = fields[i];
+    const next = fields[i + 1];
+
+    const isCurrentLarge = isLargeField(current.type);
+    const isNextLarge = next && isLargeField(next.type);
+
+    if (isCurrentLarge && isNextLarge) {
+      rows.push([current, next]);
+      i += 2;
+      continue;
+    }
+
+    if (isCurrentLarge) {
+      rows.push([current]);
+      i++;
+      continue;
+    }
+
+    if (next && !isLargeField(next.type)) {
+      rows.push([current, next]);
+      i += 2;
+      continue;
+    }
+
+    rows.push([current]);
+    i++;
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      {rows.map((row, idx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: <>
+        <div key={idx} className="grid grid-cols-2 gap-2">
+          {row.map((item) => (
+            <div
+              key={item.id}
+              className={cn(row.length === 1 ? "col-span-2" : "col-span-1")}
+            >
+              <UiField field={item} control={control} />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
