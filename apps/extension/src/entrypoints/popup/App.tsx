@@ -33,9 +33,8 @@ export default function App() {
   useEffect(() => {
     if (!currentPage || !configs || !fields) return;
 
-    const { hostname } = new URL(currentPage.url);
     const _matchConfig = configs.find((config) =>
-      config.domains.some((domain) => new RegExp(domain).test(hostname)),
+      config.domains.some((domain) => new RegExp(domain).test(currentPage.url)),
     );
 
     if (_matchConfig && fields) {

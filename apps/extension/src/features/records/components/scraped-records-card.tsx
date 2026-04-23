@@ -23,10 +23,10 @@ import type { MatchConfig } from "@/features/records/types/scrape";
 import {
   buildDefaultScrapedData,
   buildScrapedDataSchema,
+  groupItems,
 } from "@/features/records/utils/helpers";
 import { type ConfigField, FieldType } from "@/lib/dexie";
 import { cn } from "@/lib/utils";
-import { isLargeField } from "@/utils/config-field";
 import { logger } from "@/utils/logger";
 import { toastError } from "@/utils/toast";
 
@@ -228,37 +228,7 @@ const UIInputs = ({
   control: Control<ScrapedDataInput>;
   fields: ConfigField[];
 }) => {
-  const rows: ConfigField[][] = [];
-  let i = 0;
-
-  while (i < fields.length) {
-    const current = fields[i];
-    const next = fields[i + 1];
-
-    const isCurrentLarge = isLargeField(current.type);
-    const isNextLarge = next && isLargeField(next.type);
-
-    if (isCurrentLarge && isNextLarge) {
-      rows.push([current, next]);
-      i += 2;
-      continue;
-    }
-
-    if (isCurrentLarge) {
-      rows.push([current]);
-      i++;
-      continue;
-    }
-
-    if (next && !isLargeField(next.type)) {
-      rows.push([current, next]);
-      i += 2;
-      continue;
-    }
-
-    rows.push([current]);
-    i++;
-  }
+  const rows = groupItems(fields);
 
   return (
     <div className="flex flex-col gap-2">
