@@ -66,6 +66,7 @@ const typeUnion = z.discriminatedUnion("type", [
 
 export const FieldSchema = z
   .object({
+    fieldId: z.string().optional(),
     parentFieldId: z.string().optional(),
     name: z.string().nonempty("Field name is required"),
     order: z.number().min(0, "Order must be a non-negative number"),

@@ -90,3 +90,54 @@ export function buildDefaultScrapedData(fields: ConfigField[]) {
 
   return data;
 }
+
+export const groupItems = (fields: ConfigField[]) => {
+  const rows: ConfigField[][] = [];
+  let i = 0;
+
+  while (i < fields.length) {
+    const current = fields[i];
+    const next = fields[i + 1];
+
+    const isCurrentLarge = isLargeField(current.type);
+    const isNextLarge = next ? isLargeField(next.type) : false;
+
+    // CASE 1: large + large -> share same row
+    if (isCurrentLarge && isNextLarge) {
+      rows.push([current, next]);
+      i += 2;
+      continue;
+    }
+
+    // CASE 2: large + small -> split into two rows immediately
+    if (isCurrentLarge && next && !isNextLarge) {
+      rows.push([current]); // large full width
+      rows.push([next]); // small also forced to its own row
+      i += 2;
+      continue;
+    }
+
+    // CASE 3: small + large -> split into two rows
+    if (!isCurrentLarge && isNextLarge) {
+      rows.push([current]); // small alone
+      rows.push([next]); // large alone
+      i += 2;
+      continue;
+    }
+
+    // CASE 4: small + small -> share row
+    if (!isCurrentLarge && next && !isNextLarge) {
+      rows.push([current, next]);
+      i += 2;
+      continue;
+    }
+
+    // CASE 5: last remaining item
+    rows.push([current]);
+    i++;
+  }
+
+  logger.log("Grouped fields into rows:", rows);
+
+  return rows;
+};

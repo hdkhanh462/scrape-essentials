@@ -70,21 +70,35 @@ export const editConfig = async (
     dexie.scrapeConfigs,
     dexie.configFields,
     async (tx) => {
+      logger.log("[DEBUG] Editing config with fields:", {
+        fields: payload.data.fields,
+      });
+
       const row = await tx.scrapeConfigs.update(payload.id, {
         name: payload.data.name,
         isActive: payload.data.isActive,
         domains: payload.data.domains.map((d) => d.value),
         updatedAt: new Date().toISOString(),
       });
+      const oldFields = await tx.configFields
+        .where("configId")
+        .equals(payload.id)
+        .toArray();
 
       // Delete fields of the config
       await tx.configFields.where("configId").equals(payload.id).delete();
 
-      // Add new fields
-      const fields = payload.data.fields.map((field) =>
-        fieldInputToDb(field, payload.id),
-      );
-      await tx.configFields.bulkAdd(fields);
+      // When editing a config, we want to keep the same field id if the field is not changed,
+      // so we need to find the old field by fieldId and use its id if it exists
+      const fieldsToPut = payload.data.fields.map((field) => {
+        const oldField = oldFields.find((f) => f.id === field.fieldId);
+        return {
+          ...fieldInputToDb(field, payload.id),
+          id: oldField ? oldField.id : crypto.randomUUID(),
+        };
+      });
+
+      await tx.configFields.bulkPut(fieldsToPut);
 
       return row > 0;
     },
