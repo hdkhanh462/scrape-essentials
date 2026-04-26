@@ -8,10 +8,9 @@ import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import ConfigDialogForm from "@/features/configs/components/config-dialog-form";
-import { useAddConfig, useImportConfigs } from "@/features/configs/hooks";
+import { useImportConfigs } from "@/features/configs/hooks";
+import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ImportConfigsPayload } from "@/features/configs/types";
-import type { ConfigInput } from "@/features/configs/types/form-input";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapeConfig } from "@/lib/dexie";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
@@ -23,17 +22,12 @@ interface DataTableToolbarProps {
 export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
   const [importPayload, setImportPayload] = useState<ImportConfigsPayload>();
 
-  const dialog = useDialog();
   const importConfirmDialog = useDialog();
+  const { setMode, setConfigId, showDetail } = useConfigStore(
+    (state) => state.actions,
+  );
 
-  const { mutate: addConfig } = useAddConfig({
-    onSuccess: () => {
-      toast.success("Config added successfully");
-      dialog.close();
-    },
-    onError: (error) => toastError(error, "Failed to add config"),
-  });
-  const { mutate: importConfigs } = useImportConfigs({
+  const importConfigsMutation = useImportConfigs({
     onSuccess: () => {
       toast.success("Import successful");
       importConfirmDialog.close();
@@ -43,11 +37,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
-  function onSubmit(input: ConfigInput) {
-    addConfig(input);
-  }
-
-  async function handleExport() {
+  const handleExport = async () => {
     const allConfigs = await dexie.scrapeConfigs.toArray();
     const allConfigFields = await dexie.configFields.toArray();
     const exportData = { allConfigs, allConfigFields };
@@ -60,16 +50,22 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
       prefix: "configs-export",
     });
     toast.success("Export successful");
-  }
+  };
 
-  async function handleImport() {
+  const handleImport = async () => {
     await importFromJSON(async (file) => {
       const text = await file.text();
       const data = JSON.parse(text);
       setImportPayload(data);
       importConfirmDialog.open();
     });
-  }
+  };
+
+  const handleAddConfigClick = () => {
+    setMode("add");
+    setConfigId(null);
+    showDetail();
+  };
 
   return (
     <div className="flex items-center justify-between">
@@ -155,7 +151,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
                 className="h-8"
                 onClick={() => {
                   if (!importPayload) return;
-                  importConfigs(importPayload);
+                  importConfigsMutation.mutate(importPayload);
                 }}
               >
                 Continue
@@ -164,18 +160,10 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           }
         />
         <DataTableViewOptions table={table} />
-        <ConfigDialogForm
-          id="add-config-dialog-form"
-          open={dialog.isOpen}
-          onOpenChange={dialog.onChange}
-          onSubmit={onSubmit}
-          trigger={
-            <Button size="sm" className="h-8" onClick={dialog.open}>
-              <PlusIcon />
-              Add Config
-            </Button>
-          }
-        />
+        <Button size="sm" className="h-8" onClick={handleAddConfigClick}>
+          <PlusIcon />
+          Add Config
+        </Button>
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ import { toast } from "sonner";
 
 import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
-import { DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,18 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Field } from "@/components/ui/field";
-import ConfigDialogForm from "@/features/configs/components/config-dialog-form";
-import {
-  useDeleteConfig,
-  useDuplicateConfig,
-  useEditConfig,
-} from "@/features/configs/hooks";
+import { useDeleteConfig, useDuplicateConfig } from "@/features/configs/hooks";
 import { ConfigSchema } from "@/features/configs/schemas";
-import type { ConfigInput } from "@/features/configs/types/form-input";
+import { useConfigStore } from "@/features/configs/stores/config.store";
 import { useGetFields } from "@/features/fields/hooks";
 import { useDialog } from "@/hooks/use-dialog";
 import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
-import { dbFieldToFieldInput } from "@/utils/convers";
+import { dbFieldToFieldInput } from "@/utils/converts";
 import { logger } from "@/utils/logger";
 
 interface Props {
@@ -32,23 +26,19 @@ interface Props {
 }
 
 export function ConfigTableRowActions({ row }: Props) {
-  const [modalOpen, setModalOpen] = useState(false);
-
   const deleteConfirmDialog = useDialog();
+  const { setMode, setConfigId, showDetail } = useConfigStore(
+    (state) => state.actions,
+  );
 
-  const { mutate: editConfig } = useEditConfig({
-    onSuccess: () => {
-      toast.success("Config updated successfully");
-    },
-    onError: (error) => toastError(error, "Failed to update config"),
-  });
-  const { mutate: duplicateConfig } = useDuplicateConfig({
+  const fieldsQuery = useGetFields({ configId: row.original.id });
+  const duplicateConfigMutation = useDuplicateConfig({
     onSuccess: () => {
       toast.success("Config duplicated successfully");
     },
     onError: (error) => toastError(error, "Failed to duplicate config"),
   });
-  const { mutate: deleteConfig } = useDeleteConfig({
+  const deleteConfigMutation = useDeleteConfig({
     onSuccess: () => {
       toast.success("Config deleted successfully");
       deleteConfirmDialog.close();
@@ -56,25 +46,16 @@ export function ConfigTableRowActions({ row }: Props) {
     onError: (error) => toastError(error, "Failed to delete config"),
   });
 
-  const { data: originalFields, refetch: refetchOriginalFields } = useGetFields(
-    { configId: row.original.id },
-    { enabled: modalOpen },
-  );
-
-  function handleSubmit(data: ConfigInput) {
-    editConfig({ id: row.original.id, data });
-  }
-
-  function handleCopyId() {
+  const handleCopyId = () => {
     navigator.clipboard.writeText(row.original.id);
     toast.success("Config ID copied to clipboard");
-  }
+  };
 
-  async function handleCopyConfig(_e: Event) {
-    let fields: ConfigField[] = originalFields || [];
-    if (!originalFields) {
+  const handleCopyConfig = async (_e: Event) => {
+    let fields: ConfigField[] = fieldsQuery.data || [];
+    if (!fields.length) {
       logger.log("Fields not loaded, refetching...");
-      const { data } = await refetchOriginalFields();
+      const { data } = await fieldsQuery.refetch();
       fields = data || [];
     }
 
@@ -108,7 +89,13 @@ export function ConfigTableRowActions({ row }: Props) {
 
     navigator.clipboard.writeText(JSON.stringify(result.data));
     toast.success("Config copied to clipboard");
-  }
+  };
+
+  const handleEditSelect = () => {
+    setConfigId(row.original.id);
+    setMode("edit");
+    showDetail();
+  };
 
   return (
     <DropdownMenu>
@@ -123,34 +110,14 @@ export function ConfigTableRowActions({ row }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <ConfigDialogForm
-          id="edit-config-dialog-form"
-          configId={row.original.id}
-          config={{
-            ...row.original,
-            domains: row.original.domains.map((domain) => ({ value: domain })),
-            fields: originalFields
-              ? originalFields.map((field) =>
-                  dbFieldToFieldInput(field, field.id),
-                )
-              : [],
-          }}
-          onSubmit={handleSubmit}
-          onOpenChange={setModalOpen}
-          trigger={
-            <DialogTrigger type="button" className="w-full">
-              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                Edit
-              </DropdownMenuItem>
-            </DialogTrigger>
-          }
-        />
-
+        <DropdownMenuItem onSelect={handleEditSelect}>Edit</DropdownMenuItem>
         <DropdownMenuItem onSelect={handleCopyId}>Copy ID</DropdownMenuItem>
         <DropdownMenuItem onSelect={handleCopyConfig}>
           Copy JSON
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => duplicateConfig(row.original.id)}>
+        <DropdownMenuItem
+          onSelect={() => duplicateConfigMutation.mutate(row.original.id)}
+        >
           Duplicate
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -184,7 +151,7 @@ export function ConfigTableRowActions({ row }: Props) {
               variant="destructive"
               size="sm"
               className="h-8"
-              onClick={() => deleteConfig(row.original.id)}
+              onClick={() => deleteConfigMutation.mutate(row.original.id)}
             >
               Continue
             </Button>

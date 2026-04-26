@@ -6,7 +6,7 @@ import type {
   ToggleConfigActivePayload,
 } from "@/features/configs/types";
 import { dexie, type ScrapeConfig } from "@/lib/dexie";
-import { fieldInputToDb } from "@/utils/convers";
+import { fieldInputToDb } from "@/utils/converts";
 
 export const getConfigs = async (
   payload: GetConfigsPayload,
@@ -17,6 +17,20 @@ export const getConfigs = async (
     )
     .reverse()
     .sortBy("createdAt");
+};
+
+export const getConfigById = async (payload: {
+  id: ScrapeConfig["id"];
+  isActive?: boolean;
+}): Promise<ScrapeConfig | undefined> => {
+  const config = await dexie.scrapeConfigs
+    .where("id")
+    .equals(payload.id)
+    .filter((c) =>
+      payload.isActive === undefined ? true : c.isActive === payload.isActive,
+    )
+    .first();
+  return config;
 };
 
 export const importConfigs = async (

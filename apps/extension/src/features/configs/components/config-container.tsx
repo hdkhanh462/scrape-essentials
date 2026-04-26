@@ -1,8 +1,4 @@
-import type {
-  ColumnDef,
-  OnChangeFn,
-  VisibilityState,
-} from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
@@ -10,11 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { BadgeOverflow } from "@/components/ui/badge-overflow";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ConfigActiveCell } from "@/features/configs/components/config-active-cell";
+import { ConfigDetail } from "@/features/configs/components/config-detail";
 import { ConfigTableRowActions } from "@/features/configs/components/config-table-row-actions";
 import { ConfigTableToolbar } from "@/features/configs/components/config-table-toolbar";
 import { useGetConfigs } from "@/features/configs/hooks";
+import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ScrapeConfig } from "@/lib/dexie";
-import { useOptionsStore } from "@/features/shared/stores/options.store";
 import { useColumnVisibility } from "@/utils/table";
 
 const columns: ColumnDef<ScrapeConfig>[] = [
@@ -92,20 +89,25 @@ const columns: ColumnDef<ScrapeConfig>[] = [
   },
 ];
 
-export function ConfigsContainer() {
+export function ConfigContainer() {
   const { data } = useGetConfigs({});
+  const { showDetail } = useConfigStore();
   const columnVisibility = useColumnVisibility();
 
   return (
     <div>
-      <DataTable
-        columns={columns}
-        data={data ?? []}
-        columnVisibility={columnVisibility.value}
-        onColumnVisibilityChange={columnVisibility.onChange}
-      >
-        {(table) => <ConfigTableToolbar table={table} />}
-      </DataTable>
+      {showDetail ? (
+        <ConfigDetail />
+      ) : (
+        <DataTable
+          columns={columns}
+          data={data ?? []}
+          columnVisibility={columnVisibility.value}
+          onColumnVisibilityChange={columnVisibility.onChange}
+        >
+          {(table) => <ConfigTableToolbar table={table} />}
+        </DataTable>
+      )}
     </div>
   );
 }

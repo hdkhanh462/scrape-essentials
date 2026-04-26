@@ -1,5 +1,6 @@
 import {
   type UseMutationOptions,
+  type UseQueryOptions,
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import {
   deleteConfig,
   duplicateConfig,
   editConfig,
+  getConfigById,
   getConfigs,
   importConfigs,
   toggleConfigActive,
@@ -25,13 +27,33 @@ import type { ScrapeConfig } from "@/lib/dexie";
 export const configQueryKey = {
   all: ["configs"] as const,
   list: (payload: GetConfigsPayload) =>
-    [...configQueryKey.all, payload] as const,
+    [...configQueryKey.all, "list", payload] as const,
+  get: (payload: { id: ScrapeConfig["id"]; isActive?: boolean }) =>
+    [...configQueryKey.all, "get", payload] as const,
 };
 
 export const useGetConfigs = (payload: GetConfigsPayload) => {
   return useQuery<ScrapeConfig[]>({
     queryKey: configQueryKey.list(payload),
     queryFn: () => getConfigs(payload),
+  });
+};
+
+export const useGetConfigById = (
+  payload: {
+    id: ScrapeConfig["id"];
+    isActive?: boolean;
+  },
+  options?: Pick<UseQueryOptions<ScrapeConfig | undefined>, "enabled">,
+) => {
+  logger.log("[DEBUG] useGetConfigById", {
+    enabled: options?.enabled ?? !!payload.id,
+  });
+
+  return useQuery<ScrapeConfig | undefined>({
+    enabled: options?.enabled ?? !!payload.id,
+    queryKey: configQueryKey.get(payload),
+    queryFn: () => getConfigById(payload),
   });
 };
 
