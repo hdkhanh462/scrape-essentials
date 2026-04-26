@@ -23,17 +23,17 @@ import type { CurrentPage } from "@/features/records/types/scrape";
 import type { ScrapedRecord } from "@/lib/dexie";
 import { sendMessage } from "@/lib/messaging";
 
-export const scrapedRecordQueryKey = {
+export const recordQueryKey = {
   all: ["records"] as const,
   list: (payload: GetScrapedRecordsPayload) =>
-    [...scrapedRecordQueryKey.all, payload] as const,
+    [...recordQueryKey.all, "list", payload] as const,
   detail: (payload: GetScrapedRecordPayload) =>
-    [...scrapedRecordQueryKey.all, "detail", payload] as const,
+    [...recordQueryKey.all, "detail", payload] as const,
 };
 
 export const useGetRecords = (payload: GetScrapedRecordsPayload) => {
   return useQuery<ScrapedRecord[]>({
-    queryKey: scrapedRecordQueryKey.list(payload),
+    queryKey: recordQueryKey.list(payload),
     queryFn: () => getRecords(payload),
     enabled: !!payload.configId,
   });
@@ -41,7 +41,7 @@ export const useGetRecords = (payload: GetScrapedRecordsPayload) => {
 
 export const useGetRecordById = (payload: GetScrapedRecordPayload) => {
   return useQuery<ScrapedRecord | null>({
-    queryKey: scrapedRecordQueryKey.detail(payload),
+    queryKey: recordQueryKey.detail(payload),
     queryFn: () => getRecordById(payload),
   });
 };
@@ -53,7 +53,7 @@ export const useImportRecords = (
     ...options,
     mutationFn: (payload) => importRecords(payload),
     meta: {
-      invalidateQueries: scrapedRecordQueryKey.all,
+      invalidateQueries: recordQueryKey.all,
     },
   });
 };
@@ -69,7 +69,7 @@ export const useAddRecord = (
     ...options,
     mutationFn: (payload) => addRecord(payload),
     meta: {
-      invalidateQueries: scrapedRecordQueryKey.all,
+      invalidateQueries: recordQueryKey.all,
     },
   });
 };
@@ -81,7 +81,7 @@ export const useEditRecord = (
     ...options,
     mutationFn: (payload) => editRecord(payload),
     meta: {
-      invalidateQueries: scrapedRecordQueryKey.all,
+      invalidateQueries: recordQueryKey.all,
     },
   });
 };
@@ -93,7 +93,7 @@ export const useDeleteRecord = (
     ...options,
     mutationFn: (payload) => deleteRecord(payload),
     meta: {
-      invalidateQueries: scrapedRecordQueryKey.all,
+      invalidateQueries: recordQueryKey.all,
     },
   });
 };

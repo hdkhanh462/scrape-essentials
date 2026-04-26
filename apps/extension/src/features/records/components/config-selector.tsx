@@ -1,4 +1,4 @@
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { ChevronsUpDownIcon, RefreshCwIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,66 +15,84 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useGetConfigs } from "@/features/configs/hooks";
+import { recordQueryKey } from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
-import { cn } from "@/lib/utils";
+import { queryClient } from "@/features/shared/query-client";
 
 export const ConfigSelector = () => {
   const [open, setOpen] = useState(false);
 
-  const { configId, setConfigId } = useRecordStore();
+  const { configId } = useRecordStore();
+  const { setConfigId } = useRecordStore((state) => state.actions);
+
   const { data: configs } = useGetConfigs({});
 
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: recordQueryKey.list({ configId }),
+    });
+  };
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <div className="flex items-center gap-2">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            size="sm"
+            aria-expanded={open}
+            className="h-8 w-full max-w-35 justify-between lg:max-w-62"
+          >
+            {configId && configs
+              ? configs.find((config) => config.id === configId)?.name
+              : "Select config..."}
+            <ChevronsUpDownIcon className="opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-50 p-0">
+          <Command
+            filter={(_, search, keywords) => {
+              if (keywords?.[0].toLowerCase().includes(search.toLowerCase()))
+                return 1;
+              return 0;
+            }}
+          >
+            <CommandInput placeholder="Search config..." className="h-9" />
+            <CommandList>
+              <CommandEmpty>No config found.</CommandEmpty>
+              <CommandGroup>
+                {configs?.map((config) => (
+                  <CommandItem
+                    key={config.id}
+                    value={config.id}
+                    keywords={[config.name]}
+                    data-checked={configId === config.id}
+                    onSelect={(currentValue) => {
+                      setConfigId(currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    {config.name}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+
+      {configId && (
         <Button
           variant="outline"
-          role="combobox"
           size="sm"
-          aria-expanded={open}
-          className="h-8 w-full max-w-35 justify-between lg:max-w-62"
+          className="h-8"
+          onClick={handleRefresh}
         >
-          {configId && configs
-            ? configs.find((config) => config.id === configId)?.name
-            : "Select config..."}
-          <ChevronsUpDownIcon className="opacity-50" />
+          <RefreshCwIcon />
+          Refresh
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-50 p-0">
-        <Command
-          filter={(_, search, keywords) => {
-            if (keywords?.[0].toLowerCase().includes(search.toLowerCase()))
-              return 1;
-            return 0;
-          }}
-        >
-          <CommandInput placeholder="Search config..." className="h-9" />
-          <CommandList>
-            <CommandEmpty>No config found.</CommandEmpty>
-            <CommandGroup>
-              {configs?.map((config) => (
-                <CommandItem
-                  key={config.id}
-                  value={config.id}
-                  keywords={[config.name]}
-                  onSelect={(currentValue) => {
-                    setConfigId(currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {config.name}
-                  <CheckIcon
-                    className={cn(
-                      "ml-auto",
-                      configId === config.id ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      )}
+    </div>
   );
 };
