@@ -4,15 +4,16 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { XIcon } from "lucide-react";
-import { Activity, useEffect } from "react";
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  ClipboardPasteIcon,
+  XIcon,
+} from "lucide-react";
+import { Activity } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-import DialogWrapper, {
-  type DialogWrapperProps,
-} from "@/components/dialog-wrapper";
-import { FormInput, FormSwitch } from "@/components/form";
+import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -22,21 +23,24 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ConfigDialogFormFooter } from "@/features/configs/components/config-dialog-form-footer";
-import { ConfigSchema as configSchema } from "@/features/configs/schemas";
+import SortableFieldItem from "@/features/configs/components/sortable-field-item";
+import {
+  useAddConfig,
+  useEditConfig,
+  useGetConfigById,
+} from "@/features/configs/hooks";
+import { ConfigSchema } from "@/features/configs/schemas";
+import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ConfigInput } from "@/features/configs/types/form-input";
 import FieldSheetForm from "@/features/fields/components/field-sheet-form";
 import {
   useAddField,
   useDeleteField,
   useEditField,
+  useGetFields,
 } from "@/features/fields/hooks";
 import type { FieldInput } from "@/features/fields/types/form-input";
-import { useDialog } from "@/hooks/use-dialog";
-import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
-import { logger } from "@/utils/logger";
-import { toastError } from "@/utils/toast";
-import SortableFieldItem from "./sortable-field-item";
+import type { ConfigField } from "@/lib/dexie";
 
 const DEFAULT_VALUES: Partial<ConfigInput> = {
   name: "",
@@ -49,28 +53,43 @@ const DEFAULT_VALUES: Partial<ConfigInput> = {
   fields: [],
 };
 
-type Props = Omit<DialogWrapperProps, "title"> & {
-  id: string;
-  configId?: ScrapeConfig["id"];
-  config?: ConfigInput;
-  onSubmit?: (input: ConfigInput) => Promise<void> | void;
-};
-
-export default function ConfigDialogForm({
-  id,
-  configId,
-  config,
-  onSubmit,
-  ...props
-}: Props) {
+export const ConfigDetail = () => {
   const addFieldDialog = useDialog();
+  const { mode, configId } = useConfigStore();
+  const { reset } = useConfigStore((state) => state.actions);
 
-  const { mutateAsync: addField } = useAddField();
-  const { mutateAsync: editField } = useEditField();
-  const { mutateAsync: deleteField } = useDeleteField();
+  const configQuery = useGetConfigById({ id: configId || "" });
+  const fieldsQuery = useGetFields({ configId: configId || "" });
+  const addFieldMutation = useAddField();
+  const editFieldMutation = useEditField();
+  const deleteFieldMutation = useDeleteField();
+  const addConfigMutation = useAddConfig({
+    onSuccess: () => {
+      toast.success("Config added successfully");
+    },
+    onError: (error) => toastError(error, "Failed to add config"),
+  });
+  const editConfigMutation = useEditConfig({
+    onSuccess: () => {
+      toast.success("Config updated successfully");
+    },
+    onError: (error) => toastError(error, "Failed to update config"),
+  });
+
+  const config = useMemo<ConfigInput | undefined>(() => {
+    if (!configQuery.data) return undefined;
+
+    return {
+      ...configQuery.data,
+      domains: configQuery.data.domains.map((domain) => ({ value: domain })),
+      fields: fieldsQuery.data
+        ? fieldsQuery.data.map((field) => dbFieldToFieldInput(field, field.id))
+        : [],
+    };
+  }, [configQuery.data, fieldsQuery.data]);
 
   const form = useForm<ConfigInput>({
-    resolver: zodResolver(configSchema),
+    resolver: zodResolver(ConfigSchema),
     defaultValues: DEFAULT_VALUES,
   });
 
@@ -84,19 +103,62 @@ export default function ConfigDialogForm({
     name: "fields",
   });
 
+  const pasteConfig = usePasteFromClipboard({
+    onPaste: (text) => {
+      let valueFromClipboard: unknown;
+
+      try {
+        valueFromClipboard = JSON.parse(text);
+      } catch (error) {
+        toast.error("Invalid JSON format in clipboard", {
+          description: error instanceof Error ? error.message : "Unknown error",
+        });
+        return;
+      }
+
+      const { data, error } = ConfigSchema.safeParse(valueFromClipboard);
+      if (error) {
+        logger.error("Error parsing config from clipboard:", error);
+        toast.error("Paste failed", {
+          description: () => (
+            <ul>
+              {error.issues.map((err) => (
+                <li key={err.code}>
+                  {err.path.join(".")}: {err.message}
+                </li>
+              ))}
+            </ul>
+          ),
+        });
+        return;
+      }
+      form.reset(data, {
+        keepDefaultValues: true,
+      });
+    },
+  });
+
   useEffect(() => {
     if (config) form.reset(config);
-  }, [config, form]);
+  }, [config, form.reset]);
 
-  async function handleSubmit(input: ConfigInput) {
-    logger.log("Submitting form with input:", input);
+  const handleSubmit = async (input: ConfigInput) => {
+    logger.log("[DEBUG] ConfigDetail - Submitting form:", input);
 
-    await onSubmit?.(input);
-    if (!configId) form.reset();
-    else form.reset(input);
-  }
+    if (mode === "edit") {
+      if (!configId) {
+        toast.error("Config ID is missing");
+        return;
+      }
+      editConfigMutation.mutate({ id: configId, data: input });
+      form.reset(input);
+    } else {
+      addConfigMutation.mutate(input);
+      form.reset();
+    }
+  };
 
-  async function handleAddField(data: FieldInput) {
+  const handleAddField = async (data: FieldInput) => {
     let toAdd = {
       ...data,
       order: fieldsFieldArray.fields.length,
@@ -113,7 +175,7 @@ export default function ConfigDialogForm({
       return;
     }
 
-    await addField(
+    await addFieldMutation.mutateAsync(
       { ...toAdd, configId },
       {
         onSuccess: (newFieldId) => {
@@ -130,13 +192,13 @@ export default function ConfigDialogForm({
         onError: (error) => toastError(error, "Failed to add field"),
       },
     );
-  }
+  };
 
-  async function handleEditField(
+  const handleEditField = async (
     index: number,
     data: FieldInput,
     id?: ConfigField["id"],
-  ) {
+  ) => {
     logger.log("Editing field with data:", {
       index,
       data,
@@ -148,7 +210,7 @@ export default function ConfigDialogForm({
       return;
     }
 
-    await editField(
+    await editFieldMutation.mutateAsync(
       { id, data: { ...data, configId } },
       {
         onSuccess: () => {
@@ -159,15 +221,15 @@ export default function ConfigDialogForm({
         onError: (error) => toastError(error, "Failed to update field"),
       },
     );
-  }
+  };
 
-  async function handleDeleteField(index: number, id?: ConfigField["id"]) {
+  const handleDeleteField = async (index: number, id?: ConfigField["id"]) => {
     if (!configId || !id) {
       fieldsFieldArray.remove(index);
       return;
     }
 
-    await deleteField(id, {
+    await deleteFieldMutation.mutateAsync(id, {
       onSuccess: () => {
         fieldsFieldArray.remove(index);
         toast.success("Field deleted successfully");
@@ -175,9 +237,9 @@ export default function ConfigDialogForm({
       },
       onError: (error) => toastError(error, "Failed to delete field"),
     });
-  }
+  };
 
-  function handleDragEnd(event: DragEndEvent) {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over || active.id === over.id) return;
@@ -196,21 +258,20 @@ export default function ConfigDialogForm({
     fieldsFieldArray.fields.forEach((_, index) => {
       form.setValue(`fields.${index}.order`, index);
     });
-  }
+  };
 
   return (
-    <DialogWrapper
-      title={config ? "Edit Config" : "Add Config"}
-      footer={
-        <ConfigDialogFormFooter
-          id={id}
-          mode={configId ? "edit" : "add"}
-          form={form}
-        />
-      }
-      {...props}
-    >
-      <form id={id} onSubmit={form.handleSubmit(handleSubmit)}>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Button variant="outline" onClick={reset}>
+          <ArrowLeftIcon />
+          Back
+        </Button>
+        <h2 className="font-semibold text-base">
+          {mode === "edit" ? "Edit Config" : "Add New Config"}
+        </h2>
+      </div>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <FieldGroup>
           <FormInput
             control={form.control}
@@ -308,14 +369,57 @@ export default function ConfigDialogForm({
             </Button>
           </FieldSet>
           <FormSwitch control={form.control} name="isActive" label="Active" />
+
+          <Field orientation="horizontal">
+            {mode === "add" && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8"
+                onClick={pasteConfig.paste}
+              >
+                <Loader
+                  isLoading={pasteConfig.isPasted}
+                  fallback={
+                    <>
+                      <CheckIcon />
+                      Pasted
+                    </>
+                  }
+                >
+                  <ClipboardPasteIcon />
+                  Paste
+                </Loader>
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8"
+              onClick={() => form.reset()}
+            >
+              Reset
+            </Button>
+            <Button
+              type="submit"
+              size="sm"
+              className="h-8"
+              disabled={!form.formState.isDirty}
+            >
+              {mode === "edit" ? "Update Config" : "Create Config"}
+            </Button>
+          </Field>
         </FieldGroup>
       </form>
+
       <FieldSheetForm
         formId="add-field-sheet-form"
         open={addFieldDialog.isOpen}
         onOpenChange={addFieldDialog.onChange}
         onSubmit={handleAddField}
       />
-    </DialogWrapper>
+    </div>
   );
-}
+};

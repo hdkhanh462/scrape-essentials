@@ -29,7 +29,7 @@ export const useGetFields = (
   options?: Pick<UseQueryOptions<ConfigField[]>, "enabled">,
 ) => {
   return useQuery<ConfigField[]>({
-    enabled: options?.enabled,
+    enabled: options?.enabled ?? !!payload.configId,
     queryKey: fieldQueryKey.list(payload),
     queryFn: () => getFields(payload),
   });

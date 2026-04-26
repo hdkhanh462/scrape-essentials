@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent } from "@/components/sidebar";
-import { ConfigsContainer } from "@/features/configs/components/scrape-configs-container";
+import { ConfigContainer } from "@/features/configs/components/config-container";
 import { RecordsContainer } from "@/features/records/components/scrape-records-container";
 import { SettingsContainer } from "@/features/settings/components/settings-container";
 
@@ -8,7 +8,7 @@ function App() {
     <Sidebar>
       <div className="container mx-auto p-4">
         <SidebarContent value="configs">
-          <ConfigsContainer />
+          <ConfigContainer />
         </SidebarContent>
         <SidebarContent value="data">
           <RecordsContainer />
