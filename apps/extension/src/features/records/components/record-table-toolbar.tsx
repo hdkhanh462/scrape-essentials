@@ -1,10 +1,9 @@
 import type { Table } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
-import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
@@ -126,32 +125,11 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
         >
           Export
         </Button>
-        <DialogWrapper
+        <ConfirmDialog
+          control={importConfirmDialog}
           title="Are you absolutely sure?"
           description="This action cannot be undone. This will permanently import and overwrite your existing records."
-          open={importConfirmDialog.isOpen}
-          onOpenChange={importConfirmDialog.onChange}
-          footer={
-            <Field orientation="horizontal">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8"
-                onClick={importConfirmDialog.close}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                className="h-8"
-                onClick={handleImportConfirm}
-              >
-                Continue
-              </Button>
-            </Field>
-          }
+          onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />
       </div>

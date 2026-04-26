@@ -1,8 +1,7 @@
 import { CheckCircle2Icon, CloudUpload, History } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-import DialogWrapper from "@/components/dialog-wrapper";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import Loader from "@/components/loader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -28,14 +27,13 @@ import { useImportRecords } from "@/features/records/hooks";
 import {
   languageOptions,
   settingsSchema,
-  themseOptions,
+  themeOptions,
 } from "@/features/settings/schemas/settings";
 import {
   DEFAULT_SETTINGS,
   useSettingsStore,
 } from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
-import { sendMessage } from "@/lib/messaging";
 import { formatRelativeTime } from "@/utils/date";
 import { toastError } from "@/utils/toast";
 
@@ -44,12 +42,12 @@ export function SettingsContainer() {
     useSettingsStore();
   const { userInfo, lastBackup } = useGoogleStore();
 
-  const importConfirmDialog = useDialog();
+  const restoreConfirmDialog = useDialog();
 
   const { mutate: restoreBackup, isPending: isRestoring } = useRestoreBackup({
     onSuccess: (data) => {
       setImportPayload(data);
-      importConfirmDialog.open();
+      restoreConfirmDialog.open();
     },
     onError: (error) => toastError(error, "Restore failed"),
   });
@@ -73,8 +71,6 @@ export function SettingsContainer() {
   });
 
   const handleSubmit = async (data: SettingsInput) => {
-    // if (data.autoBackup !== autoBackup)
-    //   await sendMessage("autoBackupChange", data.autoBackup);
     updateSettings(data);
   };
 
@@ -93,7 +89,7 @@ export function SettingsContainer() {
       onSuccess: () => {
         importRecords(importPayload.records, {
           onSuccess: () => {
-            importConfirmDialog.close();
+            restoreConfirmDialog.close();
             toast.success("Restore successful");
           },
           onError: (error) => toastError(error, "Import records failed"),
@@ -191,39 +187,6 @@ export function SettingsContainer() {
               </div>
             </Field>
 
-            {/* {userInfo && (
-              <>
-                <FieldSeparator />
-                <Controller
-                  name="autoBackup"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field
-                      orientation="horizontal"
-                      data-invalid={fieldState.invalid}
-                    >
-                      <FieldContent>
-                        <FieldLabel htmlFor="auto-backup">
-                          Auto Backup
-                        </FieldLabel>
-                        <FieldDescription>
-                          Automatically backup your data to Google Drive
-                          periodically every day.
-                        </FieldDescription>
-                      </FieldContent>
-                      <Switch
-                        id="auto-backup"
-                        name={field.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        aria-invalid={fieldState.invalid}
-                      />
-                    </Field>
-                  )}
-                />
-              </>
-            )} */}
-
             <FieldSeparator />
             <Controller
               name="debugMode"
@@ -264,7 +227,7 @@ export function SettingsContainer() {
                     value={field.value}
                     onValueChange={field.onChange}
                   >
-                    {themseOptions.map((theme) => (
+                    {themeOptions.map((theme) => (
                       <FieldLabel key={theme} htmlFor={theme}>
                         <Field
                           orientation="horizontal"
@@ -348,32 +311,11 @@ export function SettingsContainer() {
         </FieldSet>
       </form>
 
-      <DialogWrapper
+      <ConfirmDialog
+        control={restoreConfirmDialog}
         title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently import and overwrite your existing configs."
-        open={importConfirmDialog.isOpen}
-        onOpenChange={importConfirmDialog.onChange}
-        footer={
-          <Field orientation="horizontal">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-8"
-              onClick={importConfirmDialog.close}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              className="h-8"
-              onClick={handleRestore}
-            >
-              Continue
-            </Button>
-          </Field>
-        }
+        description="This action cannot be undone. This will permanently restore and overwrite your existing configs."
+        onConfirm={handleRestore}
       />
     </div>
   );

@@ -6,24 +6,20 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
-export default function SheetWrapper({
-  title,
-  open,
-  trigger,
-  footer,
-  description,
-  children,
-  onOpenChange,
-}: DialogWrapperProps) {
+type Props = React.ComponentProps<typeof Sheet> & DialogWrapperProps;
+
+export const SheetWrapper: React.FC<Props> = (props) => {
+  const { title, description, trigger, children, footer, className, ...rest } =
+    props;
+
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      {trigger}
-      <SheetContent
-        className="min-w-lg overflow-y-auto"
-        aria-describedby={undefined}
-      >
+    <Sheet {...rest}>
+      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+      <SheetContent className={cn("min-w-lg overflow-y-auto", className)}>
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
@@ -33,4 +29,4 @@ export default function SheetWrapper({
       </SheetContent>
     </Sheet>
   );
-}
+};

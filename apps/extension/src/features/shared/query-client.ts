@@ -9,11 +9,6 @@ export const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5, // 5 minutes
     },
     mutations: {
-      onError: (error) => {
-        toast.error("Something went wrong!", {
-          description: error.message,
-        });
-      },
       onSettled: (...params) => {
         const { meta } = params[4];
 

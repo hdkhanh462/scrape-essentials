@@ -78,6 +78,8 @@ export const deleteField = async (id: ConfigField["id"]): Promise<boolean> => {
       const field = await tx.configFields.get(id);
       if (!field) throw new Error("Field not found");
 
+      if (field.isPrimary) throw new Error("Cannot delete primary field");
+
       await tx.configFields.delete(id);
       const configRow = await tx.scrapeConfigs.update(field.configId, {
         updatedAt: new Date().toISOString(),

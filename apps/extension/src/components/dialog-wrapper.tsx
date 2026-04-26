@@ -5,33 +5,27 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 
-export type DialogWrapperProps = React.PropsWithChildren & {
+export type DialogWrapperProps = {
   title: string;
-  open?: boolean;
+  description?: string;
   trigger?: React.ReactNode;
   footer?: React.ReactNode;
-  description?: string;
-  onOpenChange?(open: boolean): void;
+  className?: string;
 };
 
-export default function DialogWrapper({
-  title,
-  open,
-  trigger,
-  footer,
-  description,
-  children,
-  onOpenChange,
-}: DialogWrapperProps) {
+type Props = React.ComponentProps<typeof Dialog> & DialogWrapperProps;
+
+export const DialogWrapper: React.FC<Props> = (props) => {
+  const { title, description, trigger, children, footer, className, ...rest } =
+    props;
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      {trigger}
-      <DialogContent
-        className="max-h-[90vh] overflow-y-auto"
-        aria-describedby={undefined}
-      >
+    <Dialog {...rest}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      <DialogContent className={className}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
@@ -41,4 +35,4 @@ export default function DialogWrapper({
       </DialogContent>
     </Dialog>
   );
-}
+};

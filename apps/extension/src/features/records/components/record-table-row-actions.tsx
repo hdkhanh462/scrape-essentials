@@ -1,7 +1,7 @@
 import type { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
-import DialogWrapper from "@/components/dialog-wrapper";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Field } from "@/components/ui/field";
 import { useDeleteRecord } from "@/features/records/hooks";
 import { processCopyData } from "@/features/records/utils/copy";
 import { useDialog } from "@/hooks/use-dialog";
@@ -72,44 +71,20 @@ export function RecordTableRowActions({ row }: Props) {
       <DropdownMenuContent align="end" className="w-40">
         <DropdownMenuItem onSelect={handleCopyRecord}>Copy</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DialogWrapper
-          title="Are you absolutely sure?"
-          description="This action cannot be undone. This will permanently delete your
-          selected record."
-          open={deleteConfirmDialog.isOpen}
-          onOpenChange={deleteConfirmDialog.onChange}
-          footer={
-            <Field orientation="horizontal">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8"
-                onClick={deleteConfirmDialog.close}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                className="h-8"
-                onClick={handleDeleteRecord}
-              >
-                Continue
-              </Button>
-            </Field>
-          }
-        />
         <DropdownMenuItem
           variant="destructive"
-          onSelect={(e) => {
-            e.preventDefault();
-            deleteConfirmDialog.open();
-          }}
+          onSelect={deleteConfirmDialog.open}
         >
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
+
+      <ConfirmDialog
+        control={deleteConfirmDialog}
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your selected record."
+        onConfirm={handleDeleteRecord}
+      />
     </DropdownMenu>
   );
 }

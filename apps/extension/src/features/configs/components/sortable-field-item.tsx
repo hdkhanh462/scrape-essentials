@@ -1,9 +1,8 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVerticalIcon, MoreHorizontalIcon } from "lucide-react";
-import { Dialog } from "radix-ui";
 import { type Control, Controller, type FieldPath } from "react-hook-form";
-
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,9 +17,10 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import type { ConfigInput } from "@/features/configs/types/form-input";
-import FieldSheetForm from "@/features/fields/components/field-sheet-form";
+import { FieldSheetForm } from "@/features/fields/components/field-sheet-form";
 import type { FieldInput } from "@/features/fields/types/form-input";
 import type { ConfigField } from "@/lib/dexie";
+import { isTextField } from "@/utils/config-field";
 
 interface SortableFieldItemProps {
   id: string;
@@ -51,6 +51,9 @@ export default function SortableFieldItem({
     transition,
     isDragging,
   } = useSortable({ id });
+
+  const editFieldDialog = useDialog();
+  const deleteConfirmDialog = useDialog();
 
   const fieldName = `fields.${index}.name` as const;
 
@@ -94,25 +97,13 @@ export default function SortableFieldItem({
                     </InputGroupButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <FieldSheetForm
-                      formId={`edit-field-sheet-form-${id}`}
-                      field={field}
-                      onSubmit={async (data) =>
-                        await onEdit(index, data, field.fieldId)
-                      }
-                      trigger={
-                        <Dialog.Trigger className="w-full" type="button">
-                          <DropdownMenuItem
-                            onSelect={(event) => event.preventDefault()}
-                          >
-                            Edit
-                          </DropdownMenuItem>
-                        </Dialog.Trigger>
-                      }
-                    />
+                    <DropdownMenuItem onSelect={editFieldDialog.open}>
+                      Edit
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
-                      onClick={() => onDelete(index, field.fieldId)}
+                      onClick={deleteConfirmDialog.open}
+                      disabled={isTextField(field) && field.isPrimary}
                     >
                       Delete
                     </DropdownMenuItem>
@@ -122,6 +113,19 @@ export default function SortableFieldItem({
             </InputGroup>
           </Field>
         )}
+      />
+
+      <FieldSheetForm
+        control={editFieldDialog}
+        formId={`edit-field-sheet-form-${id}`}
+        field={field}
+        onSubmit={async (data) => await onEdit(index, data, field.fieldId)}
+      />
+      <ConfirmDialog
+        control={deleteConfirmDialog}
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete the selected field."
+        onConfirm={() => onDelete(index, field.fieldId)}
       />
     </div>
   );

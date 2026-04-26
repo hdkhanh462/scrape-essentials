@@ -2,11 +2,10 @@ import type { Column, Table } from "@tanstack/react-table";
 import { CheckIcon, PlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
-import DialogWrapper from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useImportConfigs } from "@/features/configs/hooks";
 import { useConfigStore } from "@/features/configs/stores/config.store";
@@ -65,6 +64,11 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
     setMode("add");
     setConfigId(null);
     showDetail();
+  };
+
+  const handleImportConfirm = () => {
+    if (!importPayload) return;
+    importConfigsMutation.mutate(importPayload);
   };
 
   return (
@@ -129,35 +133,11 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
         >
           Export
         </Button>
-        <DialogWrapper
+        <ConfirmDialog
+          control={importConfirmDialog}
           title="Are you absolutely sure?"
           description="This action cannot be undone. This will permanently import and overwrite your existing configs."
-          open={importConfirmDialog.isOpen}
-          onOpenChange={importConfirmDialog.onChange}
-          footer={
-            <Field orientation="horizontal">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8"
-                onClick={importConfirmDialog.close}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                className="h-8"
-                onClick={() => {
-                  if (!importPayload) return;
-                  importConfigsMutation.mutate(importPayload);
-                }}
-              >
-                Continue
-              </Button>
-            </Field>
-          }
+          onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />
         <Button size="sm" className="h-8" onClick={handleAddConfigClick}>

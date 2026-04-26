@@ -1,8 +1,7 @@
 import type { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
-
-import DialogWrapper from "@/components/dialog-wrapper";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Field } from "@/components/ui/field";
 import { useDeleteConfig, useDuplicateConfig } from "@/features/configs/hooks";
 import { ConfigSchema } from "@/features/configs/schemas";
 import { useConfigStore } from "@/features/configs/stores/config.store";
@@ -130,33 +128,11 @@ export function ConfigTableRowActions({ row }: Props) {
         </DropdownMenuItem>
       </DropdownMenuContent>
 
-      <DialogWrapper
+      <ConfirmDialog
+        control={deleteConfirmDialog}
         title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your
-          selected config."
-        open={deleteConfirmDialog.isOpen}
-        onOpenChange={deleteConfirmDialog.onChange}
-        footer={
-          <Field orientation="horizontal">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-8"
-              onClick={deleteConfirmDialog.close}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              className="h-8"
-              onClick={() => deleteConfigMutation.mutate(row.original.id)}
-            >
-              Continue
-            </Button>
-          </Field>
-        }
+        description="This action cannot be undone. This will permanently delete your selected config."
+        onConfirm={() => deleteConfigMutation.mutate(row.original.id)}
       />
     </DropdownMenu>
   );
