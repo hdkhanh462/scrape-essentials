@@ -1,9 +1,3 @@
-import {
-  CHECK_BACKUP_ALARM_INTERVAL,
-  CHECK_BACKUP_ALARM_NAME,
-} from "@/features/backup/constants";
-import { autoBackup } from "@/features/backup/services";
-import { createCheckBackupAlarm } from "@/features/backup/utils";
 import { getCurrentPage } from "@/features/records/utils/scraper";
 import { onMessage } from "@/lib/messaging";
 import { logger } from "@/utils/logger";

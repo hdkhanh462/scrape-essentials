@@ -1,8 +1,8 @@
+import type { VisibilityState } from "@tanstack/react-table";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { SidebarTab } from "@/components/sidebar";
 import { wxtStorage } from "@/features/shared/stores/wxt-storage";
-import { VisibilityState } from "@tanstack/react-table";
 
 type OptionsState = {
   activeTab: SidebarTab;
