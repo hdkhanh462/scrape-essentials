@@ -13,6 +13,12 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  MultiSelect,
+  MultiSelectContent,
+  MultiSelectTrigger,
+  MultiSelectValue,
+} from "@/components/ui/multi-select";
 import { NumberInput } from "@/components/ui/number-input";
 import { PasswordInput } from "@/components/ui/password-input";
 import {
@@ -187,6 +193,28 @@ export const FormSelect: FormControlFunc<{
           </SelectTrigger>
           <SelectContent>{props.inputProps?.children}</SelectContent>
         </Select>
+      )}
+    </FormBase>
+  );
+};
+
+export const FormSelectMultiple: FormControlFunc<{
+  children: React.ReactNode;
+  placeholder?: string;
+}> = ({ ...props }) => {
+  return (
+    <FormBase {...props}>
+      {({ onChange, onBlur, ...field }) => (
+        <MultiSelect values={field.value} onValuesChange={onChange}>
+          <MultiSelectTrigger
+            aria-invalid={field["aria-invalid"]}
+            id={field.id}
+            onBlur={onBlur}
+          >
+            <MultiSelectValue placeholder={props.inputProps?.placeholder} />
+          </MultiSelectTrigger>
+          <MultiSelectContent>{props.inputProps?.children}</MultiSelectContent>
+        </MultiSelect>
       )}
     </FormBase>
   );
