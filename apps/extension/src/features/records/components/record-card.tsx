@@ -10,8 +10,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { FieldGroup } from "@/components/ui/field";
+import { RecordCardFooter } from "@/features/records/components/record-card-footer";
 import ScrapeField from "@/features/records/components/scrape-field";
-import { ScrapedRecordsCardFooter } from "@/features/records/components/scraped-records-card-footer";
 import UiField from "@/features/records/components/ui-field";
 import {
   useAddRecord,
@@ -34,15 +34,17 @@ interface Props {
   fields: ConfigField[];
   matchConfig: MatchConfig;
   rawScrapedData: ScrapedDataInput;
+  url: string;
 }
 
-export function ScrapedRecordsCard({
+export function RecordCard({
   fields,
   matchConfig,
   rawScrapedData,
+  url,
 }: Props) {
   const [rawKey, setRawKey] = useState<string>();
-  const { mutate: addRecord } = useAddRecord();
+  const { mutate: addRecord } = useAddRecord(url);
   const { mutate: editRecord } = useEditRecord();
   const { data: scrapedRecord } = useGetRecordById({
     id: matchConfig?.config.id,
@@ -167,7 +169,7 @@ export function ScrapedRecordsCard({
     <CardWrapper
       title={`Scrape Essentials - ${matchConfig.config.name}`}
       footer={
-        <ScrapedRecordsCardFooter
+        <RecordCardFooter
           id="scrape-data-form"
           matchConfig={matchConfig}
           rawScrapedData={rawScrapedData}

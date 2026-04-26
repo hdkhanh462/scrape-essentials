@@ -17,7 +17,7 @@ interface FooterProps {
   onDeleteSuccess?: () => void;
 }
 
-export function ScrapedRecordsCardFooter({
+export function RecordCardFooter({
   id,
   matchConfig,
   rawScrapedData,

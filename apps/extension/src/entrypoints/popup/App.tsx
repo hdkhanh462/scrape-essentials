@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/empty";
 import { useGetConfigs } from "@/features/configs/hooks";
 import { useGetFields } from "@/features/fields/hooks";
-import { ScrapedRecordsCard } from "@/features/records/components/scraped-records-card";
+import { RecordCard } from "@/features/records/components/record-card";
 import { useGetCurrentPage } from "@/features/records/hooks";
 import type { ScrapedDataInput } from "@/features/records/types/form-input";
 import type { MatchConfig } from "@/features/records/types/scrape";
@@ -107,10 +107,11 @@ export default function App() {
 
   return (
     <div className="min-w-md space-y-4">
-      <ScrapedRecordsCard
+      <RecordCard
         fields={matchConfig.fields}
         matchConfig={matchConfig}
         rawScrapedData={rawScrapedData}
+        url={currentPage?.url || ""}
       />
     </div>
   );

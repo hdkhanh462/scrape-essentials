@@ -6,15 +6,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RecordCell } from "@/features/records/components/record-boolean-cell";
 import { RecordTableRowActions } from "@/features/records/components/record-table-row-actions";
 import { getFieldType } from "@/features/records/utils/helpers";
-import type { ConfigField, ScrapedRecord } from "@/lib/dexie";
+import { type ConfigField, FieldType, type ScrapedRecord } from "@/lib/dexie";
 
 export function buildColumn(fields: ConfigField[]): ColumnDef<ScrapedRecord>[] {
   const temp: ColumnDef<ScrapedRecord>[] = [];
   fields.forEach((field) => {
     if (field.isParent || field.isPrimary) return;
-    const colType = field.scrapeOptions?.isMultiple
-      ? "string[]"
-      : getFieldType(field.type, ["string", "number", "boolean"], "string");
+    const colType =
+      field.scrapeOptions?.isMultiple ||
+      field.type === FieldType.InputMultiSelect
+        ? "string[]"
+        : getFieldType(field.type, ["string", "number", "boolean"], "string");
     temp.push({
       id: field.name,
       accessorKey: `data.${field.name}`,
@@ -24,7 +26,8 @@ export function buildColumn(fields: ConfigField[]): ColumnDef<ScrapedRecord>[] {
       ),
       cell: ({ row }) => (
         <div>
-          {field.scrapeOptions?.isMultiple ? (
+          {field.scrapeOptions?.isMultiple ||
+          field.type === FieldType.InputMultiSelect ? (
             <BadgeOverflow
               items={(row.original.data[field.name] as Array<string>) || []}
               renderBadge={(_, label) => (

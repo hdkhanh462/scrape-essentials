@@ -39,6 +39,7 @@ export const importRecords = async (
 };
 
 export const addRecord = async (
+  url: string,
   payload: AddScrapedRecordPayload,
 ): Promise<ScrapedRecord["id"]> => {
   const exists = await dexie.scrapedRecords
@@ -52,6 +53,7 @@ export const addRecord = async (
   const now = new Date().toISOString();
   const newId = await dexie.scrapedRecords.add({
     ...payload.data,
+    url,
     id: crypto.randomUUID(),
     createdAt: now,
     updatedAt: now,
