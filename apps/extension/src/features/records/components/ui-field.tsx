@@ -1,5 +1,6 @@
 import type { Control } from "react-hook-form";
-
+import { FormSelectMultiple } from "@/components/form";
+import { MultiSelectItem } from "@/components/ui/multi-select";
 import { SelectItem } from "@/components/ui/select";
 import type { ScrapedDataInput } from "@/features/records/types/form-input";
 import { type ConfigField, FieldType } from "@/lib/dexie";
@@ -52,6 +53,21 @@ export default function UiField({ field, control }: UiFieldProps) {
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
               </SelectItem>
+            )),
+          }}
+        />
+      );
+    case FieldType.InputMultiSelect:
+      return (
+        <FormSelectMultiple
+          control={control}
+          name={field.name}
+          label={field.name}
+          inputProps={{
+            children: field.uiOptions?.options?.map((option) => (
+              <MultiSelectItem key={option.value} value={option.value}>
+                {option.label}
+              </MultiSelectItem>
             )),
           }}
         />
