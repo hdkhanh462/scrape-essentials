@@ -22,7 +22,8 @@ interface DataTableToolbarProps {
 }
 
 export function RecordTableToolbar({ table }: DataTableToolbarProps) {
-  const { filterString, setFilterString } = useRecordStore();
+  const { filterString } = useRecordStore();
+  const { setFilterString } = useRecordStore((state) => state.actions);
 
   const [importPayload, setImportPayload] = useState<ScrapedRecord[]>();
   const [filterValue, setFilterValue] = useState(filterString);
@@ -30,7 +31,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
   const importConfirmDialog = useDialog();
   const { mutate: importRecords } = useImportRecords();
 
-  const isFiltered = table.getState().columnFilters.length > 0;
+  // const isFiltered = table.getState().columnFilters.length > 0;
 
   async function handleExport() {
     const records = await dexie.scrapedRecords.toArray();
@@ -96,9 +97,9 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           </InputGroupAddon>
         </InputGroup>
 
-        {isFiltered && (
+        {/* {isFiltered && (
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             className="h-8"
             onClick={() => table.resetColumnFilters()}
@@ -106,8 +107,9 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
             Reset
             <XIcon />
           </Button>
-        )}
+        )} */}
       </div>
+
       <div className="flex items-center gap-2">
         <Button
           size="sm"

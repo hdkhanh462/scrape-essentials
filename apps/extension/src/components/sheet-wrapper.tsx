@@ -19,7 +19,10 @@ export const SheetWrapper: React.FC<Props> = (props) => {
   return (
     <Sheet {...rest}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent className={cn("min-w-lg overflow-y-auto", className)}>
+      <SheetContent
+        className={cn("min-w-lg overflow-y-auto", className)}
+        aria-describedby={undefined}
+      >
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}

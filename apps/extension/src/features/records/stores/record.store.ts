@@ -5,18 +5,24 @@ type RecordState = {
   filterString?: string;
 };
 
-type RecordSlice = RecordState & {
+type RecordActions = {
   setConfigId: (configId?: string) => void;
   setFilterString: (filterString?: string) => void;
 };
 
-export const DEFAULT_RECORD: RecordState = {
+type RecordSlice = RecordState & {
+  actions: RecordActions;
+};
+
+export const DEFAULT_STATE: RecordState = {
   configId: undefined,
   filterString: undefined,
 };
 
 export const useRecordStore = create<RecordSlice>()((set) => ({
-  ...DEFAULT_RECORD,
-  setConfigId: (configId) => set(() => ({ configId })),
-  setFilterString: (filterString) => set(() => ({ filterString })),
+  ...DEFAULT_STATE,
+  actions: {
+    setConfigId: (configId) => set(() => ({ configId })),
+    setFilterString: (filterString) => set(() => ({ filterString })),
+  },
 }));

@@ -28,8 +28,8 @@ export const configQueryKey = {
   all: ["configs"] as const,
   list: (payload: GetConfigsPayload) =>
     [...configQueryKey.all, "list", payload] as const,
-  get: (payload: { id: ScrapeConfig["id"]; isActive?: boolean }) =>
-    [...configQueryKey.all, "get", payload] as const,
+  detail: (payload: { id: ScrapeConfig["id"]; isActive?: boolean }) =>
+    [...configQueryKey.all, "detail", payload] as const,
 };
 
 export const useGetConfigs = (payload: GetConfigsPayload) => {
@@ -52,7 +52,7 @@ export const useGetConfigById = (
 
   return useQuery<ScrapeConfig | undefined>({
     enabled: options?.enabled ?? !!payload.id,
-    queryKey: configQueryKey.get(payload),
+    queryKey: configQueryKey.detail(payload),
     queryFn: () => getConfigById(payload),
   });
 };
