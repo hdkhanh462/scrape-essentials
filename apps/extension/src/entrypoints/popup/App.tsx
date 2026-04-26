@@ -31,16 +31,20 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (!currentPage || !configs || !fields) return;
+    if (!currentPage || !configs) return;
+
+    logger.log("[DEBUG] Current page:", currentPage?.url);
+    logger.log("[DEBUG] Configs:", configs);
+    logger.log("[DEBUG] Fields:", fields);
 
     const _matchConfig = configs.find((config) =>
       config.domains.some((domain) => new RegExp(domain).test(currentPage.url)),
     );
 
-    if (_matchConfig && fields) {
+    if (_matchConfig) {
       setMatchConfig({
         config: _matchConfig,
-        fields,
+        fields: fields || [],
       });
     }
   }, [currentPage, configs, fields]);
