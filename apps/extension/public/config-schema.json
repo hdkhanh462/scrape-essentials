@@ -17,9 +17,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "value"
-        ],
+        "required": ["value"],
         "additionalProperties": false
       }
     },
@@ -55,10 +53,7 @@
                 "type": "boolean"
               }
             },
-            "required": [
-              "name",
-              "order"
-            ],
+            "required": ["name", "order"],
             "additionalProperties": false
           },
           {
@@ -84,16 +79,11 @@
                       },
                       "defaultValue": {}
                     },
-                    "required": [
-                      "label"
-                    ],
+                    "required": ["label"],
                     "additionalProperties": false
                   }
                 },
-                "required": [
-                  "type",
-                  "uiOptions"
-                ],
+                "required": ["type", "uiOptions"],
                 "additionalProperties": false
               },
               {
@@ -101,10 +91,7 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "enum": [
-                      "input-select",
-                      "input-multiselect"
-                    ]
+                    "enum": ["input-select", "input-multiselect"]
                   },
                   "uiOptions": {
                     "type": "object",
@@ -129,25 +116,16 @@
                               "minLength": 1
                             }
                           },
-                          "required": [
-                            "label",
-                            "value"
-                          ],
+                          "required": ["label", "value"],
                           "additionalProperties": false
                         }
                       }
                     },
-                    "required": [
-                      "label",
-                      "options"
-                    ],
+                    "required": ["label", "options"],
                     "additionalProperties": false
                   }
                 },
-                "required": [
-                  "type",
-                  "uiOptions"
-                ],
+                "required": ["type", "uiOptions"],
                 "additionalProperties": false
               },
               {
@@ -155,12 +133,7 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "enum": [
-                      "text",
-                      "link",
-                      "image",
-                      "element-attribute"
-                    ]
+                    "enum": ["text", "link", "image", "element-attribute"]
                   },
                   "isParent": {
                     "type": "boolean"
@@ -181,9 +154,7 @@
                         "type": "boolean"
                       }
                     },
-                    "required": [
-                      "cssSelector"
-                    ],
+                    "required": ["cssSelector"],
                     "additionalProperties": false
                   },
                   "isPrimary": {
@@ -205,17 +176,12 @@
                           "minLength": 1
                         }
                       },
-                      "required": [
-                        "value"
-                      ],
+                      "required": ["value"],
                       "additionalProperties": false
                     }
                   }
                 },
-                "required": [
-                  "type",
-                  "scrapeOptions"
-                ],
+                "required": ["type", "scrapeOptions"],
                 "additionalProperties": false
               },
               {
@@ -244,16 +210,12 @@
                           "minLength": 1
                         }
                       },
-                      "required": [
-                        "value"
-                      ],
+                      "required": ["value"],
                       "additionalProperties": false
                     }
                   }
                 },
-                "required": [
-                  "type"
-                ],
+                "required": ["type"],
                 "additionalProperties": false
               }
             ]
@@ -262,10 +224,6 @@
       }
     }
   },
-  "required": [
-    "name",
-    "domains",
-    "fields"
-  ],
+  "required": ["name", "domains", "fields"],
   "additionalProperties": false
 }

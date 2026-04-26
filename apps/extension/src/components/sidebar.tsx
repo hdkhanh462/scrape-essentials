@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 export const sidebarItems = [
   { id: "configs", label: "Configs", icon: WrenchIcon },
-  { id: "data", label: "Data", icon: BoxIcon },
+  { id: "records", label: "Records", icon: BoxIcon },
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ] as const;
 

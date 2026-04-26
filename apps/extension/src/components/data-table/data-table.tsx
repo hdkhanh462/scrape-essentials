@@ -9,7 +9,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  OnChangeFn,
+  type OnChangeFn,
   type SortingState,
   type Table as TableType,
   useReactTable,
@@ -70,7 +70,7 @@ export function DataTable<TData, TValue>({
     globalFilterFn,
     initialState: {
       pagination: {
-        pageSize: 10,
+        pageSize: 20,
       },
     },
     enableRowSelection: true,

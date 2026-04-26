@@ -1,5 +1,5 @@
+import type { OnChangeFn, VisibilityState } from "@tanstack/react-table";
 import { useOptionsStore } from "@/features/shared/stores/options.store";
-import { OnChangeFn, VisibilityState } from "@tanstack/react-table";
 
 export const useColumnVisibility = () => {
   const { columnVisibility, setColumnVisibility } = useOptionsStore();

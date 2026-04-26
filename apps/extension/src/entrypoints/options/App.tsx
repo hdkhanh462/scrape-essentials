@@ -10,7 +10,7 @@ function App() {
         <SidebarContent value="configs">
           <ConfigContainer />
         </SidebarContent>
-        <SidebarContent value="data">
+        <SidebarContent value="records">
           <RecordsContainer />
         </SidebarContent>
         <SidebarContent value="settings">
