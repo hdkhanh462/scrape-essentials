@@ -59,6 +59,7 @@ export const useImportRecords = (
 };
 
 export const useAddRecord = (
+  url: string,
   options?: UseMutationOptions<
     ScrapedRecord["id"],
     Error,
@@ -67,7 +68,7 @@ export const useAddRecord = (
 ) => {
   return useMutation({
     ...options,
-    mutationFn: (payload) => addRecord(payload),
+    mutationFn: (payload) => addRecord(url, payload),
     meta: {
       invalidateQueries: recordQueryKey.all,
     },

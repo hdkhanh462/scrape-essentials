@@ -56,6 +56,15 @@ export function RecordTableRowActions({ row }: Props) {
     });
   };
 
+  const handleOpenNewTab = () => {
+    if (!row.original.url) {
+      toast.error("URL not found for this record");
+      return;
+    }
+
+    browser.tabs.create({ url: row.original.url, active: true });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -70,6 +79,9 @@ export function RecordTableRowActions({ row }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
         <DropdownMenuItem onSelect={handleCopyRecord}>Copy</DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleOpenNewTab}>
+          Go to URL
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"

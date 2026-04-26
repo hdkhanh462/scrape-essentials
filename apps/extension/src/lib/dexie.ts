@@ -67,6 +67,7 @@ export type ScrapedRecord = {
   configId: string;
   key: string;
   data: Record<string, unknown>;
+  url: string;
   createdAt: string;
   updatedAt: string;
 };

@@ -8,7 +8,7 @@ import { advancedGlobalFilter } from "@/features/records/utils/filter";
 import { buildColumn } from "@/features/records/utils/table";
 import { useColumnVisibility } from "@/utils/table";
 
-export function RecordsContainer() {
+export function RecordContainer() {
   const { configId, filterString } = useRecordStore();
   const columnVisibility = useColumnVisibility();
 

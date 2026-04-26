@@ -1,6 +1,6 @@
 import { Sidebar, SidebarContent } from "@/components/sidebar";
 import { ConfigContainer } from "@/features/configs/components/config-container";
-import { RecordsContainer } from "@/features/records/components/scrape-records-container";
+import { RecordContainer } from "@/features/records/components/record-container";
 import { SettingsContainer } from "@/features/settings/components/settings-container";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
           <ConfigContainer />
         </SidebarContent>
         <SidebarContent value="records">
-          <RecordsContainer />
+          <RecordContainer />
         </SidebarContent>
         <SidebarContent value="settings">
           <SettingsContainer />
