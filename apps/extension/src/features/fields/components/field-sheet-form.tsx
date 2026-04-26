@@ -3,7 +3,7 @@ import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
 
 import type { DialogWrapperProps } from "@/components/dialog-wrapper";
 import { FormInput, FormSelect } from "@/components/form";
-import SheetWrapper from "@/components/sheet-wrapper";
+import { SheetWrapper } from "@/components/sheet-wrapper";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { SelectItem } from "@/components/ui/select";
 import CheckboxFields from "@/features/fields/components/checkbox-fields";
@@ -40,17 +40,15 @@ const DEFAULT_VALUES: FieldInput = {
 };
 
 type Props = Omit<DialogWrapperProps, "title"> & {
+  control: ReturnType<typeof useDialog>;
   formId: string;
   field?: FieldInput;
   onSubmit?: (input: FieldInput) => Promise<void>;
 };
 
-export default function FieldSheetForm({
-  formId,
-  field,
-  onSubmit,
-  ...props
-}: Props) {
+export const FieldSheetForm: React.FC<Props> = (props) => {
+  const { control, formId, field, onSubmit, ...rest } = props;
+
   const form = useForm<FieldInput>({
     resolver: zodResolver(FieldSchema),
     defaultValues: DEFAULT_VALUES,
@@ -87,7 +85,9 @@ export default function FieldSheetForm({
 
   return (
     <SheetWrapper
-      {...props}
+      {...rest}
+      open={control.isOpen}
+      onOpenChange={control.onChange}
       title={field ? "Edit Field" : "Add Field"}
       footer={
         <FieldSheetFooter
@@ -148,4 +148,4 @@ export default function FieldSheetForm({
       </form>
     </SheetWrapper>
   );
-}
+};

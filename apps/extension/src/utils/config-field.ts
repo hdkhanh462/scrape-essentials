@@ -1,6 +1,26 @@
 import type { FieldInput } from "@/features/fields/types/form-input";
 import { FieldType } from "@/lib/dexie";
 
+export function isTextField(field: FieldInput): field is Extract<
+  FieldInput,
+  {
+    type:
+      | FieldType.Text
+      | FieldType.Link
+      | FieldType.Image
+      | FieldType.ElementAttribute
+      | FieldType.PageUrl;
+  }
+> {
+  return (
+    field.type === FieldType.Text ||
+    field.type === FieldType.Link ||
+    field.type === FieldType.Image ||
+    field.type === FieldType.ElementAttribute ||
+    field.type === FieldType.PageUrl
+  );
+}
+
 export function isLargeField(
   type: FieldType,
 ): type is Extract<FieldType, FieldType.InputTextarea> {

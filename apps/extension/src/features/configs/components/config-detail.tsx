@@ -32,7 +32,7 @@ import {
 import { ConfigSchema } from "@/features/configs/schemas";
 import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ConfigInput } from "@/features/configs/types/form-input";
-import FieldSheetForm from "@/features/fields/components/field-sheet-form";
+import { FieldSheetForm } from "@/features/fields/components/field-sheet-form";
 import {
   useAddField,
   useDeleteField,
@@ -283,93 +283,101 @@ export const ConfigDetail = () => {
             }}
           />
 
-          <FieldSet>
-            <FieldLegend className="text-sm!">Config domains</FieldLegend>
-            <FieldGroup className="gap-3">
-              {domainsFieldArray.fields.map((item, index) => (
-                <Controller
-                  key={item.id}
-                  name={`domains.${index}.value`}
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <div className="flex gap-2">
-                        <Input
-                          {...field}
-                          placeholder="example.com"
-                          autoComplete="off"
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          className="not-hover:text-foreground hover:text-destructive"
-                          onClick={() => domainsFieldArray.remove(index)}
-                          disabled={domainsFieldArray.fields.length === 1}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Domains */}
+            <FieldSet>
+              <FieldLegend className="text-sm!">Config domains</FieldLegend>
+              <FieldGroup className="gap-3">
+                {domainsFieldArray.fields.map((item, index) => (
+                  <Controller
+                    key={item.id}
+                    name={`domains.${index}.value`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <div className="flex gap-2">
+                          <Input
+                            {...field}
+                            placeholder="example.com"
+                            autoComplete="off"
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            className="not-hover:text-foreground hover:text-destructive"
+                            onClick={() => domainsFieldArray.remove(index)}
+                            disabled={domainsFieldArray.fields.length === 1}
+                          >
+                            <XIcon />
+                          </Button>
+                        </div>
+                        <Activity
+                          mode={fieldState.error ? "visible" : "hidden"}
                         >
-                          <XIcon />
-                        </Button>
-                      </div>
-                      <Activity mode={fieldState.error ? "visible" : "hidden"}>
-                        <FieldError errors={[fieldState.error]} />
-                      </Activity>
-                    </Field>
-                  )}
-                />
-              ))}
-            </FieldGroup>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="h-8"
-              onClick={() => domainsFieldArray.append({ value: "" })}
-            >
-              Add Domain
-            </Button>
-          </FieldSet>
-
-          <FieldSet>
-            <FieldLegend className="text-sm!">Config Fields</FieldLegend>
-            <DndContext
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={fieldsFieldArray.fields.map((field) => field.id)}
-                strategy={verticalListSortingStrategy}
+                          <FieldError errors={[fieldState.error]} />
+                        </Activity>
+                      </Field>
+                    )}
+                  />
+                ))}
+              </FieldGroup>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-8"
+                onClick={() => domainsFieldArray.append({ value: "" })}
               >
-                <FieldGroup className="gap-3">
-                  {fieldsFieldArray.fields.map((item, index) => (
-                    <SortableFieldItem
-                      key={item.id}
-                      id={item.id}
-                      index={index}
-                      field={item}
-                      control={form.control}
-                      onEdit={handleEditField}
-                      onDelete={handleDeleteField}
-                    />
-                  ))}
-                </FieldGroup>
-              </SortableContext>
-            </DndContext>
-            <Activity
-              mode={form.formState.errors.fields ? "visible" : "hidden"}
-            >
-              <FieldError errors={[form.formState.errors.fields]} />
-            </Activity>
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              className="h-8 w-full"
-              onClick={addFieldDialog.open}
-            >
-              Add Field
-            </Button>
-          </FieldSet>
+                Add Domain
+              </Button>
+            </FieldSet>
+
+            {/* Fields */}
+            <FieldSet>
+              <FieldLegend className="text-sm!">Config Fields</FieldLegend>
+              <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={fieldsFieldArray.fields.map((field) => field.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <FieldGroup className="gap-3">
+                    {fieldsFieldArray.fields.map((item, index) => (
+                      <SortableFieldItem
+                        key={item.id}
+                        id={item.id}
+                        index={index}
+                        field={item}
+                        control={form.control}
+                        onEdit={handleEditField}
+                        onDelete={handleDeleteField}
+                      />
+                    ))}
+                  </FieldGroup>
+                </SortableContext>
+              </DndContext>
+              <Activity
+                mode={form.formState.errors.fields ? "visible" : "hidden"}
+              >
+                <FieldError errors={[form.formState.errors.fields]} />
+              </Activity>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                className="h-8 w-full"
+                onClick={addFieldDialog.open}
+              >
+                Add Field
+              </Button>
+            </FieldSet>
+          </div>
+
           <FormSwitch control={form.control} name="isActive" label="Active" />
 
+          {/* Action Buttons */}
           <Field orientation="horizontal">
             {mode === "add" && (
               <Button
@@ -408,7 +416,7 @@ export const ConfigDetail = () => {
               className="h-8"
               disabled={!form.formState.isDirty}
             >
-              {mode === "edit" ? "Update Config" : "Create Config"}
+              {mode === "edit" ? "Save" : "Add"}
             </Button>
           </Field>
         </FieldGroup>
@@ -416,8 +424,7 @@ export const ConfigDetail = () => {
 
       <FieldSheetForm
         formId="add-field-sheet-form"
-        open={addFieldDialog.isOpen}
-        onOpenChange={addFieldDialog.onChange}
+        control={addFieldDialog}
         onSubmit={handleAddField}
       />
     </div>
