@@ -43,6 +43,8 @@ export default function SortableFieldItem({
   onEdit,
   onDelete,
 }: SortableFieldItemProps) {
+  const t = browser.i18n.getMessage;
+
   const {
     attributes,
     listeners,
@@ -98,14 +100,14 @@ export default function SortableFieldItem({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onSelect={editFieldDialog.open}>
-                      Edit
+                      {t("edit")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={deleteConfirmDialog.open}
                       disabled={isTextField(field) && field.isPrimary}
                     >
-                      Delete
+                      {t("delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -123,8 +125,8 @@ export default function SortableFieldItem({
       />
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete the selected field."
+        title={t("areYouSure")}
+        description={t("deleteFieldConfirmation")}
         onConfirm={() => onDelete(index, field.fieldId)}
       />
     </div>

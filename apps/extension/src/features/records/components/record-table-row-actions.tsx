@@ -25,7 +25,7 @@ export function RecordTableRowActions({ row }: Props) {
   const copyRecord = useCopyToClipboard();
   const { mutate: deleteRecord } = useDeleteRecord();
 
-  async function handleCopyRecord() {
+  const handleCopyRecord = async () => {
     const config = await dexie.scrapeConfigs
       .where("id")
       .equals(row.original.configId)
@@ -44,7 +44,7 @@ export function RecordTableRowActions({ row }: Props) {
       copyRecord.copy(copyData);
       toast.success("Record copied to clipboard");
     }
-  }
+  };
 
   const handleDeleteRecord = () => {
     deleteRecord(row.original.id, {
@@ -65,6 +65,8 @@ export function RecordTableRowActions({ row }: Props) {
     browser.tabs.create({ url: row.original.url, active: true });
   };
 
+  const t = browser.i18n.getMessage;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -78,23 +80,25 @@ export function RecordTableRowActions({ row }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onSelect={handleCopyRecord}>Copy</DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleCopyRecord}>
+          {t("copy")}
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleOpenNewTab}>
-          Go to URL
+          {t("gotoUrl")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           onSelect={deleteConfirmDialog.open}
         >
-          Delete
+          {t("delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your selected record."
+        title={t("areYouSure")}
+        description={t("deleteRecordConfirmation")}
         onConfirm={handleDeleteRecord}
       />
     </DropdownMenu>

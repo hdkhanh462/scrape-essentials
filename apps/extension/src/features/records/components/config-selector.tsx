@@ -33,6 +33,8 @@ export const ConfigSelector = () => {
     });
   };
 
+  const t = browser.i18n.getMessage;
+
   return (
     <div className="flex items-center gap-2">
       <Popover open={open} onOpenChange={setOpen}>
@@ -46,7 +48,7 @@ export const ConfigSelector = () => {
           >
             {configId && configs
               ? configs.find((config) => config.id === configId)?.name
-              : "Select config..."}
+              : t("selectConfig")}
             <ChevronsUpDownIcon className="opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -58,9 +60,9 @@ export const ConfigSelector = () => {
               return 0;
             }}
           >
-            <CommandInput placeholder="Search config..." className="h-9" />
+            <CommandInput placeholder={t("searchConfig")} className="h-9" />
             <CommandList>
-              <CommandEmpty>No config found.</CommandEmpty>
+              <CommandEmpty>{t("noResults")}</CommandEmpty>
               <CommandGroup>
                 {configs?.map((config) => (
                   <CommandItem
@@ -90,7 +92,7 @@ export const ConfigSelector = () => {
           onClick={handleRefresh}
         >
           <RefreshCwIcon />
-          Refresh
+          {t("refresh")}
         </Button>
       )}
     </div>

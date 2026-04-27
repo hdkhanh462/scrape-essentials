@@ -49,6 +49,7 @@ type Props = Omit<DialogWrapperProps, "title"> & {
 export const FieldSheetForm: React.FC<Props> = (props) => {
   const { control, formId, field, onSubmit, ...rest } = props;
 
+  const t = browser.i18n.getMessage;
   const form = useForm<FieldInput>({
     resolver: zodResolver(FieldSchema),
     defaultValues: DEFAULT_VALUES,
@@ -88,7 +89,7 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
       {...rest}
       open={control.isOpen}
       onOpenChange={control.onChange}
-      title={field ? "Edit Field" : "Add Field"}
+      title={field ? `${t("edit")} ${t("field")}` : `${t("add")} ${t("field")}`}
       footer={
         <FieldSheetFooter
           id={formId}
@@ -110,19 +111,18 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
             <FormInput
               control={form.control}
               name="name"
-              label="Field Name"
+              label={t("fieldName")}
               hideError
               inputProps={{
-                placeholder: "Enter field name",
+                placeholder: t("enterFieldName"),
                 autoComplete: "off",
               }}
             />
             <FormSelect
               control={form.control}
               name="type"
-              label="Field Type"
+              label={t("fieldType")}
               inputProps={{
-                placeholder: "Select field type",
                 children: Object.values(FieldType).map((type) => (
                   <SelectItem key={type} value={type}>
                     {typeLabels[type]}

@@ -54,6 +54,8 @@ const DEFAULT_VALUES: Partial<ConfigInput> = {
 };
 
 export const ConfigDetail = () => {
+  const t = browser.i18n.getMessage;
+
   const addFieldDialog = useDialog();
   const { mode, configId } = useConfigStore();
   const { reset } = useConfigStore((state) => state.actions);
@@ -65,15 +67,15 @@ export const ConfigDetail = () => {
   const deleteFieldMutation = useDeleteField();
   const addConfigMutation = useAddConfig({
     onSuccess: () => {
-      toast.success("Config added successfully");
+      toast.success(t("configAddedSuccessfully"));
     },
-    onError: (error) => toastError(error, "Failed to add config"),
+    onError: (error) => toastError(error, t("failedToAddConfig")),
   });
   const editConfigMutation = useEditConfig({
     onSuccess: () => {
-      toast.success("Config updated successfully");
+      toast.success(t("configUpdatedSuccessfully"));
     },
-    onError: (error) => toastError(error, "Failed to update config"),
+    onError: (error) => toastError(error, t("failedToUpdateConfig")),
   });
 
   const config = useMemo<ConfigInput | undefined>(() => {
@@ -110,8 +112,9 @@ export const ConfigDetail = () => {
       try {
         valueFromClipboard = JSON.parse(text);
       } catch (error) {
-        toast.error("Invalid JSON format in clipboard", {
-          description: error instanceof Error ? error.message : "Unknown error",
+        toast.error(t("invalidJsonFormatInClipboard"), {
+          description:
+            error instanceof Error ? error.message : t("unknownError"),
         });
         return;
       }
@@ -119,7 +122,7 @@ export const ConfigDetail = () => {
       const { data, error } = ConfigSchema.safeParse(valueFromClipboard);
       if (error) {
         logger.error("Error parsing config from clipboard:", error);
-        toast.error("Paste failed", {
+        toast.error(t("pasteFailed"), {
           description: () => (
             <ul>
               {error.issues.map((err) => (
@@ -147,7 +150,7 @@ export const ConfigDetail = () => {
 
     if (mode === "edit") {
       if (!configId) {
-        toast.error("Config ID is missing");
+        toast.error(t("configIdMissingForEdit"));
         return;
       }
       editConfigMutation.mutate({ id: configId, data: input });
@@ -183,7 +186,7 @@ export const ConfigDetail = () => {
 
           fieldsFieldArray.append(toAdd);
           addFieldDialog.close();
-          toast.success("Field added successfully");
+          toast.success(t("fieldAddedSuccessfully"));
           logger.log("Added field with id:", {
             newFieldId,
             toAdd,
@@ -215,10 +218,10 @@ export const ConfigDetail = () => {
       {
         onSuccess: () => {
           form.setValue(`fields.${index}`, data);
-          toast.success("Field updated successfully");
+          toast.success(t("fieldUpdatedSuccessfully"));
           logger.log("Updated field with id:", id);
         },
-        onError: (error) => toastError(error, "Failed to update field"),
+        onError: (error) => toastError(error, t("failedToUpdateField")),
       },
     );
   };
@@ -232,10 +235,10 @@ export const ConfigDetail = () => {
     await deleteFieldMutation.mutateAsync(id, {
       onSuccess: () => {
         fieldsFieldArray.remove(index);
-        toast.success("Field deleted successfully");
+        toast.success(t("fieldDeletedSuccessfully"));
         logger.log("Deleted field with id:", id);
       },
-      onError: (error) => toastError(error, "Failed to delete field"),
+      onError: (error) => toastError(error, t("failedToDeleteField")),
     });
   };
 
@@ -265,10 +268,12 @@ export const ConfigDetail = () => {
       <div className="flex items-center gap-2">
         <Button variant="outline" onClick={reset}>
           <ArrowLeftIcon />
-          Back
+          {t("back")}
         </Button>
         <h2 className="font-semibold text-base">
-          {mode === "edit" ? "Edit Config" : "Add New Config"}
+          {mode === "edit"
+            ? `${t("edit")} ${t("config")}`
+            : `${t("add")} ${t("config")}`}
         </h2>
       </div>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -276,9 +281,9 @@ export const ConfigDetail = () => {
           <FormInput
             control={form.control}
             name="name"
-            label="Config Name"
+            label={t("configName")}
             inputProps={{
-              placeholder: "Enter config name",
+              placeholder: t("enterConfigName"),
               autoComplete: "off",
             }}
           />
@@ -286,7 +291,7 @@ export const ConfigDetail = () => {
           <div className="grid grid-cols-2 gap-4">
             {/* Domains */}
             <FieldSet>
-              <FieldLegend className="text-sm!">Config domains</FieldLegend>
+              <FieldLegend className="text-sm!">{t("domains")}</FieldLegend>
               <FieldGroup className="gap-3">
                 {domainsFieldArray.fields.map((item, index) => (
                   <Controller
@@ -328,13 +333,15 @@ export const ConfigDetail = () => {
                 className="h-8"
                 onClick={() => domainsFieldArray.append({ value: "" })}
               >
-                Add Domain
+                {t("addDomain")}
               </Button>
             </FieldSet>
 
             {/* Fields */}
             <FieldSet>
-              <FieldLegend className="text-sm!">Config Fields</FieldLegend>
+              <FieldLegend className="text-sm!">
+                {t("configFields")}
+              </FieldLegend>
               <DndContext
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}
@@ -370,12 +377,16 @@ export const ConfigDetail = () => {
                 className="h-8 w-full"
                 onClick={addFieldDialog.open}
               >
-                Add Field
+                {t("addField")}
               </Button>
             </FieldSet>
           </div>
 
-          <FormSwitch control={form.control} name="isActive" label="Active" />
+          <FormSwitch
+            control={form.control}
+            name="isActive"
+            label={t("active")}
+          />
 
           {/* Action Buttons */}
           <Field orientation="horizontal">
@@ -392,12 +403,12 @@ export const ConfigDetail = () => {
                   fallback={
                     <>
                       <CheckIcon />
-                      Pasted
+                      {t("pasted")}
                     </>
                   }
                 >
                   <ClipboardPasteIcon />
-                  Paste
+                  {t("paste")}
                 </Loader>
               </Button>
             )}
@@ -408,7 +419,7 @@ export const ConfigDetail = () => {
               className="h-8"
               onClick={() => form.reset()}
             >
-              Reset
+              {t("reset")}
             </Button>
             <Button
               type="submit"
@@ -416,7 +427,7 @@ export const ConfigDetail = () => {
               className="h-8"
               disabled={!form.formState.isDirty}
             >
-              {mode === "edit" ? "Save" : "Add"}
+              {mode === "edit" ? t("save") : t("add")}
             </Button>
           </Field>
         </FieldGroup>

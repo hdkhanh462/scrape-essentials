@@ -1,0 +1,309 @@
+{
+  "extDescription": {
+    "message": "Một tiện ích mở rộng trình duyệt cho việc thu thập dữ liệu web, tự động hóa,.v.v."
+  },
+  "filterConfigs": {
+    "message": "Lọc cấu hình..."
+  },
+  "status": {
+    "message": "Trạng thái"
+  },
+  "active": {
+    "message": "Hoạt động"
+  },
+  "inactive": {
+    "message": "Không hoạt động"
+  },
+  "reset": {
+    "message": "Đặt lại"
+  },
+  "import": {
+    "message": "Nhập"
+  },
+  "export": {
+    "message": "Xuất"
+  },
+  "areYouSure": {
+    "message": "Bạn có chắc chắn không?"
+  },
+  "importConfigConfirmation": {
+    "message": "Hành động này không thể hoàn tác. Hành động này sẽ nhập và ghi đè lên các cấu hình hiện có của bạn."
+  },
+  "rowsSelected": {
+    "message": "hàng đã chọn"
+  },
+  "rowsPerPage": {
+    "message": "Hàng mỗi trang"
+  },
+  "page": {
+    "message": "Trang"
+  },
+  "of": {
+    "message": "của"
+  },
+  "configName": {
+    "message": "Tên Cấu hình"
+  },
+  "domains": {
+    "message": "Tên Miền"
+  },
+  "createdAt": {
+    "message": "Ngày tạo"
+  },
+  "updatedAt": {
+    "message": "Ngày cập nhật"
+  },
+  "view": {
+    "message": "Xem"
+  },
+  "toggleColumns": {
+    "message": "Ẩn/hiện cột"
+  },
+  "edit": {
+    "message": "Chỉnh sửa"
+  },
+  "add": {
+    "message": "Thêm"
+  },
+  "save": {
+    "message": "Lưu"
+  },
+  "copy": {
+    "message": "Sao chép"
+  },
+  "copied": {
+    "message": "Đã sao chép"
+  },
+  "duplicate": {
+    "message": "Nhân bản"
+  },
+  "delete": {
+    "message": "Xóa"
+  },
+  "deleteConfigConfirmation": {
+    "message": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn cấu hình đã chọn của bạn."
+  },
+  "back": {
+    "message": "Quay lại"
+  },
+  "config": {
+    "message": "Cấu hình"
+  },
+  "enterConfigName": {
+    "message": "Nhập tên cấu hình"
+  },
+  "addDomain": {
+    "message": "Thêm miền"
+  },
+  "configFields": {
+    "message": "Các trường"
+  },
+  "addField": {
+    "message": "Thêm trường"
+  },
+  "pasted": {
+    "message": "Đã dán"
+  },
+  "paste": {
+    "message": "Dán"
+  },
+  "field": {
+    "message": "Trường"
+  },
+  "fieldName": {
+    "message": "Tên trường"
+  },
+  "enterFieldName": {
+    "message": "Nhập tên trường"
+  },
+  "fieldType": {
+    "message": "Loại trường"
+  },
+  "showOnTable": {
+    "message": "Hiển thị trên bảng"
+  },
+  "filterable": {
+    "message": "Có thể lọc"
+  },
+  "required": {
+    "message": "Bắt buộc"
+  },
+  "primary": {
+    "message": "Trường Chính"
+  },
+  "multiple": {
+    "message": "Nhiều"
+  },
+  "parent": {
+    "message": "Trường Cha"
+  },
+  "regexPattern": {
+    "message": "Mẫu Regex"
+  },
+  "enterRegexPattern": {
+    "message": "Nhập mẫu regex"
+  },
+  "splitter": {
+    "message": "Bộ phân tách"
+  },
+  "enterSplitter": {
+    "message": "Nhập bộ phân tách"
+  },
+  "removers": {
+    "message": "Bộ loại bỏ"
+  },
+  "optional": {
+    "message": "Tùy chọn"
+  },
+  "enterRemover": {
+    "message": "Nhập bộ loại bỏ"
+  },
+  "addRemover": {
+    "message": "Thêm bộ loại bỏ"
+  },
+
+  "cssSelector": {
+    "message": "Bộ chọn CSS"
+  },
+  "enterCssSelector": {
+    "message": "Nhập bộ chọn CSS"
+  },
+  "condition": {
+    "message": "Điều kiện"
+  },
+  "enterCondition": {
+    "message": "Nhập điều kiện"
+  },
+  "attributeName": {
+    "message": "Tên thuộc tính"
+  },
+  "enterAttributeName": {
+    "message": "Nhập tên thuộc tính"
+  },
+
+  "defaultValue": {
+    "message": "Giá trị mặc định"
+  },
+  "enterDefaultValue": {
+    "message": "Nhập giá trị mặc định"
+  },
+  "label": {
+    "message": "Tên hiển thị"
+  },
+  "enterLabel": {
+    "message": "Nhập tên hiển thị"
+  },
+  "options": {
+    "message": "Tùy chọn"
+  },
+  "addOption": {
+    "message": "Thêm tùy chọn"
+  },
+  "enterOptionLabel": {
+    "message": "Nhập tên hiển thị tùy chọn"
+  },
+  "enterOptionValue": {
+    "message": "Nhập giá trị tùy chọn"
+  },
+
+  "selectParentField": {
+    "message": "Chọn trường cha"
+  },
+  "noResults": {
+    "message": "Không có kết quả"
+  },
+
+  "deleteFieldConfirmation": {
+    "message": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn trường đã chọn."
+  },
+
+  "fieldRequired": {
+    "message": "Trường bắt buộc"
+  },
+  "atLeastOneDomain": {
+    "message": "Ít nhất một tên miền"
+  },
+  "atLeastOneField": {
+    "message": "Ít nhất một trường"
+  },
+  "atLeastOneKeyField": {
+    "message": "Ít nhất một trường chính"
+  },
+  "onlyOneKeyFieldAllowed": {
+    "message": "Chỉ cho phép một trường chính"
+  },
+
+  "selectConfig": {
+    "message": "Chọn cấu hình..."
+  },
+  "searchConfig": {
+    "message": "Tìm kiếm cấu hình..."
+  },
+  "refresh": {
+    "message": "Làm mới"
+  },
+
+  "search": {
+    "message": "Tìm kiếm"
+  },
+  "importRecordsConfirmation": {
+    "message": "Hành động này không thể hoàn tác. Hành động này sẽ nhập và ghi đè lên các bản ghi hiện có."
+  },
+
+  "gotoUrl": {
+    "message": "Đi đến URL"
+  },
+  "deleteRecordConfirmation": {
+    "message": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn bản ghi đã chọn."
+  },
+
+  "settings": {
+    "message": "Cài đặt"
+  },
+  "settingsDescription": {
+    "message": "Cấu hình cài đặt và tùy chọn cho tiện ích."
+  },
+  "backup": {
+    "message": "Sao lưu"
+  },
+  "backupDescription": {
+    "message": "Tạo bản sao lưu của cài đặt và cấu hình hiện tại của bạn để lưu trữ an toàn hoặc chuyển sang thiết bị khác."
+  },
+  "lastBackup": {
+    "message": "Lần sao lưu gần nhất"
+  },
+  "restore": {
+    "message": "Khôi phục"
+  },
+  "debugMode": {
+    "message": "Chế độ gỡ lỗi"
+  },
+  "debugModeDescription": {
+    "message": "Bật chế độ gỡ lỗi để xem nhật ký chi tiết và khắc phục sự cố."
+  },
+  "themes": {
+    "message": "Giao diện"
+  },
+  "themesDescription": {
+    "message": "Các giao diện tùy chỉnh để cải thiện trải nghiệm người dùng và giảm mỏi mắt trong các môi trường sáng hoặc tối."
+  },
+  "themeOptionDescription": {
+    "message": "Sử dụng giao diện này để có khả năng hiển thị tốt hơn trong môi trường sáng hoặc tối."
+  },
+  "resetDefaults": {
+    "message": "Đặt lại mặc định"
+  },
+  "resetDefaultsDescription": {
+    "message": "Đặt lại tất cả cài đặt và cấu hình về giá trị mặc định. Hành động này không thể hoàn tác."
+  },
+  "restoreConfirmation": {
+    "message": "Hành động này không thể hoàn tác. Hành động này sẽ khôi phục vĩnh viễn cài đặt của bạn và ghi đè lên cài đặt và cấu hình hiện có."
+  },
+
+  "configActiveStateToggled": {
+    "message": "Trạng thái kích hoạt cấu hình đã được chuyển đổi thành công"
+  },
+  "failedToToggleConfigActiveState": {
+    "message": "Không thể chuyển đổi trạng thái kích hoạt cấu hình"
+  }
+}

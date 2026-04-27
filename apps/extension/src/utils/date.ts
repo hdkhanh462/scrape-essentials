@@ -1,5 +1,5 @@
 export const formatRelativeTime = (timestamp: number | null) => {
-  if (!timestamp) return "Never";
+  if (!timestamp) return "-";
   const diff = Date.now() - timestamp;
   const minutes = Math.floor(diff / 60000);
   const hours = Math.floor(minutes / 60);
