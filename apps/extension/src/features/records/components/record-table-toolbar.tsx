@@ -1,5 +1,5 @@
 import type { Table } from "@tanstack/react-table";
-import { XIcon } from "lucide-react";
+import { DownloadIcon, UploadIcon, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
@@ -120,6 +120,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleImportClick}
         >
+          <DownloadIcon />
           {t("button.import")}
         </Button>
         <Button
@@ -128,6 +129,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleExport}
         >
+          <UploadIcon />
           {t("button.export")}
         </Button>
         <ConfirmDialog

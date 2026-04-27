@@ -1,4 +1,10 @@
-import { CheckIcon, ClipboardPasteIcon, CopyIcon } from "lucide-react";
+import {
+  CheckIcon,
+  ClipboardPasteIcon,
+  CopyIcon,
+  RotateCcwIcon,
+  SaveIcon,
+} from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -112,6 +118,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         className="h-8"
         onClick={() => form.reset()}
       >
+        <RotateCcwIcon />
         {t("common.reset")}
       </Button>
       <Button
@@ -121,6 +128,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         className="h-8"
         disabled={!form.formState.isDirty}
       >
+        <SaveIcon />
         {mode === "add" ? t("button.add") : t("button.save")}
       </Button>
     </Field>
