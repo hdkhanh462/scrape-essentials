@@ -96,7 +96,7 @@ export function SettingsContainer() {
           onError: (error) => toastError(error, t("importRecordsFailed")),
         });
       },
-      onError: (error) => toastError(error, t("importConfigsFailed")),
+      onError: (error) => toastError(error, t("failedToImportConfigs")),
     });
   };
 
