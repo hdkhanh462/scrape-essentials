@@ -96,7 +96,7 @@ export const ConfigSelector = () => {
           onClick={handleRefresh}
         >
           <RefreshCwIcon />
-          {t("button.refresh")}
+          {t("common.refresh")}
         </Button>
       )}
     </div>
