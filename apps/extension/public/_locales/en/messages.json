@@ -419,9 +419,6 @@
   "importRecordsFailed": {
     "message": "Failed to import records"
   },
-  "importConfigsFailed": {
-    "message": "Failed to import configs"
-  },
   "restoreFailed": {
     "message": "Restore failed"
   },

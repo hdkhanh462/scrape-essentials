@@ -420,9 +420,6 @@
   "importRecordsFailed": {
     "message": "Không thể nhập bản ghi"
   },
-  "importConfigsFailed": {
-    "message": "Không thể nhập cấu hình"
-  },
   "restoreFailed": {
     "message": "Khôi phục thất bại"
   },
