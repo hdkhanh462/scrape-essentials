@@ -1,6 +1,6 @@
 import { XIcon } from "lucide-react";
 import { Controller, useFieldArray } from "react-hook-form";
-
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
+  const { t } = useTranslation();
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "removers",
@@ -24,18 +26,18 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="regex"
-          label="Regex Pattern"
+          label={t("field.regexPattern")}
           inputProps={{
-            placeholder: "Enter regex pattern",
+            placeholder: t("field.enterRegexPattern"),
             autoComplete: "off",
           }}
         />
         <FormInput
           control={form.control}
           name="spliter"
-          label="Spliter"
+          label={t("field.splitter")}
           inputProps={{
-            placeholder: "Enter spliter",
+            placeholder: t("field.enterSplitter"),
             autoComplete: "off",
           }}
         />
@@ -44,7 +46,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         )}
       </div>
       <FieldSet>
-        <FieldLegend className="text-sm!">Removers</FieldLegend>
+        <FieldLegend className="text-sm!">{t("field.removers")}</FieldLegend>
         <FieldGroup className="gap-3">
           {fields.map((item, index) => (
             <Controller
@@ -56,7 +58,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
                   <div className="flex gap-2">
                     <Input
                       {...field}
-                      placeholder="Enter remover"
+                      placeholder={t("field.enterRemover")}
                       autoComplete="off"
                     />
                     <Button
@@ -84,7 +86,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
           className="h-8"
           onClick={() => append({ value: "" })}
         >
-          Add Remover
+          {t("field.addRemover")}
         </Button>
       </FieldSet>
     </>

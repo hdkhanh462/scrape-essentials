@@ -1,5 +1,6 @@
 import type { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,7 @@ export function RecordTableRowActions({ row }: Props) {
   const copyRecord = useCopyToClipboard();
   const { mutate: deleteRecord } = useDeleteRecord();
 
-  async function handleCopyRecord() {
+  const handleCopyRecord = async () => {
     const config = await dexie.scrapeConfigs
       .where("id")
       .equals(row.original.configId)
@@ -42,28 +43,30 @@ export function RecordTableRowActions({ row }: Props) {
         key: row.original.key,
       });
       copyRecord.copy(copyData);
-      toast.success("Record copied to clipboard");
+      toast.success(t("message.recordDataCopied"));
     }
-  }
+  };
 
   const handleDeleteRecord = () => {
     deleteRecord(row.original.id, {
       onSuccess: () => {
-        toast.success("Record deleted successfully");
+        toast.success(t("message.recordDeletedSuccessfully"));
         deleteConfirmDialog.close();
       },
-      onError: (error) => toastError(error, "Delete record failed"),
+      onError: (error) => toastError(error, t("message.failedToDeleteRecord")),
     });
   };
 
   const handleOpenNewTab = () => {
     if (!row.original.url) {
-      toast.error("URL not found for this record");
+      toast.error(t("message.urlNotFound"));
       return;
     }
 
     browser.tabs.create({ url: row.original.url, active: true });
   };
+
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -78,23 +81,25 @@ export function RecordTableRowActions({ row }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onSelect={handleCopyRecord}>Copy</DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleCopyRecord}>
+          {t("button.copy")}
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleOpenNewTab}>
-          Go to URL
+          {t("record.gotoUrl")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           onSelect={deleteConfirmDialog.open}
         >
-          Delete
+          {t("button.delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your selected record."
+        title={t("dialog.areYouSure")}
+        description={t("dialog.deleteRecordConfirmation")}
         onConfirm={handleDeleteRecord}
       />
     </DropdownMenu>

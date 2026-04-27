@@ -2,6 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVerticalIcon, MoreHorizontalIcon } from "lucide-react";
 import { type Control, Controller, type FieldPath } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import {
   DropdownMenu,
@@ -43,6 +44,8 @@ export default function SortableFieldItem({
   onEdit,
   onDelete,
 }: SortableFieldItemProps) {
+  const { t } = useTranslation();
+
   const {
     attributes,
     listeners,
@@ -98,14 +101,14 @@ export default function SortableFieldItem({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onSelect={editFieldDialog.open}>
-                      Edit
+                      {t("button.edit")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={deleteConfirmDialog.open}
                       disabled={isTextField(field) && field.isPrimary}
                     >
-                      Delete
+                      {t("button.delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -123,8 +126,8 @@ export default function SortableFieldItem({
       />
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete the selected field."
+        title={t("dialog.areYouSure")}
+        description={t("dialog.deleteFieldConfirmation")}
         onConfirm={() => onDelete(index, field.fieldId)}
       />
     </div>

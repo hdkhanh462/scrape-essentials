@@ -1,5 +1,6 @@
 import type { Table } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
@@ -22,6 +23,8 @@ interface DataTableToolbarProps {
 }
 
 export function RecordTableToolbar({ table }: DataTableToolbarProps) {
+  const { t } = useTranslation();
+
   const { filterString } = useRecordStore();
   const { setFilterString } = useRecordStore((state) => state.actions);
 
@@ -33,7 +36,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
 
   // const isFiltered = table.getState().columnFilters.length > 0;
 
-  async function handleExport() {
+  const handleExport = async () => {
     const records = await dexie.scrapedRecords.toArray();
     const blob = new Blob([JSON.stringify(records)], {
       type: "application/json",
@@ -42,27 +45,27 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
       blob,
       prefix: "records-export",
     });
-    toast.success("Export records successful");
-  }
+    toast.success(t("message.exportSuccessful"));
+  };
 
-  async function handleImportClick() {
+  const handleImportClick = async () => {
     await importFromJSON(async (file) => {
       const text = await file.text();
       const data = JSON.parse(text);
       setImportPayload(data);
       importConfirmDialog.open();
     });
-  }
+  };
 
   const handleImportConfirm = async () => {
     if (!importPayload) return;
 
     importRecords(importPayload, {
       onSuccess: () => {
-        toast.success("Import records successful");
+        toast.success(t("message.configsImportedSuccessfully"));
         importConfirmDialog.close();
       },
-      onError: (error) => toastError(error, "Import records failed"),
+      onError: (error) => toastError(error, t("message.failedToImportConfigs")),
     });
   };
 
@@ -92,7 +95,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
               variant="secondary"
               onClick={() => setFilterString(filterValue)}
             >
-              Search
+              {t("common.search")}
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
@@ -117,7 +120,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleImportClick}
         >
-          Import
+          {t("button.import")}
         </Button>
         <Button
           size="sm"
@@ -125,12 +128,12 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleExport}
         >
-          Export
+          {t("button.export")}
         </Button>
         <ConfirmDialog
           control={importConfirmDialog}
-          title="Are you absolutely sure?"
-          description="This action cannot be undone. This will permanently import and overwrite your existing records."
+          title={t("dialog.areYouSure")}
+          description={t("dialog.importRecordsConfirmation")}
           onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />

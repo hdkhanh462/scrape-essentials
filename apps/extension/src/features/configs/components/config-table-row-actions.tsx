@@ -1,5 +1,6 @@
 import type { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,8 @@ interface Props {
 }
 
 export function ConfigTableRowActions({ row }: Props) {
+  const { t } = useTranslation();
+
   const deleteConfirmDialog = useDialog();
   const { setMode, setConfigId, showDetail } = useConfigStore(
     (state) => state.actions,
@@ -32,21 +35,21 @@ export function ConfigTableRowActions({ row }: Props) {
   const fieldsQuery = useGetFields({ configId: row.original.id });
   const duplicateConfigMutation = useDuplicateConfig({
     onSuccess: () => {
-      toast.success("Config duplicated successfully");
+      toast.success(t("message.configDuplicated"));
     },
-    onError: (error) => toastError(error, "Failed to duplicate config"),
+    onError: (error) => toastError(error, t("message.failedToDuplicateConfig")),
   });
   const deleteConfigMutation = useDeleteConfig({
     onSuccess: () => {
-      toast.success("Config deleted successfully");
+      toast.success(t("message.configDeleted"));
       deleteConfirmDialog.close();
     },
-    onError: (error) => toastError(error, "Failed to delete config"),
+    onError: (error) => toastError(error, t("message.failedToDeleteConfig")),
   });
 
   const handleCopyId = () => {
     navigator.clipboard.writeText(row.original.id);
-    toast.success("Config ID copied to clipboard");
+    toast.success(t("message.configIdCopied"));
   };
 
   const handleCopyConfig = async (_e: Event) => {
@@ -71,7 +74,7 @@ export function ConfigTableRowActions({ row }: Props) {
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {
       logger.error("Error copying config:", result.error);
-      toast.error("Failed to copy config", {
+      toast.error(t("message.failedToCopyConfig"), {
         description: () => (
           <ul>
             {result.error.issues.map((err) => (
@@ -86,7 +89,7 @@ export function ConfigTableRowActions({ row }: Props) {
     }
 
     navigator.clipboard.writeText(JSON.stringify(result.data));
-    toast.success("Config copied to clipboard");
+    toast.success(t("message.configCopied"));
   };
 
   const handleEditSelect = () => {
@@ -108,15 +111,19 @@ export function ConfigTableRowActions({ row }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onSelect={handleEditSelect}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onSelect={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleEditSelect}>
+          {t("button.edit")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleCopyId}>
+          {t("button.copy")} ID
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleCopyConfig}>
-          Copy JSON
+          {t("button.copy")} JSON
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => duplicateConfigMutation.mutate(row.original.id)}
         >
-          Duplicate
+          {t("button.duplicate")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
@@ -124,14 +131,14 @@ export function ConfigTableRowActions({ row }: Props) {
           variant="destructive"
           onSelect={deleteConfirmDialog.open}
         >
-          Delete
+          {t("button.delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your selected config."
+        title={t("dialog.areYouSure")}
+        description={t("dialog.deleteConfigConfirmation")}
         onConfirm={() => deleteConfigMutation.mutate(row.original.id)}
       />
     </DropdownMenu>

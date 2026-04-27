@@ -16,6 +16,7 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import {
   Table,
@@ -86,6 +87,8 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-4">
       {children?.(table)}
@@ -132,7 +135,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("common.noResults")}
                 </TableCell>
               </TableRow>
             )}
