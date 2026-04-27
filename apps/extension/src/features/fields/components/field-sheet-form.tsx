@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
-
+import { useTranslation } from "react-i18next";
 import type { DialogWrapperProps } from "@/components/dialog-wrapper";
 import { FormInput, FormSelect } from "@/components/form";
 import { SheetWrapper } from "@/components/sheet-wrapper";
@@ -49,7 +49,7 @@ type Props = Omit<DialogWrapperProps, "title"> & {
 export const FieldSheetForm: React.FC<Props> = (props) => {
   const { control, formId, field, onSubmit, ...rest } = props;
 
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
   const form = useForm<FieldInput>({
     resolver: zodResolver(FieldSchema),
     defaultValues: DEFAULT_VALUES,
@@ -89,7 +89,11 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
       {...rest}
       open={control.isOpen}
       onOpenChange={control.onChange}
-      title={field ? `${t("edit")} ${t("field")}` : `${t("add")} ${t("field")}`}
+      title={
+        field
+          ? `${t("button.edit")} ${t("field.label")}`
+          : `${t("button.add")} ${t("field.label")}`
+      }
       footer={
         <FieldSheetFooter
           id={formId}
@@ -111,17 +115,17 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
             <FormInput
               control={form.control}
               name="name"
-              label={t("fieldName")}
+              label={t("field.fieldName")}
               hideError
               inputProps={{
-                placeholder: t("enterFieldName"),
+                placeholder: t("field.enterFieldName"),
                 autoComplete: "off",
               }}
             />
             <FormSelect
               control={form.control}
               name="type"
-              label={t("fieldType")}
+              label={t("field.fieldType")}
               inputProps={{
                 children: Object.values(FieldType).map((type) => (
                   <SelectItem key={type} value={type}>

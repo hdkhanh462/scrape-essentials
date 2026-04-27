@@ -1,4 +1,5 @@
 import type { Row } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEditRecord } from "@/features/records/hooks";
 import type { ScrapedRecord } from "@/lib/dexie";
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export const RecordCell = ({ row, columnId, value }: Props) => {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
   const { mutate: editRecord } = useEditRecord();
 
   const handleCheckedChange = async () => {
@@ -27,7 +28,8 @@ export const RecordCell = ({ row, columnId, value }: Props) => {
         },
       },
       {
-        onError: (error) => toastError(error, t("failedToUpdateRecord")),
+        onError: (error) =>
+          toastError(error, t("message.failedToUpdateRecord")),
       },
     );
   };

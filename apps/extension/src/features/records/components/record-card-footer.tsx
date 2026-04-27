@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { useDeleteRecord } from "@/features/records/hooks";
@@ -26,7 +27,7 @@ export function RecordCardFooter({
   isDirty,
   onDeleteSuccess,
 }: FooterProps) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const copyScrapedData = useCopyToClipboard();
   const { mutate: deleteRecord } = useDeleteRecord();
@@ -38,7 +39,7 @@ export function RecordCardFooter({
       onSuccess: () => {
         onDeleteSuccess?.();
       },
-      onError: (error) => toastError(error, t("failedToDeleteRecord")),
+      onError: (error) => toastError(error, t("message.failedToDeleteRecord")),
     });
   };
 

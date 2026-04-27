@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   DialogWrapper,
   type DialogWrapperProps,
@@ -24,6 +25,8 @@ type Props = Pick<DialogWrapperProps, "title" | "description"> & {
 export const ConfirmDialog: React.FC<Props> = (props) => {
   const { control, cancelButton, confirmButton, onConfirm, ...rest } = props;
 
+  const { t } = useTranslation();
+
   return (
     <DialogWrapper
       {...rest}
@@ -39,7 +42,7 @@ export const ConfirmDialog: React.FC<Props> = (props) => {
             {...cancelButton?.override}
             onClick={control.close}
           >
-            {cancelButton?.label || "Cancel"}
+            {cancelButton?.label || t("common.cancel")}
           </Button>
           <Button
             variant="destructive"
@@ -48,7 +51,7 @@ export const ConfirmDialog: React.FC<Props> = (props) => {
             {...confirmButton?.override}
             onClick={onConfirm}
           >
-            {confirmButton?.label || "Confirm"}
+            {confirmButton?.label || t("common.confirm")}
           </Button>
         </Field>
       }

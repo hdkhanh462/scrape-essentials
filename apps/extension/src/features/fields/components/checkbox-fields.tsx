@@ -1,8 +1,9 @@
 import { useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export default function CheckboxFields({ form }: FieldTypePropsV2) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const type = useWatch({
     control: form.control,
@@ -18,24 +19,24 @@ export default function CheckboxFields({ form }: FieldTypePropsV2) {
       <FormCheckbox
         control={form.control}
         name="isShowOnTable"
-        label={t("showOnTable")}
+        label={t("field.showOnTable")}
       />
       <FormCheckbox
         control={form.control}
         name="isFilterable"
-        label={t("filterable")}
+        label={t("field.filterable")}
       />
       <FormCheckbox
         control={form.control}
         name="isRequired"
-        label={t("required")}
+        label={t("field.required")}
         inputProps={{ disabled: isPrimary }}
       />
       {(isScrapeFieldType(type) || isPageUrlFieldType(type)) && (
         <FormCheckbox
           control={form.control}
           name="isPrimary"
-          label={t("primary")}
+          label={t("field.primary")}
         />
       )}
       {isScrapeFieldType(type) && (
@@ -43,12 +44,12 @@ export default function CheckboxFields({ form }: FieldTypePropsV2) {
           <FormCheckbox
             control={form.control}
             name="scrapeOptions.isMultiple"
-            label={t("multiple")}
+            label={t("field.multiple")}
           />
           <FormCheckbox
             control={form.control}
             name="isParent"
-            label={t("parent")}
+            label={t("field.parent")}
           />
         </>
       )}

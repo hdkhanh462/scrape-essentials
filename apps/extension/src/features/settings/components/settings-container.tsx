@@ -1,5 +1,6 @@
 import { CheckCircle2Icon, CloudUpload, History } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import Loader from "@/components/loader";
@@ -25,6 +26,7 @@ import type { ImportPayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
 import { useImportRecords } from "@/features/records/hooks";
 import {
+  languageOptions,
   settingsSchema,
   themeOptions,
 } from "@/features/settings/schemas/settings";
@@ -37,7 +39,7 @@ import { formatRelativeTime } from "@/utils/date";
 import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const { debugMode, theme, language, autoBackup, updateSettings } =
     useSettingsStore();
@@ -50,11 +52,11 @@ export function SettingsContainer() {
       setImportPayload(data);
       restoreConfirmDialog.open();
     },
-    onError: (error) => toastError(error, t("restoreFailed")),
+    onError: (error) => toastError(error, t("message.restoreFailed")),
   });
   const { mutate: backupToDrive, isPending: isBackingUp } = useBackupToDrive({
-    onSuccess: () => toast.success(t("backupSuccessful")),
-    onError: (error) => toastError(error, t("backupFailed")),
+    onSuccess: () => toast.success(t("message.backupSuccessful")),
+    onError: (error) => toastError(error, t("message.backupFailed")),
   });
 
   const { mutate: importConfigs } = useImportConfigs();
@@ -91,12 +93,13 @@ export function SettingsContainer() {
         importRecords(importPayload.records, {
           onSuccess: () => {
             restoreConfirmDialog.close();
-            toast.success(t("restoreSuccessful"));
+            toast.success(t("message.restoreSuccessful"));
           },
-          onError: (error) => toastError(error, t("importRecordsFailed")),
+          onError: (error) =>
+            toastError(error, t("message.importRecordsFailed")),
         });
       },
-      onError: (error) => toastError(error, t("failedToImportConfigs")),
+      onError: (error) => toastError(error, t("message.failedToImportConfigs")),
     });
   };
 
@@ -108,15 +111,17 @@ export function SettingsContainer() {
     <div className="py-8">
       <form onChange={form.handleSubmit(handleSubmit)}>
         <FieldSet>
-          <FieldLegend>{t("settings")}</FieldLegend>
-          <FieldDescription>{t("settingsDescription")}</FieldDescription>
+          <FieldLegend>{t("settings.label")}</FieldLegend>
+          <FieldDescription>
+            {t("settings.settingsDescription")}
+          </FieldDescription>
 
           <FieldGroup>
             <FieldSeparator />
             <Field orientation="responsive">
               <FieldContent>
                 <div className="flex items-center gap-2">
-                  <FieldLabel htmlFor="backup">{t("backup")}</FieldLabel>
+                  <FieldLabel htmlFor="backup">{t("backup.label")}</FieldLabel>
                   <Badge
                     variant="outline"
                     className="gap-1.5 border-green-500/20 bg-green-500/5 px-2 font-normal text-green-600 dark:text-green-400"
@@ -126,10 +131,10 @@ export function SettingsContainer() {
                   </Badge>
                 </div>
                 <FieldDescription className="max-w-100">
-                  {t("backupDescription")}
+                  {t("backup.backupDescription")}
                   <span className="mt-2 flex items-center gap-2 font-medium text-foreground/80 text-xs">
                     <History className="size-3.5 text-muted-foreground" />
-                    {t("lastBackup")}:{" "}
+                    {t("backup.lastBackup")}:{" "}
                     <span className="font-normal text-muted-foreground">
                       {formatRelativeTime(lastBackup)}
                     </span>
@@ -167,7 +172,7 @@ export function SettingsContainer() {
                     >
                       <Loader isLoading={isRestoring} />
                       {!isRestoring && <History className="size-3.5" />}
-                      {t("restore")}
+                      {t("button.restore")}
                     </Button>
                     <Button
                       type="button"
@@ -178,7 +183,7 @@ export function SettingsContainer() {
                     >
                       <Loader isLoading={isBackingUp} />
                       {!isBackingUp && <CloudUpload className="size-3.5" />}
-                      {t("backup")}
+                      {t("backup.label")}
                     </Button>
                   </div>
                 </div>
@@ -196,10 +201,10 @@ export function SettingsContainer() {
                 >
                   <FieldContent>
                     <FieldLabel htmlFor="debug-mode">
-                      {t("debugMode")}
+                      {t("settings.debugMode")}
                     </FieldLabel>
                     <FieldDescription>
-                      {t("debugModeDescription")}
+                      {t("settings.debugModeDescription")}
                     </FieldDescription>
                   </FieldContent>
                   <Switch
@@ -218,8 +223,12 @@ export function SettingsContainer() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <FieldSet>
-                  <FieldLabel htmlFor="themes">{t("themes")}</FieldLabel>
-                  <FieldDescription>{t("themesDescription")}</FieldDescription>
+                  <FieldLabel htmlFor="themes">
+                    {t("settings.themes")}
+                  </FieldLabel>
+                  <FieldDescription>
+                    {t("settings.themesDescription")}
+                  </FieldDescription>
                   <RadioGroup
                     name={field.name}
                     value={field.value}
@@ -233,10 +242,10 @@ export function SettingsContainer() {
                         >
                           <FieldContent>
                             <FieldTitle className="capitalize">
-                              {theme}
+                              {t(`settings.${theme}`)}
                             </FieldTitle>
                             <FieldDescription>
-                              {t("themeOptionDescription")}
+                              {t("settings.themeOptionDescription")}
                             </FieldDescription>
                           </FieldContent>
                           <RadioGroupItem
@@ -252,14 +261,16 @@ export function SettingsContainer() {
               )}
             />
             <FieldSeparator />
-            {/* <Controller
+            <Controller
               name="language"
               control={form.control}
               render={({ field, fieldState }) => (
                 <FieldSet>
-                  <FieldLabel htmlFor="languages">{t("languages")}</FieldLabel>
+                  <FieldLabel htmlFor="languages">
+                    {t("language.label")}
+                  </FieldLabel>
                   <FieldDescription>
-                    {t("languageDescription")}
+                    {t("language.description")}
                   </FieldDescription>
                   <RadioGroup
                     name={field.name}
@@ -274,10 +285,10 @@ export function SettingsContainer() {
                         >
                           <FieldContent>
                             <FieldTitle className="capitalize">
-                              {language}
+                              {t(`language.${language}`)}
                             </FieldTitle>
                             <FieldDescription>
-                              {t("languageOptionDescription")}
+                              {t("language.optionDescription ")}
                             </FieldDescription>
                           </FieldContent>
                           <RadioGroupItem
@@ -291,19 +302,19 @@ export function SettingsContainer() {
                   </RadioGroup>
                 </FieldSet>
               )}
-            /> */}
+            />
             <FieldSeparator />
             <Field orientation="responsive">
               <FieldContent>
                 <FieldLabel htmlFor="reset-default">
-                  {t("resetDefaults")}
+                  {t("settings.resetDefaults")}
                 </FieldLabel>
                 <FieldDescription>
-                  {t("resetDefaultsDescription")}
+                  {t("settings.resetDefaultsDescription")}
                 </FieldDescription>
               </FieldContent>
               <Button type="button" variant="destructive" onClick={handleReset}>
-                {t("reset")}
+                {t("common.reset")}
               </Button>
             </Field>
           </FieldGroup>
@@ -312,8 +323,8 @@ export function SettingsContainer() {
 
       <ConfirmDialog
         control={restoreConfirmDialog}
-        title={t("areYouSure")}
-        description={t("restoreConfirmation")}
+        title={t("dialog.areYouSure")}
+        description={t("dialog.restoreConfirmation")}
         onConfirm={handleRestore}
       />
     </div>

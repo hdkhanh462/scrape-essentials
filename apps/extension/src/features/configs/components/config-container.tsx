@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-
+import { useTranslation } from "react-i18next";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,7 @@ import type { ScrapeConfig } from "@/lib/dexie";
 import { useColumnVisibility } from "@/utils/table";
 
 export function ConfigContainer() {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const { data } = useGetConfigs({});
   const { showDetail } = useConfigStore();
@@ -49,13 +49,13 @@ export function ConfigContainer() {
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("configName")} />
+        <DataTableColumnHeader column={column} title={t("config.configName")} />
       ),
     },
     {
       accessorKey: "domains",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("domains")} />
+        <DataTableColumnHeader column={column} title={t("config.domains")} />
       ),
       cell: ({ row }) => (
         <BadgeOverflow
@@ -68,14 +68,14 @@ export function ConfigContainer() {
       accessorKey: "isActive",
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("active")} />
+        <DataTableColumnHeader column={column} title={t("common.active")} />
       ),
       cell: ({ row }) => <ConfigActiveCell row={row} />,
     },
     {
       accessorKey: "createdAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("createdAt")} />
+        <DataTableColumnHeader column={column} title={t("common.createdAt")} />
       ),
       cell: ({ row }) => (
         <span>{new Date(row.getValue("createdAt")).toLocaleString()}</span>
@@ -84,7 +84,7 @@ export function ConfigContainer() {
     {
       accessorKey: "updatedAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("updatedAt")} />
+        <DataTableColumnHeader column={column} title={t("common.updatedAt")} />
       ),
       cell: ({ row }) => (
         <span>{new Date(row.getValue("updatedAt")).toLocaleString()}</span>

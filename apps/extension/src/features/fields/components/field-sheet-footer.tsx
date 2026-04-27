@@ -1,7 +1,7 @@
 import { CheckIcon, ClipboardPasteIcon, CopyIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export function FieldSheetFooter({ id, mode, form }: Props) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const copyField = useCopyToClipboard();
   const pasteField = usePasteFromClipboard({
@@ -27,7 +27,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
       try {
         valueFromClipboard = JSON.parse(text);
       } catch (error) {
-        toast.error(t("invalidJsonFormat"), {
+        toast.error(t("message.invalidJsonFormat"), {
           description: error instanceof Error ? error.message : "Unknown error",
         });
         return;
@@ -36,7 +36,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
       const { data, error } = FieldSchema.safeParse(valueFromClipboard);
       if (error) {
         logger.error("Error parsing field from clipboard:", error);
-        toast.error(t("pasteFailed"), {
+        toast.error(t("message.pasteFailed"), {
           description: () => (
             <ul>
               {error.issues.map((err) => (
@@ -75,12 +75,12 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
             fallback={
               <>
                 <CheckIcon />
-                {t("pasted")}
+                {t("button.pasted")}
               </>
             }
           >
             <ClipboardPasteIcon />
-            {t("paste")}
+            {t("button.paste")}
           </Loader>
         </Button>
       ) : (
@@ -96,12 +96,12 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
             fallback={
               <>
                 <CheckIcon />
-                {t("copied")}
+                {t("button.copied")}
               </>
             }
           >
             <CopyIcon />
-            {t("copy")}
+            {t("button.copy")}
           </Loader>
         </Button>
       )}
@@ -112,7 +112,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         className="h-8"
         onClick={() => form.reset()}
       >
-        {t("reset")}
+        {t("common.reset")}
       </Button>
       <Button
         form={id}
@@ -121,7 +121,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         className="h-8"
         disabled={!form.formState.isDirty}
       >
-        {mode === "add" ? t("add") : t("save")}
+        {mode === "add" ? t("button.add") : t("button.save")}
       </Button>
     </Field>
   );

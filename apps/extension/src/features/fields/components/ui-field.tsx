@@ -5,7 +5,7 @@ import {
   useFieldArray,
   useWatch,
 } from "react-hook-form";
-
+import { useTranslation } from "react-i18next";
 import { FormInput } from "@/components/form";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +25,7 @@ import type {
 import { FieldType } from "@/lib/dexie";
 
 export function UiField({ form, fullErrors }: FieldTypePropsV2) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -44,10 +44,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormNumberInput
             control={form.control}
             name="uiOptions.defaultValue"
-            label={t("defaultValue")}
+            label={t("field.defaultValue")}
             hideError
             inputProps={{
-              placeholder: t("enterDefaultValue"),
+              placeholder: t("field.enterDefaultValue"),
               autoComplete: "off",
             }}
           />
@@ -57,10 +57,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormSelect
             control={form.control}
             name="uiOptions.defaultValue"
-            label={t("defaultValue")}
+            label={t("field.defaultValue")}
             hideError
             inputProps={{
-              placeholder: t("enterDefaultValue"),
+              placeholder: t("field.enterDefaultValue"),
               children: (
                 <>
                   <SelectItem value="true">True</SelectItem>
@@ -75,10 +75,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormInput
             control={form.control}
             name="uiOptions.defaultValue"
-            label={t("defaultValue")}
+            label={t("field.defaultValue")}
             hideError
             inputProps={{
-              placeholder: t("enterDefaultValue"),
+              placeholder: t("field.enterDefaultValue"),
               autoComplete: "off",
             }}
           />
@@ -92,10 +92,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="uiOptions.label"
-          label={t("label")}
+          label={t("common.label")}
           hideError
           inputProps={{
-            placeholder: t("enterLabel"),
+            placeholder: t("field.enterLabel"),
             autoComplete: "off",
           }}
         />
@@ -112,7 +112,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
       </div>
       {isSelectFieldType(type) && (
         <FieldSet>
-          <FieldLegend className="text-sm!">{t("options")}</FieldLegend>
+          <FieldLegend className="text-sm!">{t("field.options")}</FieldLegend>
           <FieldGroup className="gap-3">
             {fields.map((item, index) => (
               <Controller
@@ -141,7 +141,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
             className="h-8"
             onClick={() => append({ label: "", value: "" })}
           >
-            {t("addOption")}
+            {t("field.addOption")}
           </Button>
         </FieldSet>
       )}
@@ -157,7 +157,7 @@ type OptionItemProps = {
 };
 
 function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const error = errors?.uiOptions?.options?.[index];
   return (
@@ -172,7 +172,7 @@ function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
                 label: e.target.value,
               })
             }
-            placeholder={t("enterOptionLabel")}
+            placeholder={t("field.enterOptionLabel")}
             autoComplete="off"
           />
           <Input
@@ -183,7 +183,7 @@ function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
                 value: e.target.value,
               })
             }
-            placeholder={t("enterOptionValue")}
+            placeholder={t("field.enterOptionValue")}
             autoComplete="off"
           />
         </div>

@@ -1,5 +1,6 @@
 import { ChevronsUpDownIcon, RefreshCwIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -33,7 +34,7 @@ export const ConfigSelector = () => {
     });
   };
 
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   return (
     <div className="flex items-center gap-2">
@@ -48,7 +49,7 @@ export const ConfigSelector = () => {
           >
             {configId && configs
               ? configs.find((config) => config.id === configId)?.name
-              : t("selectConfig")}
+              : t("config.selectConfig")}
             <ChevronsUpDownIcon className="opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -60,9 +61,12 @@ export const ConfigSelector = () => {
               return 0;
             }}
           >
-            <CommandInput placeholder={t("searchConfig")} className="h-9" />
+            <CommandInput
+              placeholder={t("config.searchConfig")}
+              className="h-9"
+            />
             <CommandList>
-              <CommandEmpty>{t("noResults")}</CommandEmpty>
+              <CommandEmpty>{t("common.noResults")}</CommandEmpty>
               <CommandGroup>
                 {configs?.map((config) => (
                   <CommandItem
@@ -92,7 +96,7 @@ export const ConfigSelector = () => {
           onClick={handleRefresh}
         >
           <RefreshCwIcon />
-          {t("refresh")}
+          {t("button.refresh")}
         </Button>
       )}
     </div>

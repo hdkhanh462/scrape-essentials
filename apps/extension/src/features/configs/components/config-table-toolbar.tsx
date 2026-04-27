@@ -1,6 +1,7 @@
 import type { Column, Table } from "@tanstack/react-table";
 import { CheckIcon, PlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
@@ -19,7 +20,7 @@ interface DataTableToolbarProps {
 }
 
 export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
   const [importPayload, setImportPayload] = useState<ImportConfigsPayload>();
 
   const importConfirmDialog = useDialog();
@@ -29,10 +30,10 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
 
   const importConfigsMutation = useImportConfigs({
     onSuccess: () => {
-      toast.success(t("configsImportedSuccessfully"));
+      toast.success(t("message.configsImportedSuccessfully"));
       importConfirmDialog.close();
     },
-    onError: (error) => toastError(error, t("failedToImportConfigs")),
+    onError: (error) => toastError(error, t("message.failedToImportConfigs")),
   });
 
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -49,7 +50,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
       blob,
       prefix: "configs-export",
     });
-    toast.success(t("exportSuccessful"));
+    toast.success(t("message.exportSuccessful"));
   };
 
   const handleImport = async () => {
@@ -76,7 +77,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center gap-2">
         <Input
-          placeholder={t("filterConfigs")}
+          placeholder={t("config.filterConfigs")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -90,16 +91,16 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
                 | Column<ScrapeConfig, boolean>
                 | undefined
             }
-            title={t("status")}
+            title={t("common.status")}
             options={[
               {
                 value: true,
-                label: t("active"),
+                label: t("common.active"),
                 icon: CheckIcon,
               },
               {
                 value: false,
-                label: t("inactive"),
+                label: t("common.inactive"),
                 icon: XIcon,
               },
             ]}
@@ -112,7 +113,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
             className="h-8"
             onClick={() => table.resetColumnFilters()}
           >
-            {t("reset")}
+            {t("common.reset")}
             <XIcon />
           </Button>
         )}
@@ -124,7 +125,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleImport}
         >
-          {t("import")}
+          {t("button.import")}
         </Button>
         <Button
           size="sm"
@@ -132,18 +133,18 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleExport}
         >
-          {t("export")}
+          {t("button.export")}
         </Button>
         <ConfirmDialog
           control={importConfirmDialog}
-          title={t("areYouSure")}
-          description={t("importConfigConfirmation")}
+          title={t("dialog.areYouSure")}
+          description={t("dialog.importConfigConfirmation")}
           onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />
         <Button size="sm" className="h-8" onClick={handleAddConfigClick}>
           <PlusIcon />
-          {`${t("add")} ${t("config")}`}
+          {`${t("button.add")} ${t("config.label")}`}
         </Button>
       </div>
     </div>

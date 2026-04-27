@@ -1,5 +1,6 @@
 import type { Table } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
@@ -22,6 +23,8 @@ interface DataTableToolbarProps {
 }
 
 export function RecordTableToolbar({ table }: DataTableToolbarProps) {
+  const { t } = useTranslation();
+
   const { filterString } = useRecordStore();
   const { setFilterString } = useRecordStore((state) => state.actions);
 
@@ -42,7 +45,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
       blob,
       prefix: "records-export",
     });
-    toast.success(t("exportSuccessful"));
+    toast.success(t("message.exportSuccessful"));
   };
 
   const handleImportClick = async () => {
@@ -59,14 +62,12 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
 
     importRecords(importPayload, {
       onSuccess: () => {
-        toast.success(t("configsImportedSuccessfully"));
+        toast.success(t("message.configsImportedSuccessfully"));
         importConfirmDialog.close();
       },
-      onError: (error) => toastError(error, t("failedToImportConfigs")),
+      onError: (error) => toastError(error, t("message.failedToImportConfigs")),
     });
   };
-
-  const t = browser.i18n.getMessage;
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -94,7 +95,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
               variant="secondary"
               onClick={() => setFilterString(filterValue)}
             >
-              {t("search")}
+              {t("common.search")}
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
@@ -119,7 +120,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleImportClick}
         >
-          {t("import")}
+          {t("button.import")}
         </Button>
         <Button
           size="sm"
@@ -127,12 +128,12 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleExport}
         >
-          {t("export")}
+          {t("button.export")}
         </Button>
         <ConfirmDialog
           control={importConfirmDialog}
-          title={t("areYouSure")}
-          description={t("importRecordsConfirmation")}
+          title={t("dialog.areYouSure")}
+          description={t("dialog.importRecordsConfirmation")}
           onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />
