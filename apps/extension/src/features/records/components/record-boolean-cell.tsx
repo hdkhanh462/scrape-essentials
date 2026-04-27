@@ -11,6 +11,7 @@ interface Props {
 }
 
 export const RecordCell = ({ row, columnId, value }: Props) => {
+  const t = browser.i18n.getMessage;
   const { mutate: editRecord } = useEditRecord();
 
   const handleCheckedChange = async () => {
@@ -26,7 +27,7 @@ export const RecordCell = ({ row, columnId, value }: Props) => {
         },
       },
       {
-        onError: (error) => toastError(error, "Update record failed"),
+        onError: (error) => toastError(error, t("failedToUpdateRecord")),
       },
     );
   };

@@ -112,7 +112,7 @@ export const ConfigDetail = () => {
       try {
         valueFromClipboard = JSON.parse(text);
       } catch (error) {
-        toast.error(t("invalidJsonFormatInClipboard"), {
+        toast.error(t("invalidJsonFormat"), {
           description:
             error instanceof Error ? error.message : t("unknownError"),
         });

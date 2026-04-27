@@ -29,10 +29,10 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
 
   const importConfigsMutation = useImportConfigs({
     onSuccess: () => {
-      toast.success("Import successful");
+      toast.success(t("configsImportedSuccessfully"));
       importConfirmDialog.close();
     },
-    onError: (error) => toastError(error, "Failed to import configs"),
+    onError: (error) => toastError(error, t("failedToImportConfigs")),
   });
 
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -49,7 +49,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
       blob,
       prefix: "configs-export",
     });
-    toast.success("Export successful");
+    toast.success(t("exportSuccessful"));
   };
 
   const handleImport = async () => {

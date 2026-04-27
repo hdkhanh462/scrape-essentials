@@ -42,7 +42,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
       blob,
       prefix: "records-export",
     });
-    toast.success("Export records successful");
+    toast.success(t("exportSuccessful"));
   };
 
   const handleImportClick = async () => {
@@ -59,10 +59,10 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
 
     importRecords(importPayload, {
       onSuccess: () => {
-        toast.success("Import records successful");
+        toast.success(t("configsImportedSuccessfully"));
         importConfirmDialog.close();
       },
-      onError: (error) => toastError(error, "Import records failed"),
+      onError: (error) => toastError(error, t("failedToImportConfigs")),
     });
   };
 

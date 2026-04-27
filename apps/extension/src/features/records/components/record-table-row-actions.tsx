@@ -42,23 +42,23 @@ export function RecordTableRowActions({ row }: Props) {
         key: row.original.key,
       });
       copyRecord.copy(copyData);
-      toast.success("Record copied to clipboard");
+      toast.success(t("recordDataCopied"));
     }
   };
 
   const handleDeleteRecord = () => {
     deleteRecord(row.original.id, {
       onSuccess: () => {
-        toast.success("Record deleted successfully");
+        toast.success(t("recordDeletedSuccessfully"));
         deleteConfirmDialog.close();
       },
-      onError: (error) => toastError(error, "Delete record failed"),
+      onError: (error) => toastError(error, t("failedToDeleteRecord")),
     });
   };
 
   const handleOpenNewTab = () => {
     if (!row.original.url) {
-      toast.error("URL not found for this record");
+      toast.error(t("urlNotFound"));
       return;
     }
 
