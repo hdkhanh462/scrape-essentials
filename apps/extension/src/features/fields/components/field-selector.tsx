@@ -1,5 +1,6 @@
 import { XIcon } from "lucide-react";
 import { Activity, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AutoComplete, type Item } from "@/components/auto-complete";
 import { Badge } from "@/components/ui/badge";
 import { Field } from "@/components/ui/field";
@@ -25,6 +26,8 @@ export default function FieldSelector(props: FieldSelectorProps) {
   const [loading, setLoading] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState("");
   const debouncedSearch = useDebounce(search, 400);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -66,7 +69,7 @@ export default function FieldSelector(props: FieldSelectorProps) {
         items={items}
         isLoading={loading}
         placeholder={props.placeholder}
-        emptyMessage="No results found"
+        emptyMessage={t("common.noResults")}
         onSelectedValueChange={props.onChange}
         onSearchValueChange={(val) => {
           setItems(undefined);

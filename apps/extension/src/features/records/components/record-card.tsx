@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Activity } from "react";
 import { type Control, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import CardWrapper from "@/components/card-wrapper";
 import {
@@ -50,6 +51,8 @@ export function RecordCard({
     id: matchConfig?.config.id,
     key: rawKey,
   });
+
+  const { t } = useTranslation();
 
   const schema = useMemo(() => buildScrapedDataSchema(fields), [fields]);
   const defaultValues = useMemo(
@@ -112,9 +115,9 @@ export function RecordCard({
       },
       {
         onSuccess: () => {
-          toast.success("Record added successfully");
+          toast.success(t("message.recordAddedSuccessfully"));
         },
-        onError: (error) => toastError(error, "Add record failed"),
+        onError: (error) => toastError(error, t("message.failedToAddRecord")),
       },
     );
   };
@@ -127,9 +130,9 @@ export function RecordCard({
       { id, data: { data } },
       {
         onSuccess: () => {
-          toast.success("Record edited successfully");
+          toast.success(t("message.recordEditedSuccessfully"));
         },
-        onError: (error) => toastError(error, "Edit record failed"),
+        onError: (error) => toastError(error, t("message.failedToEditRecord")),
       },
     );
   };
@@ -198,7 +201,7 @@ export function RecordCard({
             <Accordion type="single" defaultValue="item-1" collapsible>
               <AccordionItem value="item-1">
                 <AccordionTrigger className="py-0 data-[state=open]:pb-4!">
-                  Scraped Data
+                  {t("record.scrapedData")}
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pb-0">
                   {fields.map(

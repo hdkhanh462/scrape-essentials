@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
-
+import { useTranslation } from "react-i18next";
 import type { DialogWrapperProps } from "@/components/dialog-wrapper";
 import { FormInput, FormSelect } from "@/components/form";
 import { SheetWrapper } from "@/components/sheet-wrapper";
@@ -49,6 +49,7 @@ type Props = Omit<DialogWrapperProps, "title"> & {
 export const FieldSheetForm: React.FC<Props> = (props) => {
   const { control, formId, field, onSubmit, ...rest } = props;
 
+  const { t } = useTranslation();
   const form = useForm<FieldInput>({
     resolver: zodResolver(FieldSchema),
     defaultValues: DEFAULT_VALUES,
@@ -88,7 +89,11 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
       {...rest}
       open={control.isOpen}
       onOpenChange={control.onChange}
-      title={field ? "Edit Field" : "Add Field"}
+      title={
+        field
+          ? `${t("button.edit")} ${t("field.label")}`
+          : `${t("button.add")} ${t("field.label")}`
+      }
       footer={
         <FieldSheetFooter
           id={formId}
@@ -110,19 +115,18 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
             <FormInput
               control={form.control}
               name="name"
-              label="Field Name"
+              label={t("field.fieldName")}
               hideError
               inputProps={{
-                placeholder: "Enter field name",
+                placeholder: t("field.enterFieldName"),
                 autoComplete: "off",
               }}
             />
             <FormSelect
               control={form.control}
               name="type"
-              label="Field Type"
+              label={t("field.fieldType")}
               inputProps={{
-                placeholder: "Select field type",
                 children: Object.values(FieldType).map((type) => (
                   <SelectItem key={type} value={type}>
                     {typeLabels[type]}

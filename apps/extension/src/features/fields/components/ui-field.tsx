@@ -5,7 +5,7 @@ import {
   useFieldArray,
   useWatch,
 } from "react-hook-form";
-
+import { useTranslation } from "react-i18next";
 import { FormInput } from "@/components/form";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +25,8 @@ import type {
 import { FieldType } from "@/lib/dexie";
 
 export function UiField({ form, fullErrors }: FieldTypePropsV2) {
+  const { t } = useTranslation();
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "uiOptions.options",
@@ -42,10 +44,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormNumberInput
             control={form.control}
             name="uiOptions.defaultValue"
-            label="Default Value"
+            label={t("field.defaultValue")}
             hideError
             inputProps={{
-              placeholder: "Enter default value",
+              placeholder: t("field.enterDefaultValue"),
               autoComplete: "off",
             }}
           />
@@ -55,10 +57,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormSelect
             control={form.control}
             name="uiOptions.defaultValue"
-            label="Default Value"
+            label={t("field.defaultValue")}
             hideError
             inputProps={{
-              placeholder: "Select default value",
+              placeholder: t("field.enterDefaultValue"),
               children: (
                 <>
                   <SelectItem value="true">True</SelectItem>
@@ -73,10 +75,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormInput
             control={form.control}
             name="uiOptions.defaultValue"
-            label="Default Value"
+            label={t("field.defaultValue")}
             hideError
             inputProps={{
-              placeholder: "Enter default value",
+              placeholder: t("field.enterDefaultValue"),
               autoComplete: "off",
             }}
           />
@@ -90,10 +92,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="uiOptions.label"
-          label="Label"
+          label={t("common.label")}
           hideError
           inputProps={{
-            placeholder: "Enter label",
+            placeholder: t("field.enterLabel"),
             autoComplete: "off",
           }}
         />
@@ -110,7 +112,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
       </div>
       {isSelectFieldType(type) && (
         <FieldSet>
-          <FieldLegend className="text-sm!">Options</FieldLegend>
+          <FieldLegend className="text-sm!">{t("field.options")}</FieldLegend>
           <FieldGroup className="gap-3">
             {fields.map((item, index) => (
               <Controller
@@ -139,7 +141,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
             className="h-8"
             onClick={() => append({ label: "", value: "" })}
           >
-            Add Option
+            {t("field.addOption")}
           </Button>
         </FieldSet>
       )}
@@ -155,6 +157,8 @@ type OptionItemProps = {
 };
 
 function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
+  const { t } = useTranslation();
+
   const error = errors?.uiOptions?.options?.[index];
   return (
     <Field data-invalid={!!error}>
@@ -168,7 +172,7 @@ function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
                 label: e.target.value,
               })
             }
-            placeholder="Enter label"
+            placeholder={t("field.enterOptionLabel")}
             autoComplete="off"
           />
           <Input
@@ -179,7 +183,7 @@ function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
                 value: e.target.value,
               })
             }
-            placeholder="Enter value"
+            placeholder={t("field.enterOptionValue")}
             autoComplete="off"
           />
         </div>
