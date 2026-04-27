@@ -1,5 +1,11 @@
 import type { Column, Table } from "@tanstack/react-table";
-import { CheckIcon, PlusIcon, XIcon } from "lucide-react";
+import {
+  CheckIcon,
+  DownloadIcon,
+  PlusIcon,
+  UploadIcon,
+  XIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -125,6 +131,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleImport}
         >
+          <DownloadIcon />
           {t("button.import")}
         </Button>
         <Button
@@ -133,6 +140,7 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleExport}
         >
+          <UploadIcon />
           {t("button.export")}
         </Button>
         <ConfirmDialog

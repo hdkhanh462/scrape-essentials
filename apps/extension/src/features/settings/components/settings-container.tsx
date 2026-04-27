@@ -1,4 +1,9 @@
-import { CheckCircle2Icon, CloudUpload, History } from "lucide-react";
+import {
+  CheckCircle2Icon,
+  CloudUpload,
+  History,
+  RotateCcwIcon,
+} from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -314,6 +319,7 @@ export function SettingsContainer() {
                 </FieldDescription>
               </FieldContent>
               <Button type="button" variant="destructive" onClick={handleReset}>
+                <RotateCcwIcon />
                 {t("common.reset")}
               </Button>
             </Field>

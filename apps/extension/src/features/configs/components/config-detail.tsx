@@ -8,6 +8,8 @@ import {
   ArrowLeftIcon,
   CheckIcon,
   ClipboardPasteIcon,
+  RotateCcwIcon,
+  SaveIcon,
   XIcon,
 } from "lucide-react";
 import { Activity } from "react";
@@ -422,6 +424,7 @@ export const ConfigDetail = () => {
               className="h-8"
               onClick={() => form.reset()}
             >
+              <RotateCcwIcon />
               {t("common.reset")}
             </Button>
             <Button
@@ -430,6 +433,7 @@ export const ConfigDetail = () => {
               className="h-8"
               disabled={!form.formState.isDirty}
             >
+              <SaveIcon />
               {mode === "edit" ? t("button.save") : t("button.add")}
             </Button>
           </Field>

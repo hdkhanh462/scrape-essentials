@@ -1,4 +1,6 @@
+import { CheckIcon, CopyIcon, SaveIcon, Trash2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { useDeleteRecord } from "@/features/records/hooks";
@@ -79,7 +81,8 @@ export function RecordCardFooter({
           disabled={!scrapedRecord}
           onClick={handleDelete}
         >
-          Delete
+          <Trash2Icon />
+          {t("button.delete")}
         </Button>
       )}
       <Button
@@ -90,7 +93,18 @@ export function RecordCardFooter({
         disabled={!matchConfig || !rawScrapedData}
         onClick={handleCopy}
       >
-        Copy
+        <Loader
+          isLoading={copyScrapedData.isCopied}
+          fallback={
+            <>
+              <CheckIcon />
+              {t("button.copied")}
+            </>
+          }
+        >
+          <CopyIcon />
+          {t("button.copy")}
+        </Loader>
       </Button>
       <Button
         type="submit"
@@ -99,7 +113,8 @@ export function RecordCardFooter({
         form={id}
         disabled={!isDirty && !!scrapedRecord}
       >
-        Save
+        <SaveIcon />
+        {t("button.save")}
       </Button>
     </Field>
   );
