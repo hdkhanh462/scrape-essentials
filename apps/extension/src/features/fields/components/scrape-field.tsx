@@ -1,18 +1,19 @@
+import { useTranslation } from "react-i18next";
 import { FormInput } from "@/components/form";
 import { FieldError } from "@/components/ui/field";
 import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export function ScrapeField({ form, fullErrors }: FieldTypePropsV2) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   return (
     <>
       <FormInput
         control={form.control}
         name="scrapeOptions.cssSelector"
-        label={t("cssSelector")}
+        label={t("field.cssSelector")}
         inputProps={{
-          placeholder: t("enterCssSelector"),
+          placeholder: t("field.enterCssSelector"),
           autoComplete: "off",
         }}
       />
@@ -20,18 +21,18 @@ export function ScrapeField({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="scrapeOptions.condition"
-          label={t("condition")}
+          label={t("field.condition")}
           inputProps={{
-            placeholder: t("enterCondition"),
+            placeholder: t("field.enterCondition"),
             autoComplete: "off",
           }}
         />
         <FormInput
           control={form.control}
           name="scrapeOptions.attributeName"
-          label={t("attributeName")}
+          label={t("field.attributeName")}
           inputProps={{
-            placeholder: t("enterAttributeName"),
+            placeholder: t("field.enterAttributeName"),
             autoComplete: "off",
           }}
         />

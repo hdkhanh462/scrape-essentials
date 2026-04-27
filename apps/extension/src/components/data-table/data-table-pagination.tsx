@@ -5,7 +5,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -22,17 +22,17 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-muted-foreground text-sm">
-        {table.getFilteredSelectedRowModel().rows.length} {t("of")}{" "}
-        {table.getFilteredRowModel().rows.length} {t("rowsSelected")}.
+        {table.getFilteredSelectedRowModel().rows.length} {t("table.of")}{" "}
+        {table.getFilteredRowModel().rows.length} {t("table.rowsSelected")}.
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="font-medium text-sm">{t("rowsPerPage")}</p>
+          <p className="font-medium text-sm">{t("table.rowsPerPage")}</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
@@ -52,8 +52,8 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex w-25 items-center justify-center font-medium text-sm">
-          {t("page")} {table.getState().pagination.pageIndex + 1} {t("of")}{" "}
-          {table.getPageCount()}
+          {t("table.page")} {table.getState().pagination.pageIndex + 1}{" "}
+          {t("table.of")} {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">
           <Button

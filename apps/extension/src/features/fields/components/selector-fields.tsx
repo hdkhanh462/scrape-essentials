@@ -1,12 +1,12 @@
 import { Controller } from "react-hook-form";
-
+import { useTranslation } from "react-i18next";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import FieldSelector from "@/features/fields/components/field-selector";
 import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 import { dexie } from "@/lib/dexie";
 
 export default function SelectorFields({ form, fullErrors }: FieldTypePropsV2) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   const fetchFieldItems = async (value: string) => {
     return await dexie.configFields
@@ -25,11 +25,11 @@ export default function SelectorFields({ form, fullErrors }: FieldTypePropsV2) {
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>{t("parent")}</FieldLabel>
+            <FieldLabel>{t("field.parent")}</FieldLabel>
             <FieldSelector
               value={field.value}
               onChange={field.onChange}
-              placeholder={t("selectParentField")}
+              placeholder={t("field.selectParentField")}
               fetchItems={fetchFieldItems}
               fetchLabel={fetchFieldLabel}
             />

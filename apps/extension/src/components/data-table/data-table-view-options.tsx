@@ -1,7 +1,7 @@
 import type { Table } from "@tanstack/react-table";
 import { Settings2 } from "lucide-react";
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
-
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,7 +18,7 @@ export function DataTableViewOptions<TData>({
 }: {
   table: Table<TData>;
 }) {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -29,11 +29,11 @@ export function DataTableViewOptions<TData>({
           className="invisible ml-auto h-8 lg:visible"
         >
           <Settings2 />
-          {t("view")}
+          {t("button.view")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-37.5">
-        <DropdownMenuLabel>{t("toggleColumns")}</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("button.toggleColumns")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

@@ -1,4 +1,5 @@
 import type { Row } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToggleConfigActive } from "@/features/configs/hooks";
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export const ConfigActiveCell = ({ row }: Props) => {
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation("message");
 
   const [checked, setChecked] = useState(row.getValue<boolean>("isActive"));
 

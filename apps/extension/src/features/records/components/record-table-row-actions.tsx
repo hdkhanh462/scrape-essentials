@@ -1,5 +1,6 @@
 import type { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
@@ -42,30 +43,30 @@ export function RecordTableRowActions({ row }: Props) {
         key: row.original.key,
       });
       copyRecord.copy(copyData);
-      toast.success(t("recordDataCopied"));
+      toast.success(t("message.recordDataCopied"));
     }
   };
 
   const handleDeleteRecord = () => {
     deleteRecord(row.original.id, {
       onSuccess: () => {
-        toast.success(t("recordDeletedSuccessfully"));
+        toast.success(t("message.recordDeletedSuccessfully"));
         deleteConfirmDialog.close();
       },
-      onError: (error) => toastError(error, t("failedToDeleteRecord")),
+      onError: (error) => toastError(error, t("message.failedToDeleteRecord")),
     });
   };
 
   const handleOpenNewTab = () => {
     if (!row.original.url) {
-      toast.error(t("urlNotFound"));
+      toast.error(t("message.urlNotFound"));
       return;
     }
 
     browser.tabs.create({ url: row.original.url, active: true });
   };
 
-  const t = browser.i18n.getMessage;
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -81,24 +82,24 @@ export function RecordTableRowActions({ row }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
         <DropdownMenuItem onSelect={handleCopyRecord}>
-          {t("copy")}
+          {t("button.copy")}
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleOpenNewTab}>
-          {t("gotoUrl")}
+          {t("record.gotoUrl")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           onSelect={deleteConfirmDialog.open}
         >
-          {t("delete")}
+          {t("button.delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title={t("areYouSure")}
-        description={t("deleteRecordConfirmation")}
+        title={t("dialog.areYouSure")}
+        description={t("dialog.deleteRecordConfirmation")}
         onConfirm={handleDeleteRecord}
       />
     </DropdownMenu>
