@@ -18,6 +18,8 @@ export function DataTableViewOptions<TData>({
 }: {
   table: Table<TData>;
 }) {
+  const t = browser.i18n.getMessage;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,11 +29,11 @@ export function DataTableViewOptions<TData>({
           className="invisible ml-auto h-8 lg:visible"
         >
           <Settings2 />
-          View
+          {t("view")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-37.5">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("toggleColumns")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

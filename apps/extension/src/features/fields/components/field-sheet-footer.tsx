@@ -17,6 +17,8 @@ interface Props {
 }
 
 export function FieldSheetFooter({ id, mode, form }: Props) {
+  const t = browser.i18n.getMessage;
+
   const copyField = useCopyToClipboard();
   const pasteField = usePasteFromClipboard({
     onPaste: (text) => {
@@ -73,12 +75,12 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
             fallback={
               <>
                 <CheckIcon />
-                Pasted
+                {t("pasted")}
               </>
             }
           >
             <ClipboardPasteIcon />
-            Paste
+            {t("paste")}
           </Loader>
         </Button>
       ) : (
@@ -94,12 +96,12 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
             fallback={
               <>
                 <CheckIcon />
-                Copied
+                {t("copied")}
               </>
             }
           >
             <CopyIcon />
-            Copy
+            {t("copy")}
           </Loader>
         </Button>
       )}
@@ -110,7 +112,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         className="h-8"
         onClick={() => form.reset()}
       >
-        Reset
+        {t("reset")}
       </Button>
       <Button
         form={id}
@@ -119,7 +121,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         className="h-8"
         disabled={!form.formState.isDirty}
       >
-        {mode === "add" ? "Add" : "Save"}
+        {mode === "add" ? t("add") : t("save")}
       </Button>
     </Field>
   );

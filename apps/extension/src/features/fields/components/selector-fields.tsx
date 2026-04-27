@@ -6,6 +6,8 @@ import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 import { dexie } from "@/lib/dexie";
 
 export default function SelectorFields({ form, fullErrors }: FieldTypePropsV2) {
+  const t = browser.i18n.getMessage;
+
   const fetchFieldItems = async (value: string) => {
     return await dexie.configFields
       .where("name")
@@ -23,11 +25,11 @@ export default function SelectorFields({ form, fullErrors }: FieldTypePropsV2) {
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>Parent Field</FieldLabel>
+            <FieldLabel>{t("parent")}</FieldLabel>
             <FieldSelector
               value={field.value}
               onChange={field.onChange}
-              placeholder="Select parent field"
+              placeholder={t("selectParentField")}
               fetchItems={fetchFieldItems}
               fetchLabel={fetchFieldLabel}
             />

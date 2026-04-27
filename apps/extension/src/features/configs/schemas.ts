@@ -6,16 +6,16 @@ import type { FieldType } from "@/lib/dexie";
 
 export const ConfigSchema = z
   .object({
-    name: z.string().min(1, "Name is required"),
+    name: z.string().nonempty("fieldRequired"),
     domains: z
       .array(
         z.object({
-          value: z.string().nonempty("Domain is required"),
+          value: z.string().nonempty("fieldRequired"),
         }),
       )
-      .min(1, "At least one domain is required"),
+      .min(1, "atLeastOneDomain"),
     isActive: z.boolean().optional(),
-    fields: z.array(FieldSchema).min(1, "At least one field is required"),
+    fields: z.array(FieldSchema).min(1, "atLeastOneField"),
   })
   .superRefine((data, ctx) => {
     const rawKeys = data.fields.filter((f) => {
@@ -29,7 +29,7 @@ export const ConfigSchema = z
     if (rawKeys.length === 0) {
       ctx.addIssue({
         code: "custom",
-        message: "A key field is required",
+        message: "atLeastOneKeyField",
         path: ["fields"],
       });
       return;
@@ -38,7 +38,7 @@ export const ConfigSchema = z
     if (rawKeys.length > 1) {
       ctx.addIssue({
         code: "custom",
-        message: "Only one key field is allowed",
+        message: "onlyOneKeyFieldAllowed",
         path: ["fields"],
       });
       return;

@@ -3,14 +3,16 @@ import { FieldError } from "@/components/ui/field";
 import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export function ScrapeField({ form, fullErrors }: FieldTypePropsV2) {
+  const t = browser.i18n.getMessage;
+
   return (
     <>
       <FormInput
         control={form.control}
         name="scrapeOptions.cssSelector"
-        label="CSS Selector"
+        label={t("cssSelector")}
         inputProps={{
-          placeholder: "Enter CSS selector",
+          placeholder: t("enterCssSelector"),
           autoComplete: "off",
         }}
       />
@@ -18,18 +20,18 @@ export function ScrapeField({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="scrapeOptions.condition"
-          label="Condition"
+          label={t("condition")}
           inputProps={{
-            placeholder: "Enter condition",
+            placeholder: t("enterCondition"),
             autoComplete: "off",
           }}
         />
         <FormInput
           control={form.control}
           name="scrapeOptions.attributeName"
-          label="Attribute Name"
+          label={t("attributeName")}
           inputProps={{
-            placeholder: "Enter attribute name",
+            placeholder: t("enterAttributeName"),
             autoComplete: "off",
           }}
         />

@@ -33,7 +33,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
 
   // const isFiltered = table.getState().columnFilters.length > 0;
 
-  async function handleExport() {
+  const handleExport = async () => {
     const records = await dexie.scrapedRecords.toArray();
     const blob = new Blob([JSON.stringify(records)], {
       type: "application/json",
@@ -43,16 +43,16 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
       prefix: "records-export",
     });
     toast.success("Export records successful");
-  }
+  };
 
-  async function handleImportClick() {
+  const handleImportClick = async () => {
     await importFromJSON(async (file) => {
       const text = await file.text();
       const data = JSON.parse(text);
       setImportPayload(data);
       importConfirmDialog.open();
     });
-  }
+  };
 
   const handleImportConfirm = async () => {
     if (!importPayload) return;
@@ -65,6 +65,8 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
       onError: (error) => toastError(error, "Import records failed"),
     });
   };
+
+  const t = browser.i18n.getMessage;
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -92,7 +94,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
               variant="secondary"
               onClick={() => setFilterString(filterValue)}
             >
-              Search
+              {t("search")}
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
@@ -117,7 +119,7 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleImportClick}
         >
-          Import
+          {t("import")}
         </Button>
         <Button
           size="sm"
@@ -125,12 +127,12 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           className="h-8"
           onClick={handleExport}
         >
-          Export
+          {t("export")}
         </Button>
         <ConfirmDialog
           control={importConfirmDialog}
-          title="Are you absolutely sure?"
-          description="This action cannot be undone. This will permanently import and overwrite your existing records."
+          title={t("areYouSure")}
+          description={t("importRecordsConfirmation")}
           onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />

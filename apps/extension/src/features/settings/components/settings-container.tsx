@@ -25,7 +25,6 @@ import type { ImportPayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
 import { useImportRecords } from "@/features/records/hooks";
 import {
-  languageOptions,
   settingsSchema,
   themeOptions,
 } from "@/features/settings/schemas/settings";
@@ -38,6 +37,8 @@ import { formatRelativeTime } from "@/utils/date";
 import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
+  const t = browser.i18n.getMessage;
+
   const { debugMode, theme, language, autoBackup, updateSettings } =
     useSettingsStore();
   const { userInfo, lastBackup } = useGoogleStore();
@@ -107,17 +108,15 @@ export function SettingsContainer() {
     <div className="py-8">
       <form onChange={form.handleSubmit(handleSubmit)}>
         <FieldSet>
-          <FieldLegend>Settings</FieldLegend>
-          <FieldDescription>
-            Configure your extension settings here.
-          </FieldDescription>
+          <FieldLegend>{t("settings")}</FieldLegend>
+          <FieldDescription>{t("settingsDescription")}</FieldDescription>
 
           <FieldGroup>
             <FieldSeparator />
             <Field orientation="responsive">
               <FieldContent>
                 <div className="flex items-center gap-2">
-                  <FieldLabel htmlFor="backup">Backup</FieldLabel>
+                  <FieldLabel htmlFor="backup">{t("backup")}</FieldLabel>
                   <Badge
                     variant="outline"
                     className="gap-1.5 border-green-500/20 bg-green-500/5 px-2 font-normal text-green-600 dark:text-green-400"
@@ -127,11 +126,10 @@ export function SettingsContainer() {
                   </Badge>
                 </div>
                 <FieldDescription className="max-w-100">
-                  Securely backup your settings and configurations to your
-                  personal Google Drive account.
+                  {t("backupDescription")}
                   <span className="mt-2 flex items-center gap-2 font-medium text-foreground/80 text-xs">
                     <History className="size-3.5 text-muted-foreground" />
-                    Last backup:{" "}
+                    {t("lastBackup")}:{" "}
                     <span className="font-normal text-muted-foreground">
                       {formatRelativeTime(lastBackup)}
                     </span>
@@ -169,7 +167,7 @@ export function SettingsContainer() {
                     >
                       <Loader isLoading={isRestoring} />
                       {!isRestoring && <History className="size-3.5" />}
-                      Restore
+                      {t("restore")}
                     </Button>
                     <Button
                       type="button"
@@ -180,7 +178,7 @@ export function SettingsContainer() {
                     >
                       <Loader isLoading={isBackingUp} />
                       {!isBackingUp && <CloudUpload className="size-3.5" />}
-                      Backup
+                      {t("backup")}
                     </Button>
                   </div>
                 </div>
@@ -197,9 +195,11 @@ export function SettingsContainer() {
                   data-invalid={fieldState.invalid}
                 >
                   <FieldContent>
-                    <FieldLabel htmlFor="debug-mode">Debug Mode</FieldLabel>
+                    <FieldLabel htmlFor="debug-mode">
+                      {t("debugMode")}
+                    </FieldLabel>
                     <FieldDescription>
-                      Enable debug mode for development.
+                      {t("debugModeDescription")}
                     </FieldDescription>
                   </FieldContent>
                   <Switch
@@ -218,10 +218,8 @@ export function SettingsContainer() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <FieldSet>
-                  <FieldLabel htmlFor="themes">Themes</FieldLabel>
-                  <FieldDescription>
-                    Select your preferred theme for the extension.
-                  </FieldDescription>
+                  <FieldLabel htmlFor="themes">{t("themes")}</FieldLabel>
+                  <FieldDescription>{t("themesDescription")}</FieldDescription>
                   <RadioGroup
                     name={field.name}
                     value={field.value}
@@ -238,8 +236,7 @@ export function SettingsContainer() {
                               {theme}
                             </FieldTitle>
                             <FieldDescription>
-                              Use {theme} theme for better visibility in bright
-                              environments.
+                              {t("themeOptionDescription")}
                             </FieldDescription>
                           </FieldContent>
                           <RadioGroupItem
@@ -255,14 +252,14 @@ export function SettingsContainer() {
               )}
             />
             <FieldSeparator />
-            <Controller
+            {/* <Controller
               name="language"
               control={form.control}
               render={({ field, fieldState }) => (
                 <FieldSet>
-                  <FieldLabel htmlFor="languages">Languages</FieldLabel>
+                  <FieldLabel htmlFor="languages">{t("languages")}</FieldLabel>
                   <FieldDescription>
-                    Choose your preferred language for the extension.
+                    {t("languageDescription")}
                   </FieldDescription>
                   <RadioGroup
                     name={field.name}
@@ -280,7 +277,7 @@ export function SettingsContainer() {
                               {language}
                             </FieldTitle>
                             <FieldDescription>
-                              Use {language} language for all interactions.
+                              {t("languageOptionDescription")}
                             </FieldDescription>
                           </FieldContent>
                           <RadioGroupItem
@@ -294,17 +291,19 @@ export function SettingsContainer() {
                   </RadioGroup>
                 </FieldSet>
               )}
-            />
+            /> */}
             <FieldSeparator />
             <Field orientation="responsive">
               <FieldContent>
-                <FieldLabel htmlFor="reset-default">Reset Default</FieldLabel>
+                <FieldLabel htmlFor="reset-default">
+                  {t("resetDefaults")}
+                </FieldLabel>
                 <FieldDescription>
-                  Reset all settings to their default values.
+                  {t("resetDefaultsDescription")}
                 </FieldDescription>
               </FieldContent>
               <Button type="button" variant="destructive" onClick={handleReset}>
-                Reset
+                {t("reset")}
               </Button>
             </Field>
           </FieldGroup>
@@ -313,8 +312,8 @@ export function SettingsContainer() {
 
       <ConfirmDialog
         control={restoreConfirmDialog}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently restore and overwrite your existing configs."
+        title={t("areYouSure")}
+        description={t("restoreConfirmation")}
         onConfirm={handleRestore}
       />
     </div>

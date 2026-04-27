@@ -26,6 +26,8 @@ export default function FieldSelector(props: FieldSelectorProps) {
   const [selectedLabel, setSelectedLabel] = useState("");
   const debouncedSearch = useDebounce(search, 400);
 
+  const t = browser.i18n.getMessage;
+
   useEffect(() => {
     const fetchSearchResults = async () => {
       if (!debouncedSearch) return;
@@ -66,7 +68,7 @@ export default function FieldSelector(props: FieldSelectorProps) {
         items={items}
         isLoading={loading}
         placeholder={props.placeholder}
-        emptyMessage="No results found"
+        emptyMessage={t("noResults")}
         onSelectedValueChange={props.onChange}
         onSearchValueChange={(val) => {
           setItems(undefined);

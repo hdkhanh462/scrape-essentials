@@ -24,6 +24,8 @@ interface Props {
 }
 
 export function ConfigTableRowActions({ row }: Props) {
+  const t = browser.i18n.getMessage;
+
   const deleteConfirmDialog = useDialog();
   const { setMode, setConfigId, showDetail } = useConfigStore(
     (state) => state.actions,
@@ -108,15 +110,19 @@ export function ConfigTableRowActions({ row }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onSelect={handleEditSelect}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onSelect={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleEditSelect}>
+          {t("edit")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleCopyId}>
+          {t("copy")} ID
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleCopyConfig}>
-          Copy JSON
+          {t("copy")} JSON
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => duplicateConfigMutation.mutate(row.original.id)}
         >
-          Duplicate
+          {t("duplicate")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
@@ -124,14 +130,14 @@ export function ConfigTableRowActions({ row }: Props) {
           variant="destructive"
           onSelect={deleteConfirmDialog.open}
         >
-          Delete
+          {t("delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your selected config."
+        title={t("areYouSure")}
+        description={t("deleteConfigConfirmation")}
         onConfirm={() => deleteConfigMutation.mutate(row.original.id)}
       />
     </DropdownMenu>

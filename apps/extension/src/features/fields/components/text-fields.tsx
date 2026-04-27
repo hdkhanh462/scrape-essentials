@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import type { FieldTypePropsV2 } from "@/features/fields/types/field";
 
 export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
+  const t = browser.i18n.getMessage;
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "removers",
@@ -24,18 +26,18 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="regex"
-          label="Regex Pattern"
+          label={t("regexPattern")}
           inputProps={{
-            placeholder: "Enter regex pattern",
+            placeholder: t("enterRegexPattern"),
             autoComplete: "off",
           }}
         />
         <FormInput
           control={form.control}
           name="spliter"
-          label="Spliter"
+          label={t("splitter")}
           inputProps={{
-            placeholder: "Enter spliter",
+            placeholder: t("enterSplitter"),
             autoComplete: "off",
           }}
         />
@@ -44,7 +46,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         )}
       </div>
       <FieldSet>
-        <FieldLegend className="text-sm!">Removers</FieldLegend>
+        <FieldLegend className="text-sm!">{t("removers")}</FieldLegend>
         <FieldGroup className="gap-3">
           {fields.map((item, index) => (
             <Controller
@@ -56,7 +58,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
                   <div className="flex gap-2">
                     <Input
                       {...field}
-                      placeholder="Enter remover"
+                      placeholder={t("enterRemover")}
                       autoComplete="off"
                     />
                     <Button
@@ -84,7 +86,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
           className="h-8"
           onClick={() => append({ value: "" })}
         >
-          Add Remover
+          {t("addRemover")}
         </Button>
       </FieldSet>
     </>

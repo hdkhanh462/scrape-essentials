@@ -11,10 +11,11 @@ export default defineConfig({
   },
   manifest: () => ({
     name: "Scrape Essentials",
-    description: "A browser extension for web scraping and automation.",
+    description: "__MSG_extDescription__",
     version: "0.1.9",
     permissions: ["activeTab", "identity", "storage", "scripting", "alarms"],
     host_permissions: [`${import.meta.env.VITE_API_URL}/*`],
+    default_locale: "en",
   }),
   vite: () => ({
     plugins: [tailwindcss()],
