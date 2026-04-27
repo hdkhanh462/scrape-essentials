@@ -34,21 +34,21 @@ export function ConfigTableRowActions({ row }: Props) {
   const fieldsQuery = useGetFields({ configId: row.original.id });
   const duplicateConfigMutation = useDuplicateConfig({
     onSuccess: () => {
-      toast.success("Config duplicated successfully");
+      toast.success(t("configDuplicated"));
     },
-    onError: (error) => toastError(error, "Failed to duplicate config"),
+    onError: (error) => toastError(error, t("failedToDuplicateConfig")),
   });
   const deleteConfigMutation = useDeleteConfig({
     onSuccess: () => {
-      toast.success("Config deleted successfully");
+      toast.success(t("configDeleted"));
       deleteConfirmDialog.close();
     },
-    onError: (error) => toastError(error, "Failed to delete config"),
+    onError: (error) => toastError(error, t("failedToDeleteConfig")),
   });
 
   const handleCopyId = () => {
     navigator.clipboard.writeText(row.original.id);
-    toast.success("Config ID copied to clipboard");
+    toast.success(t("configIdCopied"));
   };
 
   const handleCopyConfig = async (_e: Event) => {
@@ -73,7 +73,7 @@ export function ConfigTableRowActions({ row }: Props) {
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {
       logger.error("Error copying config:", result.error);
-      toast.error("Failed to copy config", {
+      toast.error(t("failedToCopyConfig"), {
         description: () => (
           <ul>
             {result.error.issues.map((err) => (
@@ -88,7 +88,7 @@ export function ConfigTableRowActions({ row }: Props) {
     }
 
     navigator.clipboard.writeText(JSON.stringify(result.data));
-    toast.success("Config copied to clipboard");
+    toast.success(t("configCopied"));
   };
 
   const handleEditSelect = () => {

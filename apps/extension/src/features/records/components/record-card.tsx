@@ -51,6 +51,8 @@ export function RecordCard({
     key: rawKey,
   });
 
+  const t = browser.i18n.getMessage;
+
   const schema = useMemo(() => buildScrapedDataSchema(fields), [fields]);
   const defaultValues = useMemo(
     () => buildDefaultScrapedData(fields),
@@ -112,9 +114,9 @@ export function RecordCard({
       },
       {
         onSuccess: () => {
-          toast.success("Record added successfully");
+          toast.success(t("recordAddedSuccessfully"));
         },
-        onError: (error) => toastError(error, "Add record failed"),
+        onError: (error) => toastError(error, t("failedToAddRecord")),
       },
     );
   };
@@ -127,9 +129,9 @@ export function RecordCard({
       { id, data: { data } },
       {
         onSuccess: () => {
-          toast.success("Record edited successfully");
+          toast.success(t("recordEditedSuccessfully"));
         },
-        onError: (error) => toastError(error, "Edit record failed"),
+        onError: (error) => toastError(error, t("failedToEditRecord")),
       },
     );
   };
@@ -198,7 +200,7 @@ export function RecordCard({
             <Accordion type="single" defaultValue="item-1" collapsible>
               <AccordionItem value="item-1">
                 <AccordionTrigger className="py-0 data-[state=open]:pb-4!">
-                  Scraped Data
+                  {t("scrapedData")}
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pb-0">
                   {fields.map(

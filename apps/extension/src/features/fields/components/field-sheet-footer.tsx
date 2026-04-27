@@ -27,7 +27,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
       try {
         valueFromClipboard = JSON.parse(text);
       } catch (error) {
-        toast.error("Invalid JSON format in clipboard", {
+        toast.error(t("invalidJsonFormat"), {
           description: error instanceof Error ? error.message : "Unknown error",
         });
         return;
@@ -36,7 +36,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
       const { data, error } = FieldSchema.safeParse(valueFromClipboard);
       if (error) {
         logger.error("Error parsing field from clipboard:", error);
-        toast.error("Paste failed", {
+        toast.error(t("pasteFailed"), {
           description: () => (
             <ul>
               {error.issues.map((err) => (

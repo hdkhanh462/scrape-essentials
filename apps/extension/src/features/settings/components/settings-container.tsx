@@ -50,11 +50,11 @@ export function SettingsContainer() {
       setImportPayload(data);
       restoreConfirmDialog.open();
     },
-    onError: (error) => toastError(error, "Restore failed"),
+    onError: (error) => toastError(error, t("restoreFailed")),
   });
   const { mutate: backupToDrive, isPending: isBackingUp } = useBackupToDrive({
-    onSuccess: () => toast.success("Backup successful"),
-    onError: (error) => toastError(error, "Backup failed"),
+    onSuccess: () => toast.success(t("backupSuccessful")),
+    onError: (error) => toastError(error, t("backupFailed")),
   });
 
   const { mutate: importConfigs } = useImportConfigs();
@@ -91,12 +91,12 @@ export function SettingsContainer() {
         importRecords(importPayload.records, {
           onSuccess: () => {
             restoreConfirmDialog.close();
-            toast.success("Restore successful");
+            toast.success(t("restoreSuccessful"));
           },
-          onError: (error) => toastError(error, "Import records failed"),
+          onError: (error) => toastError(error, t("importRecordsFailed")),
         });
       },
-      onError: (error) => toastError(error, "Import configs failed"),
+      onError: (error) => toastError(error, t("importConfigsFailed")),
     });
   };
 

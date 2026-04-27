@@ -26,6 +26,8 @@ export function RecordCardFooter({
   isDirty,
   onDeleteSuccess,
 }: FooterProps) {
+  const t = browser.i18n.getMessage;
+
   const copyScrapedData = useCopyToClipboard();
   const { mutate: deleteRecord } = useDeleteRecord();
 
@@ -36,7 +38,7 @@ export function RecordCardFooter({
       onSuccess: () => {
         onDeleteSuccess?.();
       },
-      onError: (error) => toastError(error, "Delete record failed"),
+      onError: (error) => toastError(error, t("failedToDeleteRecord")),
     });
   };
 

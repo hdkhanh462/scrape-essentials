@@ -305,5 +305,127 @@
   },
   "failedToToggleConfigActiveState": {
     "message": "Failed to toggle config active state"
+  },
+  "configAddedSuccessfully": {
+    "message": "Config added successfully"
+  },
+  "failedToAddConfig": {
+    "message": "Failed to add config"
+  },
+  "configUpdatedSuccessfully": {
+    "message": "Config updated successfully"
+  },
+  "failedToUpdateConfig": {
+    "message": "Failed to update config"
+  },
+  "invalidJsonFormat": {
+    "message": "Invalid JSON format in clipboard"
+  },
+  "unknownError": {
+    "message": "Unknown error"
+  },
+  "pasteFailed": {
+    "message": "Paste failed"
+  },
+  "configIdMissingForEdit": {
+    "message": "Config ID missing for edit"
+  },
+  "fieldAddedSuccessfully": {
+    "message": "Field added successfully"
+  },
+  "fieldUpdatedSuccessfully": {
+    "message": "Field updated successfully"
+  },
+  "failedToUpdateField": {
+    "message": "Failed to update field"
+  },
+  "fieldDeletedSuccessfully": {
+    "message": "Field deleted successfully"
+  },
+  "failedToDeleteField": {
+    "message": "Failed to delete field"
+  },
+
+  "configDuplicated": {
+    "message": "Config duplicated"
+  },
+  "failedToDuplicateConfig": {
+    "message": "Failed to duplicate config"
+  },
+  "configDeleted": {
+    "message": "Config deleted"
+  },
+  "failedToDeleteConfig": {
+    "message": "Failed to delete config"
+  },
+  "configIdCopied": {
+    "message": "Config ID copied"
+  },
+  "failedToCopyConfig": {
+    "message": "Failed to copy config"
+  },
+  "configCopied": {
+    "message": "Config copied"
+  },
+
+  "configsImportedSuccessfully": {
+    "message": "Configs imported successfully"
+  },
+  "failedToImportConfigs": {
+    "message": "Failed to import configs"
+  },
+  "exportSuccessful": {
+    "message": "Export successful"
+  },
+
+  "recordAddedSuccessfully": {
+    "message": "Record added successfully"
+  },
+  "failedToAddRecord": {
+    "message": "Failed to add record"
+  },
+  "recordEditedSuccessfully": {
+    "message": "Record edited successfully"
+  },
+  "failedToEditRecord": {
+    "message": "Failed to edit record"
+  },
+  "scrapedData": {
+    "message": "Scraped Data"
+  },
+
+  "recordDataCopied": {
+    "message": "Record data copied"
+  },
+  "recordDeletedSuccessfully": {
+    "message": "Record deleted successfully"
+  },
+  "failedToDeleteRecord": {
+    "message": "Failed to delete record"
+  },
+  "urlNotFound": {
+    "message": "URL not found"
+  },
+
+  "backupSuccessful": {
+    "message": "Backup successful"
+  },
+  "backupFailed": {
+    "message": "Backup failed"
+  },
+  "restoreSuccessful": {
+    "message": "Restore successful"
+  },
+  "importRecordsFailed": {
+    "message": "Failed to import records"
+  },
+  "importConfigsFailed": {
+    "message": "Failed to import configs"
+  },
+  "restoreFailed": {
+    "message": "Restore failed"
+  },
+  "failedToUpdateRecord": {
+    "message": "Failed to update record"
   }
 }

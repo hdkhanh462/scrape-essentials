@@ -305,5 +305,128 @@
   },
   "failedToToggleConfigActiveState": {
     "message": "Không thể chuyển đổi trạng thái kích hoạt cấu hình"
+  },
+
+  "configAddedSuccessfully": {
+    "message": "Cấu hình đã được thêm thành công"
+  },
+  "failedToAddConfig": {
+    "message": "Không thể thêm cấu hình"
+  },
+  "configUpdatedSuccessfully": {
+    "message": "Cấu hình đã được cập nhật thành công"
+  },
+  "failedToUpdateConfig": {
+    "message": "Không thể cập nhật cấu hình"
+  },
+  "invalidJsonFormat": {
+    "message": "Định dạng JSON không hợp lệ"
+  },
+  "unknownError": {
+    "message": "Lỗi không xác định"
+  },
+  "pasteFailed": {
+    "message": "Dán thất bại"
+  },
+  "configIdMissingForEdit": {
+    "message": "Thiếu ID cấu hình để chỉnh sửa"
+  },
+  "fieldAddedSuccessfully": {
+    "message": "Trường đã được thêm thành công"
+  },
+  "fieldUpdatedSuccessfully": {
+    "message": "Trường đã được cập nhật thành công"
+  },
+  "failedToUpdateField": {
+    "message": "Không thể cập nhật trường"
+  },
+  "fieldDeletedSuccessfully": {
+    "message": "Trường đã được xóa thành công"
+  },
+  "failedToDeleteField": {
+    "message": "Không thể xóa trường"
+  },
+
+  "configDuplicated": {
+    "message": "Cấu hình đã được nhân bản"
+  },
+  "failedToDuplicateConfig": {
+    "message": "Không thể nhân bản cấu hình"
+  },
+  "configDeleted": {
+    "message": "Cấu hình đã được xóa"
+  },
+  "failedToDeleteConfig": {
+    "message": "Không thể xóa cấu hình"
+  },
+  "configIdCopied": {
+    "message": "ID cấu hình đã được sao chép"
+  },
+  "failedToCopyConfig": {
+    "message": "Không thể sao chép cấu hình"
+  },
+  "configCopied": {
+    "message": "Cấu hình đã được sao chép"
+  },
+
+  "configsImportedSuccessfully": {
+    "message": "Cấu hình đã được nhập thành công"
+  },
+  "failedToImportConfigs": {
+    "message": "Không thể nhập cấu hình"
+  },
+  "exportSuccessful": {
+    "message": "Xuất thành công"
+  },
+
+  "recordAddedSuccessfully": {
+    "message": "Bản ghi đã được thêm thành công"
+  },
+  "failedToAddRecord": {
+    "message": "Không thể thêm bản ghi"
+  },
+  "recordEditedSuccessfully": {
+    "message": "Bản ghi đã được chỉnh sửa thành công"
+  },
+  "failedToEditRecord": {
+    "message": "Không thể chỉnh sửa bản ghi"
+  },
+  "scrapedData": {
+    "message": "Dữ liệu đã Scrape"
+  },
+
+  "recordDataCopied": {
+    "message": "Dữ liệu bản ghi đã được sao chép"
+  },
+  "recordDeletedSuccessfully": {
+    "message": "Bản ghi đã được xóa thành công"
+  },
+  "failedToDeleteRecord": {
+    "message": "Không thể xóa bản ghi"
+  },
+  "urlNotFound": {
+    "message": "Không tìm thấy URL"
+  },
+
+  "backupSuccessful": {
+    "message": "Sao lưu thành công"
+  },
+  "backupFailed": {
+    "message": "Sao lưu thất bại"
+  },
+  "restoreSuccessful": {
+    "message": "Khôi phục thành công"
+  },
+  "importRecordsFailed": {
+    "message": "Không thể nhập bản ghi"
+  },
+  "importConfigsFailed": {
+    "message": "Không thể nhập cấu hình"
+  },
+  "restoreFailed": {
+    "message": "Khôi phục thất bại"
+  },
+  "failedToUpdateRecord": {
+    "message": "Không thể cập nhật bản ghi"
   }
 }
