@@ -14,7 +14,7 @@ export default defineConfig({
     description: "__MSG_extDescription__",
     version: "0.2.0",
     permissions: ["activeTab", "identity", "storage", "scripting", "alarms"],
-    host_permissions: [`${import.meta.env.VITE_API_URL}/*`],
+    host_permissions: ["<all_urls>"],
     default_locale: "en",
   }),
   vite: () => ({

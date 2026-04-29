@@ -36,6 +36,8 @@ interface Props {
   matchConfig: MatchConfig;
   rawScrapedData: ScrapedDataInput;
   url: string;
+  className?: string;
+  footerFixedBottom?: boolean;
 }
 
 export function RecordCard({
@@ -43,6 +45,8 @@ export function RecordCard({
   matchConfig,
   rawScrapedData,
   url,
+  className,
+  footerFixedBottom,
 }: Props) {
   const [rawKey, setRawKey] = useState<string>();
   const { mutate: addRecord } = useAddRecord(url);
@@ -170,6 +174,8 @@ export function RecordCard({
 
   return (
     <CardWrapper
+      className={className}
+      footerFixedBottom={footerFixedBottom}
       title={`Scrape Essentials - ${matchConfig.config.name}`}
       footer={
         <RecordCardFooter

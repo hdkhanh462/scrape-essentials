@@ -7,12 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 type Props = {
   title: string;
   description?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  footerFixedBottom?: boolean;
+  className?: string;
 };
 
 export default function CardWrapper({
@@ -20,9 +23,11 @@ export default function CardWrapper({
   description,
   children,
   footer,
+  footerFixedBottom,
+  className,
 }: Props) {
   return (
-    <Card className="w-full border-0">
+    <Card className={cn("w-full border-0", className)}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <Activity mode={description ? "visible" : "hidden"}>
@@ -30,7 +35,15 @@ export default function CardWrapper({
         </Activity>
       </CardHeader>
       <CardContent>{children}</CardContent>
-      {footer && <CardFooter>{footer}</CardFooter>}
+      {footer && (
+        <CardFooter
+          className={cn(
+            footerFixedBottom && "fixed right-0 bottom-0 left-0 border-t",
+          )}
+        >
+          {footer}
+        </CardFooter>
+      )}
     </Card>
   );
 }

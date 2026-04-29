@@ -43,5 +43,6 @@ export async function getCurrentPage(): Promise<CurrentPage | undefined> {
     return { bodyHtml, url: tab.url };
   } catch (error) {
     logger.error("Error when scrape current tab:", error);
+    return { bodyHtml: "", url: "" };
   }
 }
