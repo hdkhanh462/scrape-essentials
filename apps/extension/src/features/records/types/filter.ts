@@ -1,4 +1,4 @@
-export type Operator = ":" | "=" | ">" | "<" | ">=" | "<=";
+export type Operator = ":" | "!:" | "=" | "!=" | ">" | "<" | ">=" | "<=";
 
 export type Condition = {
   column: string;

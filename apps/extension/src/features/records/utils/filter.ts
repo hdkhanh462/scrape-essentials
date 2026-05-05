@@ -53,7 +53,8 @@ function parseFilter(input: string): Expression | null {
 
   const conditions: Condition[] = [];
 
-  const regex = /([\w\s]+?)\s*(>=|<=|=|>|<|:)\s*(?:"([^"]+)"|([^\s&|]+))/g;
+  const regex =
+    /([\w\s]+?)\s*(>=|<=|!=|!?:|=|>|<|:)\s*(?:"([^"]+)"|([^\s&|]+))/g;
 
   for (const part of andParts) {
     let match = regex.exec(part);
@@ -128,8 +129,11 @@ function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
       const rowValues = cellValue.map((v: string) => v.toLowerCase());
 
       const arrayExpr = parseArrayExpression(condition.value.toLowerCase());
+      const result = evaluateArrayExpr(arrayExpr, rowValues);
 
-      return evaluateArrayExpr(arrayExpr, rowValues);
+      return condition.operator === "!:" || condition.operator === "!="
+        ? !result
+        : result;
     }
 
     // ================== NUMBER ==================
@@ -140,6 +144,14 @@ function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
 
       if (condition.operator === ":") {
         return String(v).includes(String(f));
+      }
+
+      if (condition.operator === "!:") {
+        return !String(v).includes(String(f));
+      }
+
+      if (condition.operator === "!=") {
+        return v !== f;
       }
 
       return {
@@ -153,13 +165,27 @@ function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
 
     // ================== BOOLEAN ==================
     case "boolean":
+      if (condition.operator === "!=") {
+        return String(cellValue) !== condition.value;
+      }
+      if (condition.operator === "!:") {
+        return !String(cellValue)
+          .toLowerCase()
+          .includes(condition.value.toLowerCase());
+      }
       return String(cellValue) === condition.value;
 
     // ================== STRING ==================
-    default:
-      return String(cellValue)
-        .toLowerCase()
-        .includes(condition.value.toLowerCase());
+    default: {
+      const text = String(cellValue).toLowerCase();
+      const query = condition.value.toLowerCase();
+
+      if (condition.operator === "!=" || condition.operator === "!:") {
+        return !text.includes(query);
+      }
+
+      return text.includes(query);
+    }
   }
 }
 
