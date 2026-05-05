@@ -121,6 +121,31 @@ function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
 
   const type = columnMeta?.type;
 
+  // Handle numeric comparisons regardless of type
+  if (
+    [">", "<", ">=", "<=", "=", "!="].includes(condition.operator) &&
+    !Number.isNaN(Number(condition.value))
+  ) {
+    const v = Number(cellValue);
+    const f = Number(condition.value);
+    if (Number.isNaN(v) || Number.isNaN(f)) return false;
+
+    switch (condition.operator) {
+      case ">":
+        return v > f;
+      case "<":
+        return v < f;
+      case ">=":
+        return v >= f;
+      case "<=":
+        return v <= f;
+      case "=":
+        return v === f;
+      case "!=":
+        return v !== f;
+    }
+  }
+
   switch (type) {
     // ================== ARRAY STRING ==================
     case "string[]": {
@@ -180,11 +205,18 @@ function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
       const text = String(cellValue).toLowerCase();
       const query = condition.value.toLowerCase();
 
-      if (condition.operator === "!=" || condition.operator === "!:") {
-        return !text.includes(query);
+      switch (condition.operator) {
+        case "=":
+          return text === query;
+        case "!=":
+          return text !== query;
+        case ":":
+          return text.includes(query);
+        case "!:":
+          return !text.includes(query);
+        default:
+          return false;
       }
-
-      return text.includes(query);
     }
   }
 }
