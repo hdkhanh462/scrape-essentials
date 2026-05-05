@@ -9,32 +9,6 @@ import type {
 } from "@/features/records/types/filter";
 import { logger } from "@/utils/logger";
 
-function _splitOrAtRoot(input: string): string[] {
-  const result: string[] = [];
-  let depth = 0;
-  let current = "";
-
-  for (let i = 0; i < input.length; i++) {
-    const char = input[i];
-
-    if (char === "(") depth++;
-    if (char === ")") depth--;
-
-    if (char === "|" && depth === 0) {
-      result.push(current.trim());
-      current = "";
-    } else {
-      current += char;
-    }
-  }
-
-  if (current.trim()) {
-    result.push(current.trim());
-  }
-
-  return result;
-}
-
 function splitAtRoot(input: string, separator: string): string[] {
   const result: string[] = [];
   let depth = 0;
@@ -79,7 +53,7 @@ function parseFilter(input: string): Expression | null {
 
   const conditions: Condition[] = [];
 
-  const regex = /(\w+)(>=|<=|=|>|<|:)(?:"([^"]+)"|([^\s&|]+))/g;
+  const regex = /([\w\s]+?)\s*(>=|<=|=|>|<|:)\s*(?:"([^"]+)"|([^\s&|]+))/g;
 
   for (const part of andParts) {
     let match = regex.exec(part);

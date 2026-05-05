@@ -59,7 +59,7 @@ export function RecordTableRowActions({ row }: Props) {
 
   const handleOpenNewTab = () => {
     if (!row.original.url) {
-      toast.error(t("message.urlNotFound"));
+      toast.error(t("record.urlNotFound"));
       return;
     }
 

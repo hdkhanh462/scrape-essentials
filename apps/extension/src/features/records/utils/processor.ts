@@ -52,9 +52,20 @@ async function processScrapeField(bodyHtml: string, field: ConfigField) {
         `Parent field with ID "${field.parentFieldId}" not found or missing cssSelector`,
       );
     }
+
+    logger.log("[DEBUG] Processing parent field:", parentField);
+
     const parentElements = body.querySelectorAll(
       parentField.scrapeOptions.cssSelector,
     );
+
+    logger.log(
+      "[DEBUG] Found parent elements for field",
+      field.name,
+      ":",
+      parentElements,
+    );
+
     let tempValue: string | string[] = "";
     parentElements.forEach((element) => {
       const _text = element.textContent || "";
@@ -62,8 +73,19 @@ async function processScrapeField(bodyHtml: string, field: ConfigField) {
         field.scrapeOptions?.condition &&
         _text.includes(field.scrapeOptions.condition);
 
+      logger.log(
+        "[DEBUG] Checking condition for field",
+        field.name,
+        ":",
+        conditionMet,
+        `(element text: ${_text})`,
+      );
+
       if (conditionMet) tempValue = processDataQuery(element, field);
     });
+
+    logger.log("[DEBUG] Extracted value for field", field.name, ":", tempValue);
+
     return tempValue;
   }
 
