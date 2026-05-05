@@ -43,7 +43,7 @@ export function RecordTableRowActions({ row }: Props) {
         key: row.original.key,
       });
       copyRecord.copy(copyData);
-      toast.success(t("message.recordDataCopied"));
+      toast.success(t("record.recordDataCopied"));
     }
   };
 
