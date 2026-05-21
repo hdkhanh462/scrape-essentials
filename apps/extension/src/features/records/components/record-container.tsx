@@ -1,14 +1,27 @@
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { DataTable } from "@/components/data-table/data-table";
 import { useGetFields } from "@/features/fields/hooks";
 import { ConfigSelector } from "@/features/records/components/config-selector";
 import { RecordTableToolbar } from "@/features/records/components/record-table-toolbar";
-import { useGetRecordById, useGetRecords } from "@/features/records/hooks";
+import {
+  useDeleteMultipleRecords,
+  useGetRecordById,
+  useGetRecords,
+} from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { advancedGlobalFilter } from "@/features/records/utils/filter";
 import { buildColumn } from "@/features/records/utils/table";
+import type { ScrapedRecord } from "@/lib/dexie";
 import { useColumnVisibility } from "@/utils/table";
 
 export function RecordContainer() {
+  const [rowSelection, setRowSelection] = useState({});
+  const [selectedIds, setSelectedIds] = useState<ScrapedRecord["id"][]>([]);
+
+  const { t } = useTranslation();
+  const deleteConfirmDialog = useDialog();
+
   const { configId, filterString } = useRecordStore();
   const columnVisibility = useColumnVisibility();
 
@@ -18,11 +31,24 @@ export function RecordContainer() {
     isShowOnTable: true,
   });
   const { data: records } = useGetRecords({ configId });
+  const deleteRecordsMutation = useDeleteMultipleRecords({
+    onSuccess: () => {
+      setSelectedIds([]);
+      setRowSelection({});
+      deleteConfirmDialog.close();
+      toast.success(t("message.recordsDeletedSuccessfully"));
+    },
+  });
 
   const columns = useMemo(
     () => buildColumn(config?.url || "", fields || []),
     [fields],
   );
+
+  const handleDeleteSelected = (ids: ScrapedRecord["id"][]) => {
+    deleteConfirmDialog.open();
+    setSelectedIds(ids);
+  };
 
   return (
     <div className="space-y-4">
@@ -33,10 +59,23 @@ export function RecordContainer() {
         globalFilter={filterString}
         globalFilterFn={advancedGlobalFilter}
         columnVisibility={columnVisibility.value}
+        rowSelection={rowSelection}
         onColumnVisibilityChange={columnVisibility.onChange}
+        onRowSelectionChange={setRowSelection}
       >
-        {(table) => <RecordTableToolbar table={table} />}
+        {(table) => (
+          <RecordTableToolbar
+            table={table}
+            onDeleteSelected={handleDeleteSelected}
+          />
+        )}
       </DataTable>
+      <ConfirmDialog
+        control={deleteConfirmDialog}
+        title={t("dialog.areYouSure")}
+        description={t("dialog.deleteRecordsConfirmation")}
+        onConfirm={() => deleteRecordsMutation.mutate(selectedIds)}
+      />
     </div>
   );
 }

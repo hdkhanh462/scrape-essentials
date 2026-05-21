@@ -92,7 +92,7 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
       ),
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <span className="max-w-75 truncate font-medium">
+          <span className="max-w-75 truncate font-bold">
             {row.getValue("key")}
           </span>
         </div>

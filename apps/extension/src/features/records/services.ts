@@ -79,3 +79,10 @@ export const deleteRecord = async (
   await dexie.scrapedRecords.delete(id);
   return true;
 };
+
+export const deleteMultipleRecords = async (
+  ids: ScrapedRecord["id"][],
+): Promise<boolean> => {
+  await dexie.scrapedRecords.bulkDelete(ids);
+  return true;
+};

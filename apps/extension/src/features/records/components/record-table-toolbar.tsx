@@ -20,9 +20,13 @@ import { toastError } from "@/utils/toast";
 
 interface DataTableToolbarProps {
   table: Table<ScrapedRecord>;
+  onDeleteSelected?: (ids: ScrapedRecord["id"][]) => void;
 }
 
-export function RecordTableToolbar({ table }: DataTableToolbarProps) {
+export function RecordTableToolbar({
+  table,
+  onDeleteSelected,
+}: DataTableToolbarProps) {
   const { t } = useTranslation();
 
   const { filterString } = useRecordStore();
@@ -34,7 +38,8 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
   const importConfirmDialog = useDialog();
   const { mutate: importRecords } = useImportRecords();
 
-  // const isFiltered = table.getState().columnFilters.length > 0;
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+  const isSelected = selectedCount > 0;
 
   const handleExport = async () => {
     const records = await dexie.scrapedRecords.toArray();
@@ -100,17 +105,22 @@ export function RecordTableToolbar({ table }: DataTableToolbarProps) {
           </InputGroupAddon>
         </InputGroup>
 
-        {/* {isFiltered && (
+        {isSelected && (
           <Button
-            variant="outline"
+            variant="destructive"
             size="sm"
             className="h-8"
-            onClick={() => table.resetColumnFilters()}
+            onClick={() => {
+              const selectedIds = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id);
+              onDeleteSelected?.(selectedIds);
+            }}
           >
-            Reset
+            Delete ({selectedCount})
             <XIcon />
           </Button>
-        )} */}
+        )}
       </div>
 
       <div className="flex items-center gap-2">
