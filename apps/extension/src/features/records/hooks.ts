@@ -6,6 +6,7 @@ import {
 
 import {
   addRecord,
+  deleteMultipleRecords,
   deleteRecord,
   editRecord,
   getRecordById,
@@ -94,6 +95,18 @@ export const useDeleteRecord = (
   return useMutation({
     ...options,
     mutationFn: (payload) => deleteRecord(payload),
+    meta: {
+      invalidateQueries: recordQueryKey.all,
+    },
+  });
+};
+
+export const useDeleteMultipleRecords = (
+  options?: UseMutationOptions<boolean, Error, ScrapedRecord["id"][]>,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: (payload) => deleteMultipleRecords(payload),
     meta: {
       invalidateQueries: recordQueryKey.all,
     },

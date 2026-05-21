@@ -88,6 +88,7 @@
     "deleteConfigConfirmation": "This action cannot be undone. This will permanently delete your selected config.",
     "deleteFieldConfirmation": "This action cannot be undone. This will permanently delete the selected field.",
     "deleteRecordConfirmation": "This action cannot be undone. This will permanently delete your selected record.",
+    "deleteRecordsConfirmation": "This action cannot be undone. This will permanently delete your selected records.",
     "importRecordsConfirmation": "This action cannot be undone. This will permanently import and overwrite your existing records.",
     "restoreConfirmation": "This action cannot be undone. This will permanently restore your settings and overwrite your existing settings and configurations."
   },
@@ -162,6 +163,7 @@
     "recordEditedSuccessfully": "Record edited successfully",
     "failedToEditRecord": "Failed to edit record",
     "recordDeletedSuccessfully": "Record deleted successfully",
+    "recordsDeletedSuccessfully": "Records deleted successfully",
     "failedToDeleteRecord": "Failed to delete record",
     "failedToUpdateRecord": "Failed to update record",
     "backupSuccessful": "Backup successful",

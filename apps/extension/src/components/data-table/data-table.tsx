@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: <> */
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -10,6 +11,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   type OnChangeFn,
+  type RowSelectionState,
   type SortingState,
   type Table as TableType,
   useReactTable,
@@ -31,10 +33,11 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   globalFilter?: string;
-  // biome-ignore lint/suspicious/noExplicitAny: <>
   globalFilterFn?: FilterFnOption<any>;
   columnVisibility?: VisibilityState;
+  rowSelection?: RowSelectionState;
   onColumnVisibilityChange?: OnChangeFn<VisibilityState>;
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   children?: (table: TableType<TData>) => React.ReactNode;
 }
 
@@ -44,10 +47,12 @@ export function DataTable<TData, TValue>({
   globalFilter,
   globalFilterFn,
   columnVisibility,
+  rowSelection,
   children,
   onColumnVisibilityChange,
+  onRowSelectionChange,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [rowSelectionLocal, setRowSelectionLocal] = useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -64,7 +69,8 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnVisibility,
-      rowSelection,
+      rowSelection:
+        rowSelection && onRowSelectionChange ? rowSelection : rowSelectionLocal,
       columnFilters,
       globalFilter,
     },
@@ -75,7 +81,10 @@ export function DataTable<TData, TValue>({
       },
     },
     enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange:
+      rowSelection && onRowSelectionChange
+        ? onRowSelectionChange
+        : setRowSelectionLocal,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange,

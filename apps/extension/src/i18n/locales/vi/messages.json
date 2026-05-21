@@ -88,6 +88,7 @@
     "deleteConfigConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn cấu hình đã chọn của bạn.",
     "deleteFieldConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn trường đã chọn.",
     "deleteRecordConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn bản ghi đã chọn.",
+    "deleteRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn các bản ghi đã chọn.",
     "importRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ nhập và ghi đè lên các bản ghi hiện có.",
     "restoreConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ khôi phục vĩnh viễn cài đặt của bạn và ghi đè lên cài đặt và cấu hình hiện có."
   },
@@ -162,6 +163,7 @@
     "recordEditedSuccessfully": "Bản ghi đã được chỉnh sửa thành công",
     "failedToEditRecord": "Không thể chỉnh sửa bản ghi",
     "recordDeletedSuccessfully": "Bản ghi đã được xóa thành công",
+    "recordsDeletedSuccessfully": "Các bản ghi đã được xóa thành công",
     "failedToDeleteRecord": "Không thể xóa bản ghi",
     "failedToUpdateRecord": "Không thể cập nhật bản ghi",
     "backupSuccessful": "Sao lưu thành công",
