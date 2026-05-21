@@ -76,11 +76,12 @@ export const useAddRecord = (
 };
 
 export const useEditRecord = (
+  url: string,
   options?: UseMutationOptions<boolean, Error, EditScrapedRecordPayload>,
 ) => {
   return useMutation({
     ...options,
-    mutationFn: (payload) => editRecord(payload),
+    mutationFn: (payload) => editRecord(url, payload),
     meta: {
       invalidateQueries: recordQueryKey.all,
     },

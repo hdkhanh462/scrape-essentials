@@ -9,11 +9,12 @@ interface Props {
   row: Row<ScrapedRecord>;
   columnId: string;
   value: string | number | boolean;
+  url: string;
 }
 
-export const RecordCell = ({ row, columnId, value }: Props) => {
+export const RecordCell = ({ row, columnId, value, url }: Props) => {
   const { t } = useTranslation();
-  const { mutate: editRecord } = useEditRecord();
+  const { mutate: editRecord } = useEditRecord(url);
 
   const handleCheckedChange = async () => {
     const toUpdate = !value;
