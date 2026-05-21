@@ -2,7 +2,7 @@ import { DataTable } from "@/components/data-table/data-table";
 import { useGetFields } from "@/features/fields/hooks";
 import { ConfigSelector } from "@/features/records/components/config-selector";
 import { RecordTableToolbar } from "@/features/records/components/record-table-toolbar";
-import { useGetRecords } from "@/features/records/hooks";
+import { useGetRecordById, useGetRecords } from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { advancedGlobalFilter } from "@/features/records/utils/filter";
 import { buildColumn } from "@/features/records/utils/table";
@@ -12,13 +12,17 @@ export function RecordContainer() {
   const { configId, filterString } = useRecordStore();
   const columnVisibility = useColumnVisibility();
 
+  const { data: config } = useGetRecordById({ id: configId });
   const { data: fields } = useGetFields({
     configId,
     isShowOnTable: true,
   });
   const { data: records } = useGetRecords({ configId });
 
-  const columns = useMemo(() => buildColumn(fields ?? []), [fields]);
+  const columns = useMemo(
+    () => buildColumn(config?.url || "", fields || []),
+    [fields],
+  );
 
   return (
     <div className="space-y-4">

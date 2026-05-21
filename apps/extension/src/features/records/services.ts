@@ -62,10 +62,12 @@ export const addRecord = async (
 };
 
 export const editRecord = async (
+  url: string,
   payload: EditScrapedRecordPayload,
 ): Promise<boolean> => {
   const row = await dexie.scrapedRecords.update(payload.id, {
     ...payload.data,
+    url,
     updatedAt: new Date().toISOString(),
   });
   return row > 0;

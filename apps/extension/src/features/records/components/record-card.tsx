@@ -50,7 +50,7 @@ export function RecordCard({
 }: Props) {
   const [rawKey, setRawKey] = useState<string>();
   const { mutate: addRecord } = useAddRecord(url);
-  const { mutate: editRecord } = useEditRecord();
+  const { mutate: editRecord } = useEditRecord(url);
   const { data: scrapedRecord } = useGetRecordById({
     id: matchConfig?.config.id,
     key: rawKey,

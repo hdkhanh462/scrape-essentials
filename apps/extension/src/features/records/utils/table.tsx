@@ -8,7 +8,12 @@ import { RecordTableRowActions } from "@/features/records/components/record-tabl
 import { getFieldType } from "@/features/records/utils/helpers";
 import { type ConfigField, FieldType, type ScrapedRecord } from "@/lib/dexie";
 
-export function buildColumn(fields: ConfigField[]): ColumnDef<ScrapedRecord>[] {
+type BuildColumnHandler = (
+  url: string,
+  fields: ConfigField[],
+) => ColumnDef<ScrapedRecord>[];
+
+export const buildColumn: BuildColumnHandler = (url, fields) => {
   const temp: ColumnDef<ScrapedRecord>[] = [];
   fields.forEach((field) => {
     if (field.isParent || field.isPrimary) return;
@@ -38,6 +43,7 @@ export function buildColumn(fields: ConfigField[]): ColumnDef<ScrapedRecord>[] {
             <RecordCell
               row={row}
               columnId={field.name}
+              url={url}
               value={getFieldType(
                 field.type,
                 [
@@ -116,4 +122,4 @@ export function buildColumn(fields: ConfigField[]): ColumnDef<ScrapedRecord>[] {
       cell: ({ row }) => <RecordTableRowActions row={row} />,
     },
   ];
-}
+};
