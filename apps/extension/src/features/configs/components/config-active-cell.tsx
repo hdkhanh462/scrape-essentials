@@ -1,9 +1,11 @@
 import type { Row } from "@tanstack/react-table";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToggleConfigActive } from "@/features/configs/hooks";
 import type { ScrapeConfig } from "@/lib/dexie";
+import { toastError } from "@/utils/toast";
 
 interface Props {
   row: Row<ScrapeConfig>;

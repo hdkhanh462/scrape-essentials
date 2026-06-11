@@ -7,7 +7,9 @@ import { useDeleteRecord } from "@/features/records/hooks";
 import type { ScrapedDataInput } from "@/features/records/types/form-input";
 import type { MatchConfig } from "@/features/records/types/scrape";
 import { processCopyData } from "@/features/records/utils/copy";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import type { ScrapedRecord } from "@/lib/dexie";
+import { logger } from "@/utils/logger";
 import { toastError } from "@/utils/toast";
 
 interface FooterProps {

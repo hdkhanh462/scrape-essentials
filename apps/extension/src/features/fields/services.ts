@@ -4,6 +4,7 @@ import type {
   GetFieldsPayload,
 } from "@/features/fields/types";
 import { type ConfigField, dexie } from "@/lib/dexie";
+import { fieldInputToDb } from "@/utils/converts";
 
 export const getFields = async (
   payload: GetFieldsPayload,

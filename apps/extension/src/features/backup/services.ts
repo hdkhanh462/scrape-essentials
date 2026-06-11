@@ -8,6 +8,7 @@ import type { ImportPayload } from "@/features/backup/types";
 import { driveApiUrl, shouldBackup } from "@/features/backup/utils";
 import { useSettingsStore } from "@/features/settings/stores/settings.store";
 import { dexie } from "@/lib/dexie";
+import { gzipJSON, ungzipJSON } from "@/utils/gzip";
 import { logger } from "@/utils/logger";
 
 export async function getOrCreateBackupFolder(token: string): Promise<string> {

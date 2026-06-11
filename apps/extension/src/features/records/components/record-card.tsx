@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Activity } from "react";
+import { Activity, useEffect, useMemo, useState } from "react";
 import { type Control, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -28,6 +28,12 @@ import {
 } from "@/features/records/utils/helpers";
 import { type ConfigField, FieldType } from "@/lib/dexie";
 import { cn } from "@/lib/utils";
+import {
+  isInputFieldType,
+  isPageUrlFieldType,
+  isScrapeFieldType,
+  isSelectFieldType,
+} from "@/utils/config-field";
 import { logger } from "@/utils/logger";
 import { toastError } from "@/utils/toast";
 
@@ -75,7 +81,7 @@ export function RecordCard({
         rawScrapedData[fields.find((field) => field.isPrimary)?.name || ""];
       setRawKey(_rawKey as string);
     }
-  }, [rawScrapedData]);
+  }, [rawScrapedData, fields]);
 
   useEffect(() => {
     if (scrapedRecord) {

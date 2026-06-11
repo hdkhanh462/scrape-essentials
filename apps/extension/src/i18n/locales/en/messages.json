@@ -130,8 +130,10 @@
     "atLeastOneDomain": "At least one domain is required",
     "atLeastOneField": "At least one field is required",
     "atLeastOneKeyField": "At least one key field is required",
+    "atLeastOneOption": "At least one option is required",
     "onlyOneKeyFieldAllowed": "Only one key field is allowed",
-    "invalidJsonFormat": "Invalid JSON format in clipboard"
+    "invalidJsonFormat": "Invalid JSON format in clipboard",
+    "mustBeNonNegative": "Must be a non-negative number"
   },
   "message": {
     "configActiveStateToggled": "Config active state toggled successfully",

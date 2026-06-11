@@ -20,6 +20,7 @@ import {
 import type { ConfigInput } from "@/features/configs/types/form-input";
 import { FieldSheetForm } from "@/features/fields/components/field-sheet-form";
 import type { FieldInput } from "@/features/fields/types/form-input";
+import { useDialog } from "@/hooks/use-dialog";
 import type { ConfigField } from "@/lib/dexie";
 import { isTextField } from "@/utils/config-field";
 

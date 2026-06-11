@@ -1,5 +1,7 @@
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTable } from "@/components/data-table/data-table";
 import { useGetFields } from "@/features/fields/hooks";
 import { ConfigSelector } from "@/features/records/components/config-selector";
@@ -12,6 +14,7 @@ import {
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { advancedGlobalFilter } from "@/features/records/utils/filter";
 import { buildColumn } from "@/features/records/utils/table";
+import { useDialog } from "@/hooks/use-dialog";
 import type { ScrapedRecord } from "@/lib/dexie";
 import { useColumnVisibility } from "@/utils/table";
 
@@ -42,7 +45,7 @@ export function RecordContainer() {
 
   const columns = useMemo(
     () => buildColumn(config?.url || "", fields || []),
-    [fields],
+    [fields, config],
   );
 
   const handleDeleteSelected = (ids: ScrapedRecord["id"][]) => {

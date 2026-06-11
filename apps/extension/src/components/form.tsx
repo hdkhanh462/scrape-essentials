@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from "react";
 import {
   Controller,
   type ControllerProps,
@@ -13,14 +14,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  MultiSelect,
-  MultiSelectContent,
-  MultiSelectTrigger,
-  MultiSelectValue,
-} from "@/components/ui/multi-select";
-import { NumberInput } from "@/components/ui/number-input";
-import { PasswordInput } from "@/components/ui/password-input";
 import {
   Select,
   SelectContent,
@@ -64,7 +57,7 @@ type FormBaseProps<
   ) => React.ReactNode;
 };
 
-type FormControlFunc<
+export type FormControlFunc<
   ExtraProps extends Record<string, unknown> = Record<never, never>,
 > = <
   TFieldValues extends FieldValues = FieldValues,
@@ -74,7 +67,7 @@ type FormControlFunc<
   props: FormControlProps<TFieldValues, TName, TTransformedValues, ExtraProps>,
 ) => React.ReactNode;
 
-function FormBase<
+export function FormBase<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
   TTransformedValues = TFieldValues,
@@ -142,7 +135,7 @@ function FormBase<
   );
 }
 
-type FormInputProps = {
+export type FormInputProps = {
   placeholder?: string;
   autoComplete?: React.InputHTMLAttributes<HTMLInputElement>["autoComplete"];
   readOnly?: React.InputHTMLAttributes<HTMLInputElement>["readOnly"];
@@ -156,65 +149,31 @@ export const FormInput: FormControlFunc<FormInputProps> = (props) => {
   );
 };
 
-export const FormPasswordInput: FormControlFunc<FormInputProps> = (props) => {
-  return (
-    <FormBase {...props}>
-      {(field, props) => <PasswordInput {...field} {...props} />}
-    </FormBase>
-  );
-};
-
-export const FormNumberInput: FormControlFunc<FormInputProps> = (props) => {
-  return (
-    <FormBase {...props}>
-      {(field, inputProps) => <NumberInput {...field} {...inputProps} />}
-    </FormBase>
-  );
-};
-
 export const FormTextarea: FormControlFunc = (props) => {
   return <FormBase {...props}>{(field) => <Textarea {...field} />}</FormBase>;
 };
 
-export const FormSelect: FormControlFunc<{
-  children: React.ReactNode;
+export type FormSelectProps = PropsWithChildren<{
   placeholder?: string;
-}> = ({ ...props }) => {
+  position?: "popper" | "item-aligned";
+}>;
+
+export const FormSelect: FormControlFunc<FormSelectProps> = (props) => {
   return (
     <FormBase {...props}>
-      {({ onChange, onBlur, ...field }) => (
+      {({ onChange, onBlur, ...field }, inputProps) => (
         <Select {...field} onValueChange={onChange}>
           <SelectTrigger
             aria-invalid={field["aria-invalid"]}
             id={field.id}
             onBlur={onBlur}
           >
-            <SelectValue placeholder={props.inputProps?.placeholder} />
+            <SelectValue placeholder={inputProps?.placeholder} />
           </SelectTrigger>
-          <SelectContent>{props.inputProps?.children}</SelectContent>
+          <SelectContent position={inputProps?.position}>
+            {inputProps?.children}
+          </SelectContent>
         </Select>
-      )}
-    </FormBase>
-  );
-};
-
-export const FormSelectMultiple: FormControlFunc<{
-  children: React.ReactNode;
-  placeholder?: string;
-}> = ({ ...props }) => {
-  return (
-    <FormBase {...props}>
-      {({ onChange, onBlur, ...field }) => (
-        <MultiSelect values={field.value} onValuesChange={onChange}>
-          <MultiSelectTrigger
-            aria-invalid={field["aria-invalid"]}
-            id={field.id}
-            onBlur={onBlur}
-          >
-            <MultiSelectValue placeholder={props.inputProps?.placeholder} />
-          </MultiSelectTrigger>
-          <MultiSelectContent>{props.inputProps?.children}</MultiSelectContent>
-        </MultiSelect>
       )}
     </FormBase>
   );

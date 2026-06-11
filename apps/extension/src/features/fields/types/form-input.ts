@@ -24,9 +24,10 @@ export type FullErrors = FieldErrors<
       {
         type:
           | FieldType.InputText
-          | FieldType.InputTextarea
+          | FieldType.InputCheckbox
           | FieldType.InputNumber
-          | FieldType.InputCheckbox;
+          | FieldType.InputTextarea
+          | FieldType.InputTags;
       }
     >
   > &

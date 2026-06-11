@@ -1,4 +1,5 @@
 import i18next from "i18next";
+import { useEffect } from "react";
 import { useSettingsStore } from "@/features/settings/stores/settings.store";
 
 type Props = React.PropsWithChildren;

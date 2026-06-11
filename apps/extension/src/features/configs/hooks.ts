@@ -23,6 +23,7 @@ import type {
   ToggleConfigActivePayload,
 } from "@/features/configs/types";
 import type { ScrapeConfig } from "@/lib/dexie";
+import { logger } from "@/utils/logger";
 
 export const configQueryKey = {
   all: ["configs"] as const,

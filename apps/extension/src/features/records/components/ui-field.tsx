@@ -1,5 +1,14 @@
 import type { Control } from "react-hook-form";
-import { FormSelectMultiple } from "@/components/form";
+import {
+  FormCheckbox,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+} from "@/components/form";
+import {
+  FormNumberInput,
+  FormSelectMultiple,
+} from "@/components/form-extended";
 import { MultiSelectItem } from "@/components/ui/multi-select";
 import { SelectItem } from "@/components/ui/select";
 import type { ScrapedDataInput } from "@/features/records/types/form-input";
@@ -38,6 +47,10 @@ export default function UiField({ field, control }: UiFieldProps) {
       return (
         <FormTextarea control={control} name={field.name} label={field.name} />
       );
+    case FieldType.InputTags:
+      return (
+        <FormTagsInput control={control} name={field.name} label={field.name} />
+      );
     case FieldType.InputCheckbox:
       return (
         <FormCheckbox control={control} name={field.name} label={field.name} />
@@ -49,6 +62,7 @@ export default function UiField({ field, control }: UiFieldProps) {
           name={field.name}
           label={field.name}
           inputProps={{
+            position: "popper",
             children: field.uiOptions?.options?.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}

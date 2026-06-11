@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useDeleteRecord } from "@/features/records/hooks";
 import { processCopyData } from "@/features/records/utils/copy";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapedRecord } from "@/lib/dexie";
 import { toastError } from "@/utils/toast";

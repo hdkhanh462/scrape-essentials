@@ -1,5 +1,11 @@
 import type { CurrentPage } from "@/features/records/types/scrape";
 import { type ConfigField, dexie, FieldType } from "@/lib/dexie";
+import {
+  isInputFieldType,
+  isScrapeFieldType,
+  isSelectFieldType,
+} from "@/utils/config-field";
+import { logger } from "@/utils/logger";
 
 function processElement(element: Element, field: ConfigField) {
   switch (field.type) {

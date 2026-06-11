@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { FieldSchema } from "@/features/fields/schemas";
 import type { FieldInput } from "@/features/fields/types/form-input";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { usePasteFromClipboard } from "@/hooks/use-paste-from-clipboard";
 import { logger } from "@/utils/logger";
 

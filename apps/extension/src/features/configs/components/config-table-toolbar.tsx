@@ -20,6 +20,7 @@ import type { ImportConfigsPayload } from "@/features/configs/types";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapeConfig } from "@/lib/dexie";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
+import { toastError } from "@/utils/toast";
 
 interface DataTableToolbarProps {
   table: Table<ScrapeConfig>;

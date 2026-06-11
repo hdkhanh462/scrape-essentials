@@ -7,6 +7,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import type { ConfigField } from "@/lib/dexie";
 
 interface ScrapeFieldProps {

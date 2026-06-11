@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { FormInput, FormNumberInput } from "@/components/form";
+import { FormInput } from "@/components/form";
+import { FormNumberInput } from "@/components/form-extended";
 import { Button } from "@/components/ui/button";
 import {
   Card,
