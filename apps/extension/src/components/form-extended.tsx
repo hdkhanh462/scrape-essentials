@@ -47,7 +47,7 @@ export const FormTagsInput: FormControlFunc<FormTagsInputProps> = (props) => {
     <FormBase {...props}>
       {(field, inputProps) => (
         <TagsInput
-          value={field.value}
+          value={field.value || []}
           onValueChange={field.onChange}
           editable={inputProps?.editable}
           addOnPaste={inputProps?.addOnPaste}
