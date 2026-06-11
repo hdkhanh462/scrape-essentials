@@ -53,11 +53,12 @@ export const FormTagsInput: FormControlFunc<FormTagsInputProps> = (props) => {
           addOnPaste={inputProps?.addOnPaste}
         >
           <TagsInputList>
-            {field.value?.map((trick: string) => (
-              <TagsInputItem key={trick} value={trick}>
-                {trick}
-              </TagsInputItem>
-            ))}
+            {Array.isArray(field.value) &&
+              field.value.map((value: string) => (
+                <TagsInputItem key={value} value={value}>
+                  {value}
+                </TagsInputItem>
+              ))}
             <TagsInputInput placeholder={inputProps?.placeholder} />
           </TagsInputList>
         </TagsInput>
