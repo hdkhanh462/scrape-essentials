@@ -6,7 +6,8 @@ import {
   useWatch,
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { FormInput } from "@/components/form";
+import { FormInput, FormSelect } from "@/components/form";
+import { FormNumberInput } from "@/components/form-extended";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -23,6 +24,7 @@ import type {
   FullErrors,
 } from "@/features/fields/types/form-input";
 import { FieldType } from "@/lib/dexie";
+import { isSelectFieldType } from "@/utils/config-field";
 
 export function UiField({ form, fullErrors }: FieldTypePropsV2) {
   const { t } = useTranslation();
@@ -67,6 +69,18 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
                   <SelectItem value="false">False</SelectItem>
                 </>
               ),
+            }}
+          />
+        );
+      case FieldType.InputTags:
+        return (
+          <FormTagsInput
+            control={form.control}
+            name="uiOptions.defaultValue"
+            label={t("field.defaultValue")}
+            hideError
+            inputProps={{
+              placeholder: t("field.enterDefaultValue"),
             }}
           />
         );

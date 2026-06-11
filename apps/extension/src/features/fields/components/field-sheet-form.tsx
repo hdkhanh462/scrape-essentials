@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import type { DialogWrapperProps } from "@/components/dialog-wrapper";
@@ -18,7 +19,13 @@ import type {
   FieldInput,
   FullErrors,
 } from "@/features/fields/types/form-input";
+import type { useDialog } from "@/hooks/use-dialog";
 import { FieldType } from "@/lib/dexie";
+import {
+  isInputFieldType,
+  isScrapeFieldType,
+  isSelectFieldType,
+} from "@/utils/config-field";
 
 const DEFAULT_VALUES: FieldInput = {
   name: "",

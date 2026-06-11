@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
   onColumnVisibilityChange,
   onRowSelectionChange,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelectionLocal, setRowSelectionLocal] = useState({});
+  const [rowSelectionLocal, setRowSelectionLocal] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );

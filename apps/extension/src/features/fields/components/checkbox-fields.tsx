@@ -1,6 +1,8 @@
 import { useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { FormCheckbox } from "@/components/form";
 import type { FieldTypePropsV2 } from "@/features/fields/types/field";
+import { isPageUrlFieldType, isScrapeFieldType } from "@/utils/config-field";
 
 export default function CheckboxFields({ form }: FieldTypePropsV2) {
   const { t } = useTranslation();

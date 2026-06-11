@@ -12,10 +12,11 @@ import {
   SaveIcon,
   XIcon,
 } from "lucide-react";
-import { Activity } from "react";
+import { Activity, useEffect, useMemo } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { FormInput, FormSwitch } from "@/components/form";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,7 +44,12 @@ import {
   useGetFields,
 } from "@/features/fields/hooks";
 import type { FieldInput } from "@/features/fields/types/form-input";
+import { useDialog } from "@/hooks/use-dialog";
+import { usePasteFromClipboard } from "@/hooks/use-paste-from-clipboard";
 import type { ConfigField } from "@/lib/dexie";
+import { dbFieldToFieldInput } from "@/utils/converts";
+import { logger } from "@/utils/logger";
+import { toastError } from "@/utils/toast";
 
 const DEFAULT_VALUES: Partial<ConfigInput> = {
   name: "",

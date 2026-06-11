@@ -7,6 +7,7 @@ import type {
 } from "@/features/configs/types";
 import { dexie, type ScrapeConfig } from "@/lib/dexie";
 import { fieldInputToDb } from "@/utils/converts";
+import { logger } from "@/utils/logger";
 
 export const getConfigs = async (
   payload: GetConfigsPayload,

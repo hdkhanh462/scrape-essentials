@@ -130,8 +130,10 @@
     "atLeastOneDomain": "Ít nhất một tên miền",
     "atLeastOneField": "Ít nhất một trường",
     "atLeastOneKeyField": "Ít nhất một trường chính",
+    "atLeastOneOption": "Ít nhất một tùy chọn",
     "onlyOneKeyFieldAllowed": "Chỉ cho phép một trường chính",
-    "invalidJsonFormat": "Định dạng JSON không hợp lệ"
+    "invalidJsonFormat": "Định dạng JSON không hợp lệ",
+    "mustBeNonNegative": "Phải là số không âm"
   },
   "message": {
     "configActiveStateToggled": "Trạng thái kích hoạt cấu hình đã được chuyển đổi thành công",

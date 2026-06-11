@@ -1,6 +1,7 @@
 import { XIcon } from "lucide-react";
 import { Controller, useFieldArray } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { FormInput } from "@/components/form";
 import { Button } from "@/components/ui/button";
 import {
   Field,

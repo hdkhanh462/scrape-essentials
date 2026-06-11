@@ -19,6 +19,7 @@ import { useDialog } from "@/hooks/use-dialog";
 import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
 import { dbFieldToFieldInput } from "@/utils/converts";
 import { logger } from "@/utils/logger";
+import { toastError } from "@/utils/toast";
 
 interface Props {
   row: Row<ScrapeConfig>;

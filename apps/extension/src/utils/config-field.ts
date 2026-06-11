@@ -23,8 +23,8 @@ export function isTextField(field: FieldInput): field is Extract<
 
 export function isLargeField(
   type: FieldType,
-): type is Extract<FieldType, FieldType.InputTextarea> {
-  return type === FieldType.InputTextarea;
+): type is Extract<FieldType, FieldType.InputTextarea | FieldType.InputTags> {
+  return type === FieldType.InputTextarea || type === FieldType.InputTags;
 }
 
 export function isInputField(field: FieldInput): field is Extract<
@@ -32,16 +32,18 @@ export function isInputField(field: FieldInput): field is Extract<
   {
     type:
       | FieldType.InputText
-      | FieldType.InputTextarea
       | FieldType.InputNumber
-      | FieldType.InputCheckbox;
+      | FieldType.InputCheckbox
+      | FieldType.InputTextarea
+      | FieldType.InputTags;
   }
 > {
   return (
     field.type === FieldType.InputText ||
-    field.type === FieldType.InputTextarea ||
     field.type === FieldType.InputNumber ||
-    field.type === FieldType.InputCheckbox
+    field.type === FieldType.InputCheckbox ||
+    field.type === FieldType.InputTextarea ||
+    field.type === FieldType.InputTags
   );
 }
 
@@ -84,9 +86,10 @@ export function isPageUrlField(
 export function isInputFieldType(type: FieldType) {
   return (
     type === FieldType.InputText ||
-    type === FieldType.InputTextarea ||
     type === FieldType.InputNumber ||
-    type === FieldType.InputCheckbox
+    type === FieldType.InputCheckbox ||
+    type === FieldType.InputTextarea ||
+    type === FieldType.InputTags
   );
 }
 

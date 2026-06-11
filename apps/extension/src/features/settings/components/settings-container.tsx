@@ -4,6 +4,7 @@ import {
   History,
   RotateCcwIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -40,6 +41,7 @@ import {
   useSettingsStore,
 } from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
+import { useDialog } from "@/hooks/use-dialog";
 import { formatRelativeTime } from "@/utils/date";
 import { toastError } from "@/utils/toast";
 

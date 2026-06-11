@@ -1,5 +1,13 @@
 import z from "zod";
 import { type ConfigField, FieldType } from "@/lib/dexie";
+import {
+  isInputFieldType,
+  isLargeField,
+  isPageUrlFieldType,
+  isScrapeFieldType,
+  isSelectFieldType,
+} from "@/utils/config-field";
+import { logger } from "@/utils/logger";
 
 export function getFieldType<T = unknown>(
   type: FieldType,

@@ -5,6 +5,7 @@ import {
 } from "@/components/dialog-wrapper";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import type { useDialog } from "@/hooks/use-dialog";
 
 type ActionProps = {
   label?: string;

@@ -17,16 +17,23 @@ export type ScrapeConfig = {
 
 export enum FieldType {
   PageUrl = "page-url",
+
+  // Data fields
   Text = "text",
   Link = "link",
   Image = "image",
   ElementAttribute = "element-attribute",
+
+  // Input fields
   InputText = "input-text",
-  InputTextarea = "input-textarea",
   InputNumber = "input-number",
   InputCheckbox = "input-checkbox",
   InputSelect = "input-select",
   InputMultiSelect = "input-multiselect",
+
+  // Large input fields
+  InputTextarea = "input-textarea",
+  InputTags = "input-tags",
 }
 
 export interface FieldScrapeOptions {

@@ -3,6 +3,7 @@ import z from "zod";
 import { FieldSchema } from "@/features/fields/schemas";
 import type { FieldInput } from "@/features/fields/types/form-input";
 import type { FieldType } from "@/lib/dexie";
+import { isPageUrlFieldType, isScrapeFieldType } from "@/utils/config-field";
 
 export const ConfigSchema = z
   .object({
