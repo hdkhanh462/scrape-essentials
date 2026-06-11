@@ -19,7 +19,8 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
     if (field.isParent || field.isPrimary) return;
     const colType =
       field.scrapeOptions?.isMultiple ||
-      field.type === FieldType.InputMultiSelect
+      field.type === FieldType.InputMultiSelect ||
+      field.type === FieldType.InputTags
         ? "string[]"
         : getFieldType(field.type, ["string", "number", "boolean"], "string");
     temp.push({
@@ -32,7 +33,8 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
       cell: ({ row }) => (
         <div>
           {field.scrapeOptions?.isMultiple ||
-          field.type === FieldType.InputMultiSelect ? (
+          field.type === FieldType.InputMultiSelect ||
+          field.type === FieldType.InputTags ? (
             <BadgeOverflow
               items={(row.original.data[field.name] as Array<string>) || []}
               renderBadge={(_, label) => (
