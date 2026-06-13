@@ -35,15 +35,15 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         />
         <FormInput
           control={form.control}
-          name="spliter"
+          name="splitter"
           label={t("field.splitter")}
           inputProps={{
             placeholder: t("field.enterSplitter"),
             autoComplete: "off",
           }}
         />
-        {(fullErrors?.regex || fullErrors?.spliter) && (
-          <FieldError errors={[fullErrors?.regex, fullErrors?.spliter]} />
+        {(fullErrors?.regex || fullErrors?.splitter) && (
+          <FieldError errors={[fullErrors?.regex, fullErrors?.splitter]} />
         )}
       </div>
       <FieldSet>

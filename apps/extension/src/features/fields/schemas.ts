@@ -4,7 +4,7 @@ import { FieldType } from "@/lib/dexie";
 const TextSchema = z.object({
   isPrimary: z.boolean().optional(),
   regex: z.string().optional(),
-  spliter: z.string().optional(),
+  splitter: z.string().optional(),
   removers: z
     .array(
       z.object({

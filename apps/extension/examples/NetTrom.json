@@ -1,6 +1,10 @@
 {
   "name": "NetTrom",
-  "domains": [{ "value": "nettruyen[a-z0-9]*\\." }],
+  "domains": [
+    {
+      "value": "nettruyen[a-z0-9]*\\."
+    }
+  ],
   "isActive": true,
   "fields": [
     {
@@ -15,17 +19,50 @@
         "label": "Point",
         "defaultValue": "0",
         "options": [
-          { "label": "0", "value": "0" },
-          { "label": "1", "value": "1" },
-          { "label": "2", "value": "2" },
-          { "label": "3", "value": "3" },
-          { "label": "4", "value": "4" },
-          { "label": "5", "value": "5" },
-          { "label": "6", "value": "6" },
-          { "label": "7", "value": "7" },
-          { "label": "8", "value": "8" },
-          { "label": "9", "value": "9" },
-          { "label": "10", "value": "10" }
+          {
+            "label": "0",
+            "value": "0"
+          },
+          {
+            "label": "1",
+            "value": "1"
+          },
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          },
+          {
+            "label": "4",
+            "value": "4"
+          },
+          {
+            "label": "5",
+            "value": "5"
+          },
+          {
+            "label": "6",
+            "value": "6"
+          },
+          {
+            "label": "7",
+            "value": "7"
+          },
+          {
+            "label": "8",
+            "value": "8"
+          },
+          {
+            "label": "9",
+            "value": "9"
+          },
+          {
+            "label": "10",
+            "value": "10"
+          }
         ]
       }
     },
@@ -37,7 +74,9 @@
       "isFilterable": true,
       "isShowOnTable": true,
       "type": "input-number",
-      "uiOptions": { "label": "Chapter" }
+      "uiOptions": {
+        "label": "Chapter"
+      }
     },
     {
       "parentFieldId": "",
@@ -50,10 +89,22 @@
       "uiOptions": {
         "label": "Status",
         "options": [
-          { "label": "Reading", "value": "Reading" },
-          { "label": "Read Later", "value": "Read Later" },
-          { "label": "Completed", "value": "Completed" },
-          { "label": "Dropped", "value": "Dropped" }
+          {
+            "label": "Reading",
+            "value": "Reading"
+          },
+          {
+            "label": "Read Later",
+            "value": "Read Later"
+          },
+          {
+            "label": "Completed",
+            "value": "Completed"
+          },
+          {
+            "label": "Dropped",
+            "value": "Dropped"
+          }
         ]
       }
     },
@@ -73,7 +124,7 @@
       },
       "isPrimary": true,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -92,7 +143,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -111,7 +162,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     }
   ]

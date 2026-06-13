@@ -37,7 +37,7 @@ const DEFAULT_VALUES: FieldInput = {
   isRequired: false,
   isPrimary: false,
   regex: "",
-  spliter: "",
+  splitter: "",
   scrapeOptions: {
     cssSelector: "",
     attributeName: "",
