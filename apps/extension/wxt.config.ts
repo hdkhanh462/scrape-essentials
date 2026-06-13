@@ -18,6 +18,9 @@ export default defineConfig({
     default_locale: "en",
   }),
   vite: () => ({
+    build: {
+      chunkSizeWarningLimit: 10 * 1024 * 1024, // 10MB
+    },
     plugins: [tailwindcss()],
     resolve: {
       alias: {
