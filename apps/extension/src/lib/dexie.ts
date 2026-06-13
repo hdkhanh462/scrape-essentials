@@ -64,7 +64,7 @@ export type ConfigField = {
   isParent?: boolean;
   removers?: string[];
   regex?: string;
-  spliter?: string;
+  splitter?: string;
   uiOptions?: FieldUiOptions;
   scrapeOptions?: FieldScrapeOptions;
 };
@@ -86,10 +86,25 @@ const dexie = new Dexie("ScrapeEssentialsDB") as Dexie & {
   scrapedRecords: EntityTable<ScrapedRecord, "id">;
 };
 
-dexie.version(1).stores({
-  scrapeConfigs: "id, name, isActive, createdAt, updatedAt",
-  configFields: "id, configId, parentFieldId, name, type, order, isShowOnTable",
-  scrapedRecords: "id, [configId+key], createdAt, updatedAt",
-});
+dexie
+  .version(2)
+  .stores({
+    scrapeConfigs: "id, name, isActive, createdAt, updatedAt",
+    configFields:
+      "id, configId, parentFieldId, name, type, order, isShowOnTable",
+    scrapedRecords: "id, [configId+key], createdAt, updatedAt",
+  })
+  .upgrade(async (tx) => {
+    const table = tx.table("configFields");
+
+    await table
+      .toCollection()
+      .modify((field: { splitter?: string; spliter?: string }) => {
+        if (field.spliter !== undefined) {
+          field.splitter = field.spliter;
+          delete field.spliter;
+        }
+      });
+  });
 
 export { dexie };

@@ -43,7 +43,7 @@ export function fieldInputToDb(
       ...base,
       isPrimary: input.isPrimary,
       regex: input.regex,
-      spliter: input.spliter,
+      splitter: input.splitter,
       removers: map(input.removers, "value"),
     };
   }
@@ -110,7 +110,7 @@ export function dbFieldToFieldInput(
       isParent: field.isParent,
       isPrimary: field.isPrimary,
       regex: field.regex,
-      spliter: field.spliter,
+      splitter: field.splitter,
       removers: map(field.removers, (v) => ({ value: v })),
       scrapeOptions: {
         ...field.scrapeOptions,
@@ -125,7 +125,7 @@ export function dbFieldToFieldInput(
     type: field.type,
     isPrimary: field.isPrimary,
     regex: field.regex,
-    spliter: field.spliter,
+    splitter: field.splitter,
     removers: map(field.removers, (v) => ({ value: v })),
   };
 }

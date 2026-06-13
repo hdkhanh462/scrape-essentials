@@ -137,9 +137,9 @@ export async function processField(
     typeof value === "string"
   ) {
     value = processTextField(value, field);
-    if (field.spliter) {
+    if (field.splitter) {
       value = value
-        .split(field.spliter)
+        .split(field.splitter)
         .map((item) => item.trim())
         .filter((item) => item.length > 0);
     }

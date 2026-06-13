@@ -17,7 +17,7 @@
       "type": "page-url",
       "isPrimary": true,
       "regex": "-([a-z0-9]+)/",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -137,7 +137,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -156,7 +156,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": ",",
+      "splitter": ",",
       "removers": []
     },
     {
@@ -174,7 +174,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -194,7 +194,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -212,7 +212,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -232,7 +232,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": "",
+      "splitter": "",
       "removers": []
     },
     {
@@ -252,7 +252,7 @@
       },
       "isPrimary": false,
       "regex": "",
-      "spliter": ",",
+      "splitter": ",",
       "removers": []
     }
   ]
