@@ -1,6 +1,10 @@
 {
-  "name": "AnimeVietsub (New)",
-  "domains": [{ "value": "animevietsub[a-z]*\\.[a-z]*/phim/" }],
+  "name": "AnimeVietsub",
+  "domains": [
+    {
+      "value": "animevietsub[a-z]*\\.[a-z]*/phim/"
+    }
+  ],
   "isActive": true,
   "fields": [
     {
@@ -28,17 +32,50 @@
         "label": "Point",
         "defaultValue": "0",
         "options": [
-          { "label": "0", "value": "0" },
-          { "label": "1", "value": "1" },
-          { "label": "2", "value": "2" },
-          { "label": "3", "value": "3" },
-          { "label": "4", "value": "4" },
-          { "label": "5", "value": "5" },
-          { "label": "6", "value": "6" },
-          { "label": "7", "value": "7" },
-          { "label": "8", "value": "8" },
-          { "label": "9", "value": "9" },
-          { "label": "10", "value": "10" }
+          {
+            "label": "0",
+            "value": "0"
+          },
+          {
+            "label": "1",
+            "value": "1"
+          },
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          },
+          {
+            "label": "4",
+            "value": "4"
+          },
+          {
+            "label": "5",
+            "value": "5"
+          },
+          {
+            "label": "6",
+            "value": "6"
+          },
+          {
+            "label": "7",
+            "value": "7"
+          },
+          {
+            "label": "8",
+            "value": "8"
+          },
+          {
+            "label": "9",
+            "value": "9"
+          },
+          {
+            "label": "10",
+            "value": "10"
+          }
         ]
       }
     },
@@ -50,7 +87,9 @@
       "isFilterable": true,
       "isShowOnTable": true,
       "type": "input-number",
-      "uiOptions": { "label": "Episode" }
+      "uiOptions": {
+        "label": "Episode"
+      }
     },
     {
       "parentFieldId": "",
@@ -63,10 +102,22 @@
       "uiOptions": {
         "label": "Status",
         "options": [
-          { "label": "Watching", "value": "Watching" },
-          { "label": "Watch Later", "value": "Watch Later" },
-          { "label": "Completed", "value": "Completed" },
-          { "label": "Dropped", "value": "Dropped" }
+          {
+            "label": "Watching",
+            "value": "Watching"
+          },
+          {
+            "label": "Watch Later",
+            "value": "Watch Later"
+          },
+          {
+            "label": "Completed",
+            "value": "Completed"
+          },
+          {
+            "label": "Dropped",
+            "value": "Dropped"
+          }
         ]
       }
     },
