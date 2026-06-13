@@ -21,10 +21,10 @@ export const driveApiUrl = (
 };
 
 export const shouldBackup = (minutes: number): boolean => {
-  logger.log("Checking if backup is needed...");
+  logger.debug("Checking if backup is needed...");
 
   const { lastBackup } = useGoogleStore.getState();
-  logger.log(
+  logger.debug(
     "Last backup timestamp:",
     lastBackup ? new Date(lastBackup).toLocaleString() : "Never",
   );
@@ -33,7 +33,7 @@ export const shouldBackup = (minutes: number): boolean => {
   const interval = minutes * 60 * 1000;
   const diff = Date.now() - lastBackup;
 
-  logger.log(
+  logger.debug(
     `Next check backup in ${Math.max(0, Math.round((interval - diff) / 60000))} minutes`,
   );
 
@@ -54,7 +54,7 @@ export const createCheckBackupAlarm = (minutes: number) => {
           browser.runtime.lastError.message,
         );
       else
-        logger.log(`Backup alarm created with ${minutes} minute(s) interval`);
+        logger.debug(`Backup alarm created with ${minutes} minute(s) interval`);
     },
   );
 };

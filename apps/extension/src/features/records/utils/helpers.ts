@@ -145,7 +145,7 @@ export const groupItems = (fields: ConfigField[]) => {
     i++;
   }
 
-  logger.log("Grouped fields into rows:", rows);
+  logger.debug("Grouped fields into rows:", rows);
 
   return rows;
 };

@@ -33,9 +33,9 @@ export default function App() {
   useEffect(() => {
     if (!currentPage || !configs) return;
 
-    logger.log("[DEBUG] Current page:", currentPage?.url);
-    logger.log("[DEBUG] Configs:", configs);
-    logger.log("[DEBUG] Fields:", fields);
+    logger.debug("Current page:", currentPage?.url);
+    logger.debug("Configs:", configs);
+    logger.debug("Fields:", fields);
 
     const _matchConfig = configs.find((config) =>
       config.domains.some((domain) => new RegExp(domain).test(currentPage.url)),

@@ -12,7 +12,7 @@ async function generateSchema() {
       "public/config-schema.json",
       JSON.stringify(json, null, 2),
     );
-    logger.log("Schema generated successfully.");
+    logger.debug("Schema generated successfully.");
   } catch (error) {
     logger.error("Error writing schema to file:", error);
   }

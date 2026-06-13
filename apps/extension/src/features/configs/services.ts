@@ -85,7 +85,7 @@ export const editConfig = async (
     dexie.scrapeConfigs,
     dexie.configFields,
     async (tx) => {
-      logger.log("[DEBUG] Editing config with fields:", {
+      logger.debug("Editing config with fields:", {
         fields: payload.data.fields,
       });
 
