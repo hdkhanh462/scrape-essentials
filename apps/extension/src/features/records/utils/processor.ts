@@ -59,14 +59,14 @@ async function processScrapeField(bodyHtml: string, field: ConfigField) {
       );
     }
 
-    logger.log("[DEBUG] Processing parent field:", parentField);
+    logger.debug("Processing parent field:", parentField);
 
     const parentElements = body.querySelectorAll(
       parentField.scrapeOptions.cssSelector,
     );
 
-    logger.log(
-      "[DEBUG] Found parent elements for field",
+    logger.debug(
+      "Found parent elements for field",
       field.name,
       ":",
       parentElements,
@@ -79,7 +79,7 @@ async function processScrapeField(bodyHtml: string, field: ConfigField) {
         field.scrapeOptions?.condition &&
         _text.includes(field.scrapeOptions.condition);
 
-      logger.log(
+      logger.debug(
         "[DEBUG] Checking condition for field",
         field.name,
         ":",
@@ -90,7 +90,7 @@ async function processScrapeField(bodyHtml: string, field: ConfigField) {
       if (conditionMet) tempValue = processDataQuery(element, field);
     });
 
-    logger.log("[DEBUG] Extracted value for field", field.name, ":", tempValue);
+    logger.debug("Extracted value for field", field.name, ":", tempValue);
 
     return tempValue;
   }

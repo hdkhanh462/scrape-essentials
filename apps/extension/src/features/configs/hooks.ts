@@ -47,7 +47,7 @@ export const useGetConfigById = (
   },
   options?: Pick<UseQueryOptions<ScrapeConfig | undefined>, "enabled">,
 ) => {
-  logger.log("[DEBUG] useGetConfigById", {
+  logger.debug("useGetConfigById", {
     enabled: options?.enabled ?? !!payload.id,
   });
 

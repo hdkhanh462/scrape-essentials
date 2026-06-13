@@ -48,7 +48,7 @@ export function RecordCardFooter({
   };
 
   const handleCopy = () => {
-    logger.log("Copying data with", {
+    logger.debug("Copying data with", {
       matchConfig,
       rawScrapedData,
       scrapedRecord,
@@ -67,7 +67,7 @@ export function RecordCardFooter({
       key: rawKey,
     });
 
-    logger.log("Processed copy data", { copyData });
+    logger.debug("Processed copy data", { copyData });
 
     copyScrapedData.copy(copyData);
   };

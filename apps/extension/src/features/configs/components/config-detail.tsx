@@ -155,7 +155,7 @@ export const ConfigDetail = () => {
   }, [config, form.reset]);
 
   const handleSubmit = async (input: ConfigInput) => {
-    logger.log("[DEBUG] ConfigDetail - Submitting form:", input);
+    logger.debug("ConfigDetail - Submitting form:", input);
 
     if (mode === "edit") {
       if (!configId) {
@@ -176,7 +176,7 @@ export const ConfigDetail = () => {
       order: fieldsFieldArray.fields.length,
     };
 
-    logger.log("Adding field with data:", {
+    logger.debug("Adding field with data:", {
       data,
       toAdd,
     });
@@ -196,7 +196,7 @@ export const ConfigDetail = () => {
           fieldsFieldArray.append(toAdd);
           addFieldDialog.close();
           toast.success(t("message.fieldAddedSuccessfully"));
-          logger.log("Added field with id:", {
+          logger.debug("Added field with id:", {
             newFieldId,
             toAdd,
           });
@@ -211,7 +211,7 @@ export const ConfigDetail = () => {
     data: FieldInput,
     id?: ConfigField["id"],
   ) => {
-    logger.log("Editing field with data:", {
+    logger.debug("Editing field with data:", {
       index,
       data,
       id,
@@ -228,7 +228,7 @@ export const ConfigDetail = () => {
         onSuccess: () => {
           form.setValue(`fields.${index}`, data);
           toast.success(t("message.fieldUpdatedSuccessfully"));
-          logger.log("Updated field with id:", id);
+          logger.debug("Updated field with id:", id);
         },
         onError: (error) => toastError(error, t("message.failedToUpdateField")),
       },
@@ -245,7 +245,7 @@ export const ConfigDetail = () => {
       onSuccess: () => {
         fieldsFieldArray.remove(index);
         toast.success(t("message.fieldDeletedSuccessfully"));
-        logger.log("Deleted field with id:", id);
+        logger.debug("Deleted field with id:", id);
       },
       onError: (error) => toastError(error, t("message.failedToDeleteField")),
     });

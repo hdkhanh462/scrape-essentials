@@ -56,7 +56,7 @@ export function ConfigTableRowActions({ row }: Props) {
   const handleCopyConfig = async (_e: Event) => {
     let fields: ConfigField[] = fieldsQuery.data || [];
     if (!fields.length) {
-      logger.log("Fields not loaded, refetching...");
+      logger.debug("Fields not loaded, refetching...");
       const { data } = await fieldsQuery.refetch();
       fields = data || [];
     }
@@ -70,7 +70,7 @@ export function ConfigTableRowActions({ row }: Props) {
       fields: fields.map((field) => dbFieldToFieldInput(field)),
     };
 
-    logger.log("Copying config with fields:", { configData });
+    logger.debug("Copying config with fields:", { configData });
 
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {

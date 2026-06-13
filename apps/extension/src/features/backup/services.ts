@@ -140,7 +140,7 @@ export async function backupToDrive(
   await uploadBackup(accessToken, folderId, blob, browser.runtime.getVersion());
 
   setLastBackup(Date.now());
-  logger.log("Backup successfully uploaded to Google Drive");
+  logger.debug("Backup successfully uploaded to Google Drive");
 }
 
 export async function restoreBackup(): Promise<ImportPayload> {
@@ -171,6 +171,6 @@ export const autoBackup = async () => {
   const { autoBackup } = useSettingsStore.getState();
   if (!autoBackup || !shouldBackup(60)) return;
 
-  logger.log("Auto backup triggered");
+  logger.debug("Auto backup triggered");
   await backupToDrive({ authIfMissing: false });
 };
