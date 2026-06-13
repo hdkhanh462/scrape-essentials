@@ -54,7 +54,7 @@ function parseFilter(input: string): Expression | null {
   const conditions: Condition[] = [];
 
   const regex =
-    /([\w\s]+?)\s*(>=|<=|!=|!?:|=|>|<|:)\s*(?:"([^"]+)"|([^\s&|]+))/g;
+    /([\w\s]+?)\s*(>=|<=|!=|!?:|=|>|<|:)\s*(?:"([^"]*)"|([^\s&|]+))/g;
 
   for (const part of andParts) {
     let match = regex.exec(part);
@@ -116,8 +116,9 @@ function evaluateArrayExpr(expr: ArrayExpr, rowValues: string[]): boolean {
 }
 
 function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
-  const cellValue = row.getValue(condition.column);
-  if (cellValue == null) return false;
+  const cellValue = row.getValue(condition.column) || "-";
+
+  if (cellValue === null) return false;
 
   const type = columnMeta?.type;
 
