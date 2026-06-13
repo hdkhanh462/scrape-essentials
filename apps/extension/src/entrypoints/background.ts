@@ -20,6 +20,7 @@ export default defineBackground(() => {
 
       if (!matchConfig) {
         await browser.action.disable(tabId);
+        await browser.action.setBadgeText({ tabId, text: "OFF" });
         await browser.action.setIcon({
           tabId,
           path: {
