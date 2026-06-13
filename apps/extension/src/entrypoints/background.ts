@@ -18,6 +18,8 @@ export default defineBackground(() => {
         ),
       );
 
+      logger.debug("Tab updated:", { tabId, url: tab.url, changeInfo });
+
       if (!matchConfig) {
         await browser.action.disable(tabId);
         await browser.action.setBadgeText({ tabId, text: "OFF" });
@@ -38,6 +40,14 @@ export default defineBackground(() => {
       });
 
       await browser.action.enable(tabId);
+      await browser.action.setBadgeText({ tabId, text: "" });
+      await browser.action.setIcon({
+        tabId,
+        path: {
+          16: browser.runtime.getURL("/icons/16.png"),
+          32: browser.runtime.getURL("/icons/32.png"),
+        },
+      });
     }
   });
 });
