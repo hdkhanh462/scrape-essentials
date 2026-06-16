@@ -6,7 +6,7 @@ export const toastError = (
   title?: string,
   description?: string,
 ) => {
-  logger.error("Error:", error);
+  logger.error("Something went wrong:", error);
   toast.error(title || "Error", {
     description: description || error.message,
   });

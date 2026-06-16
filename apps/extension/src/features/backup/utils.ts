@@ -3,22 +3,35 @@ import { useGoogleStore } from "@/features/backup/stores/google.store";
 import { useSettingsStore } from "@/features/settings/stores/settings.store";
 import { logger } from "@/utils/logger";
 
-export const driveApiUrl = (
-  path: string,
-  params?: Record<string, string | number | boolean>,
-) => {
-  const base = new URL(`https://www.googleapis.com/drive/v3/${path}`);
+export const urlBuilder = (base: string) => {
+  return (
+    path: string,
+    params?: Record<string, string | number | boolean>,
+  ): string => {
+    const url = new URL(`${base}${path}`);
 
-  if (!params) return base;
+    if (params) {
+      for (const [key, value] of Object.entries(params)) {
+        url.searchParams.set(key, String(value));
+      }
+    }
 
-  const search = new URLSearchParams();
+    logger.debug("Constructed URL:", {
+      base,
+      path,
+      params,
+      url: url.toString(),
+    });
 
-  for (const [key, value] of Object.entries(params)) {
-    search.append(key, String(value));
-  }
-
-  return `${base}?${search.toString()}`;
+    return url.toString();
+  };
 };
+
+export const driveApiUrl = urlBuilder("https://www.googleapis.com/drive/v3");
+
+export const oAuthUrl = urlBuilder("https://accounts.google.com/o/oauth2");
+
+export const apiUrl = urlBuilder(import.meta.env.VITE_API_URL);
 
 export const shouldBackup = (minutes: number): boolean => {
   logger.debug("Checking if backup is needed...");
