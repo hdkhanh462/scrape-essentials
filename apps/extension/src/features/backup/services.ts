@@ -12,11 +12,11 @@ import { gzipJSON, ungzipJSON } from "@/utils/gzip";
 import { logger } from "@/utils/logger";
 
 export async function getOrCreateBackupFolder(token: string): Promise<string> {
-  const searchUrl = driveApiUrl("files", {
+  const url = driveApiUrl("/files", {
     q: `name='${BACKUP_FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder'`,
   });
 
-  const search = await fetch(searchUrl, {
+  const search = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -26,7 +26,7 @@ export async function getOrCreateBackupFolder(token: string): Promise<string> {
     return result.files[0].id;
   }
 
-  const create = await fetch(driveApiUrl("files"), {
+  const create = await fetch(driveApiUrl("/files"), {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -64,20 +64,26 @@ export async function uploadBackup(
 
   form.append("file", blob);
 
-  await fetch(
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: form,
+  const res = await fetch(driveApiUrl("/files", { uploadType: "multipart" }), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+    body: form,
+  });
+
+  if (!res.ok) {
+    const json = await res.json();
+    logger.error("Failed to upload backup:", {
+      status: res.status,
+      error: json.error,
+    });
+    throw new Error("Failed to upload backup");
+  }
 }
 
 export async function getLatestBackup(token: string, folderId: string) {
-  const url = driveApiUrl("files", {
+  const url = driveApiUrl("/files", {
     q: `name contains '${BACKUP_FILE_NAME_PREFIX}' and '${folderId}' in parents and trashed=false`,
     orderBy: "createdTime desc",
     pageSize: "1",
@@ -91,15 +97,13 @@ export async function getLatestBackup(token: string, folderId: string) {
 
   const data = await res.json();
 
-  if (!data.files?.length) {
-    throw new Error("No backup found");
-  }
+  if (!data.files?.length) throw new Error("No backup found");
 
   return data.files[0];
 }
 
 export async function downloadBackup(token: string, fileId: string) {
-  const url = driveApiUrl(`files/${fileId}`, {
+  const url = driveApiUrl(`/files/${fileId}`, {
     alt: "media",
   });
 
@@ -115,8 +119,7 @@ export async function downloadBackup(token: string, fileId: string) {
 export async function backupToDrive(
   { authIfMissing } = { authIfMissing: true },
 ) {
-  const { backupFolderId, setBackupFolderId, setLastBackup } =
-    useGoogleStore.getState();
+  const { backupFolderId, setBackupFolderId } = useGoogleStore.getState();
 
   const accessToken = await getAccessToken({ authIfMissing });
   if (!accessToken) {
@@ -139,7 +142,6 @@ export async function backupToDrive(
   const blob = gzipJSON({ configs, fields, records });
   await uploadBackup(accessToken, folderId, blob, browser.runtime.getVersion());
 
-  setLastBackup(Date.now());
   logger.debug("Backup successfully uploaded to Google Drive");
 }
 

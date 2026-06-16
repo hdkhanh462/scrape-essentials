@@ -46,6 +46,8 @@ import { formatRelativeTime } from "@/utils/date";
 import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
+  const [importPayload, setImportPayload] = useState<ImportPayload>();
+
   const { t } = useTranslation();
 
   const { debugMode, theme, language, autoBackup, updateSettings } =
@@ -54,22 +56,19 @@ export function SettingsContainer() {
 
   const restoreConfirmDialog = useDialog();
 
-  const { mutate: restoreBackup, isPending: isRestoring } = useRestoreBackup({
+  const restoreMutation = useRestoreBackup({
     onSuccess: (data) => {
       setImportPayload(data);
       restoreConfirmDialog.open();
     },
     onError: (error) => toastError(error, t("message.restoreFailed")),
   });
-  const { mutate: backupToDrive, isPending: isBackingUp } = useBackupToDrive({
+  const backupMutation = useBackupToDrive({
     onSuccess: () => toast.success(t("message.backupSuccessful")),
     onError: (error) => toastError(error, t("message.backupFailed")),
   });
-
-  const { mutate: importConfigs } = useImportConfigs();
-  const { mutate: importRecords } = useImportRecords();
-
-  const [importPayload, setImportPayload] = useState<ImportPayload>();
+  const importConfigsMutation = useImportConfigs();
+  const importRecordsMutation = useImportRecords();
 
   const form = useForm<SettingsInput>({
     defaultValues: settingsSchema.parse({
@@ -89,15 +88,15 @@ export function SettingsContainer() {
   };
 
   const handleRestoreClick = async () => {
-    restoreBackup();
+    restoreMutation.mutate();
   };
 
   const handleRestore = async () => {
     if (!importPayload) return;
 
-    importConfigs(importPayload, {
+    importConfigsMutation.mutate(importPayload, {
       onSuccess: () => {
-        importRecords(importPayload.records, {
+        importRecordsMutation.mutate(importPayload.records, {
           onSuccess: () => {
             restoreConfirmDialog.close();
             toast.success(t("message.restoreSuccessful"));
@@ -111,7 +110,7 @@ export function SettingsContainer() {
   };
 
   const handleBackup = async () => {
-    backupToDrive();
+    backupMutation.mutate();
   };
 
   return (
@@ -174,22 +173,26 @@ export function SettingsContainer() {
                       variant="outline"
                       size="sm"
                       className="h-8 shadow-none"
-                      disabled={isRestoring}
+                      disabled={restoreMutation.isPending}
                       onClick={handleRestoreClick}
                     >
-                      <Loader isLoading={isRestoring} />
-                      {!isRestoring && <History className="size-3.5" />}
+                      <Loader isLoading={restoreMutation.isPending} />
+                      {!restoreMutation.isPending && (
+                        <History className="size-3.5" />
+                      )}
                       {t("button.restore")}
                     </Button>
                     <Button
                       type="button"
                       size="sm"
                       className="h-8 shadow-none"
-                      disabled={isBackingUp}
+                      disabled={backupMutation.isPending}
                       onClick={handleBackup}
                     >
-                      <Loader isLoading={isBackingUp} />
-                      {!isBackingUp && <CloudUpload className="size-3.5" />}
+                      <Loader isLoading={backupMutation.isPending} />
+                      {!backupMutation.isPending && (
+                        <CloudUpload className="size-3.5" />
+                      )}
                       {t("backup.label")}
                     </Button>
                   </div>
