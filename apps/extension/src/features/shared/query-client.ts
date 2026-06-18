@@ -15,7 +15,10 @@ export const queryClient = new QueryClient({
         if (meta?.invalidateQueries) {
           queryClient.invalidateQueries({
             queryKey: meta.invalidateQueries,
-            type: "active",
+          });
+
+          logger.debug("Invalidated queries:", {
+            queryKeys: meta.invalidateQueries,
           });
         }
       },
