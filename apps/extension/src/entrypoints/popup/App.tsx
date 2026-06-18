@@ -21,7 +21,7 @@ export default function App() {
   const [rawScrapedData, setRawScrapedData] = useState<ScrapedDataInput>();
 
   const { data: currentPage, isFetching: isCurrentPageLoading } =
-    useGetCurrentPage();
+    useGetCurrentPage("");
   const { data: configs, isFetching: isConfigsLoading } = useGetConfigs({
     isActive: true,
   });
