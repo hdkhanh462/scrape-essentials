@@ -123,7 +123,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen min-w-screen space-y-4 overflow-y-scroll">
+    <div className="h-screen min-w-screen space-y-4">
       <RecordCard
         fields={matchConfig.fields}
         matchConfig={matchConfig}
