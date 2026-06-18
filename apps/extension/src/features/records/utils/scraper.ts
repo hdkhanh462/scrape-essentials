@@ -35,14 +35,14 @@ export async function scrapeByTabId(tabId: number): Promise<string> {
   }
 }
 
-export async function getCurrentPage(): Promise<CurrentPage | undefined> {
+export async function getCurrentPage(): Promise<CurrentPage | null> {
   try {
     const [tab] = await browser.tabs.query({
       active: true,
       currentWindow: true,
     });
 
-    if (!tab.id || !tab.url) return;
+    if (!tab.id || !tab.url) return null;
 
     logger.debug("Scraping current tab:", { id: tab.id, url: tab.url });
 
@@ -51,6 +51,6 @@ export async function getCurrentPage(): Promise<CurrentPage | undefined> {
     return { bodyHtml, url: tab.url };
   } catch (error) {
     logger.error("Error when scraping current tab:", error);
-    return;
+    return null;
   }
 }

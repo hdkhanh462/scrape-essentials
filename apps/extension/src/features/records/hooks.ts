@@ -113,9 +113,9 @@ export const useDeleteMultipleRecords = (
   });
 };
 
-export const useGetCurrentPage = () => {
-  return useQuery<CurrentPage | undefined>({
-    queryKey: ["currentPage"],
+export const useGetCurrentPage = (currentUrl: string | undefined) => {
+  return useQuery<CurrentPage | null>({
+    queryKey: ["currentPage", currentUrl],
     queryFn: async () => sendMessage("getCurrentPage"),
   });
 };

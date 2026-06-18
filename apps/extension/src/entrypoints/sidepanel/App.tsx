@@ -1,6 +1,5 @@
 import { TriangleAlertIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-
 import {
   Empty,
   EmptyHeader,
@@ -14,76 +13,94 @@ import { useGetCurrentPage } from "@/features/records/hooks";
 import type { ScrapedDataInput } from "@/features/records/types/form-input";
 import type { MatchConfig } from "@/features/records/types/scrape";
 import { processField } from "@/features/records/utils/processor";
+import { onMessage } from "@/lib/messaging";
 import { logger } from "@/utils/logger";
 
 export default function App() {
-  const [matchConfig, setMatchConfig] = useState<MatchConfig>();
   const [rawScrapedData, setRawScrapedData] = useState<ScrapedDataInput>();
+  const [currentUrl, setCurrentUrl] = useState<string | undefined>();
 
-  const { data: currentPage, isFetching: isCurrentPageLoading } =
-    useGetCurrentPage();
-  const { data: configs, isFetching: isConfigsLoading } = useGetConfigs({
-    isActive: true,
-  });
+  const currentPageQuery = useGetCurrentPage(currentUrl);
+  const configsQuery = useGetConfigs({ isActive: true });
 
-  const { data: fields, isFetching: isFieldsLoading } = useGetFields({
-    configId: matchConfig?.config?.id,
-  });
+  const activeConfig = useMemo(() => {
+    if (!currentPageQuery.data || !configsQuery.data) return null;
 
-  useEffect(() => {
-    if (!currentPage || !configs) return;
-
-    logger.debug("Current page:", currentPage?.url);
-    logger.debug("Configs:", configs);
-    logger.debug("Fields:", fields);
-
-    const _matchConfig = configs.find((config) =>
-      config.domains.some((domain) => new RegExp(domain).test(currentPage.url)),
+    return configsQuery.data.find((config) =>
+      config.domains.some((domain) =>
+        new RegExp(domain).test(currentPageQuery.data!.url),
+      ),
     );
+  }, [currentPageQuery.data, configsQuery.data]);
 
-    if (_matchConfig) {
-      setMatchConfig({
-        config: _matchConfig,
-        fields: fields || [],
-      });
-    }
-  }, [currentPage, configs, fields]);
+  const fieldsQuery = useGetFields({ configId: activeConfig?.id });
+  const matchConfig = useMemo<MatchConfig | undefined>(() => {
+    if (!activeConfig) return undefined;
+
+    return {
+      config: activeConfig,
+      fields: fieldsQuery.data ?? [],
+    };
+  }, [activeConfig, fieldsQuery.data]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+  useEffect(() => {
+    setRawScrapedData(undefined);
+  }, [currentUrl]);
 
   useEffect(() => {
-    if (!currentPage || !matchConfig) return;
+    return onMessage("pageChanged", ({ data }) => {
+      setCurrentUrl(data.url);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!currentPageQuery.data || !matchConfig) return;
+
+    let cancelled = false;
 
     (async () => {
       const result: ScrapedDataInput = {};
 
       for (const field of matchConfig.fields) {
         try {
-          result[field.name] = await processField(currentPage, field);
+          if (!currentPageQuery.data) continue;
+
+          result[field.name] = await processField(currentPageQuery.data, field);
         } catch (error) {
           logger.error(`Error processing field "${field.name}":`, error);
         }
       }
 
-      setRawScrapedData(result);
+      if (!cancelled) setRawScrapedData(result);
     })();
-  }, [currentPage, matchConfig]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentPageQuery.data, matchConfig]);
 
   const title = useMemo(() => {
     if (!matchConfig) {
       return "No matching config found";
     }
-    if (!fields || fields.length === 0) {
+    if (!fieldsQuery.data || fieldsQuery.data.length === 0) {
       return "No fields configured";
     }
     return "No data scraped";
-  }, [matchConfig, fields]);
+  }, [matchConfig, fieldsQuery.data]);
 
-  if (isCurrentPageLoading || isConfigsLoading || isFieldsLoading) {
+  if (
+    currentPageQuery.isFetching ||
+    configsQuery.isFetching ||
+    fieldsQuery.isFetching
+  ) {
     return null;
   }
 
   if (
-    !fields ||
-    fields.length === 0 ||
+    !fieldsQuery.data ||
+    fieldsQuery.data.length === 0 ||
     !matchConfig ||
     !rawScrapedData ||
     Object.keys(rawScrapedData).length === 0
@@ -106,12 +123,12 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen min-w-screen space-y-4">
+    <div className="h-screen min-w-screen space-y-4 overflow-y-scroll">
       <RecordCard
         fields={matchConfig.fields}
         matchConfig={matchConfig}
         rawScrapedData={rawScrapedData}
-        url={currentPage?.url || ""}
+        url={currentPageQuery.data?.url || ""}
         className="h-full"
         footerFixedBottom
       />
