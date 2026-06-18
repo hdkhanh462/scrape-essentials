@@ -27,18 +27,31 @@ export default function CardWrapper({
   className,
 }: Props) {
   return (
-    <Card className={cn("w-full border-0", className)}>
+    <Card
+      className={cn(
+        "relative h-full min-h-0 w-full overflow-hidden border-0",
+        className,
+      )}
+    >
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <Activity mode={description ? "visible" : "hidden"}>
           <CardDescription>{description}</CardDescription>
         </Activity>
       </CardHeader>
-      <CardContent>{children}</CardContent>
+      <CardContent
+        className={cn(
+          "min-h-0",
+          footerFixedBottom && "flex-1 overflow-y-scroll pb-28",
+        )}
+      >
+        {children}
+      </CardContent>
       {footer && (
         <CardFooter
           className={cn(
-            footerFixedBottom && "fixed right-0 bottom-0 left-0 border-t",
+            footerFixedBottom &&
+              "absolute right-0 bottom-0 left-0 z-10 border-t bg-muted",
           )}
         >
           {footer}
