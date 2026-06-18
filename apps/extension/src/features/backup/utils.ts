@@ -11,9 +11,9 @@ export const urlBuilder = (base: string) => {
     const url = new URL(`${base}${path}`);
 
     if (params) {
-      for (const [key, value] of Object.entries(params)) {
+      Object.entries(params).forEach(([key, value]) => {
         url.searchParams.set(key, String(value));
-      }
+      });
     }
 
     logger.debug("Constructed URL:", {
@@ -28,6 +28,9 @@ export const urlBuilder = (base: string) => {
 };
 
 export const driveApiUrl = urlBuilder("https://www.googleapis.com/drive/v3");
+export const driveUploadApiUrl = urlBuilder(
+  "https://www.googleapis.com/upload/drive/v3",
+);
 
 export const oAuthUrl = urlBuilder("https://accounts.google.com/o/oauth2");
 

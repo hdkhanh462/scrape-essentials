@@ -5,7 +5,11 @@ import {
 import { getAccessToken } from "@/features/backup/identity";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
 import type { ImportPayload } from "@/features/backup/types";
-import { driveApiUrl, shouldBackup } from "@/features/backup/utils";
+import {
+  driveApiUrl,
+  driveUploadApiUrl,
+  shouldBackup,
+} from "@/features/backup/utils";
 import { useSettingsStore } from "@/features/settings/stores/settings.store";
 import { dexie } from "@/lib/dexie";
 import { gzipJSON, ungzipJSON } from "@/utils/gzip";
@@ -64,13 +68,16 @@ export async function uploadBackup(
 
   form.append("file", blob);
 
-  const res = await fetch(driveApiUrl("/files", { uploadType: "multipart" }), {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
+  const res = await fetch(
+    driveUploadApiUrl("/files", { uploadType: "multipart" }),
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: form,
     },
-    body: form,
-  });
+  );
 
   if (!res.ok) {
     const json = await res.json();
