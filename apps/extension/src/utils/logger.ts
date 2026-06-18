@@ -11,4 +11,9 @@ const error = (...args: any[]) => {
   if (debugMode) console.error("[ERROR]", ...args);
 };
 
-export const logger = { debug, error };
+const warn = (...args: any[]) => {
+  const { debugMode } = useSettingsStore.getState();
+  if (debugMode) console.warn("[WARN]", ...args);
+};
+
+export const logger = { debug, error, warn };

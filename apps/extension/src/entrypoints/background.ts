@@ -16,7 +16,11 @@ export default defineBackground(() => {
       url: tab.url,
     });
 
-    await sendMessage("pageChanged", { url: tab.url });
+    try {
+      await sendMessage("pageChanged", { url: tab.url });
+    } catch (error) {
+      logger.warn("Error sending pageChanged message:", error);
+    }
     await updateIcon(tab);
   });
 
@@ -28,7 +32,11 @@ export default defineBackground(() => {
     });
 
     if (changeInfo.status === "complete") {
-      await sendMessage("pageChanged", { url: tab.url });
+      try {
+        await sendMessage("pageChanged", { url: tab.url });
+      } catch (error) {
+        logger.warn("Error sending pageChanged message:", error);
+      }
       await updateIcon(tab);
     }
   });
