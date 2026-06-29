@@ -119,11 +119,7 @@
   },
   "language": {
     "label": "Language",
-    "description": "Select your preferred language for the extension interface.",
-    "optionDescription ": "Select your preferred language for the extension interface.",
-    "selectLanguage": "Select language...",
-    "english": "English",
-    "vietnamese": "Vietnamese"
+    "selectLanguage": "Select language..."
   },
   "validation": {
     "fieldRequired": "Field is required",
@@ -172,6 +168,7 @@
     "backupFailed": "Backup failed",
     "restoreSuccessful": "Restore successful",
     "importRecordsFailed": "Failed to import records",
-    "restoreFailed": "Restore failed"
+    "restoreFailed": "Restore failed",
+    "recentSearches": "Recent searches"
   }
 }

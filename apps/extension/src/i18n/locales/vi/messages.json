@@ -119,11 +119,7 @@
   },
   "language": {
     "label": "Ngôn ngữ",
-    "description": "Chọn ngôn ngữ ưa thích cho giao diện tiện ích.",
-    "optionDescription ": "Chọn ngôn ngữ ưa thích cho giao diện tiện ích.",
-    "selectLanguage": "Chọn ngôn ngữ...",
-    "english": "Tiếng Anh",
-    "vietnamese": "Tiếng Việt"
+    "selectLanguage": "Chọn ngôn ngữ..."
   },
   "validation": {
     "fieldRequired": "Trường bắt buộc",
@@ -172,6 +168,7 @@
     "backupFailed": "Sao lưu thất bại",
     "restoreSuccessful": "Khôi phục thành công",
     "importRecordsFailed": "Không thể nhập bản ghi",
-    "restoreFailed": "Khôi phục thất bại"
+    "restoreFailed": "Khôi phục thất bại",
+    "recentSearches": "Các tìm kiếm gần đây"
   }
 }

@@ -72,9 +72,9 @@ export function AutoComplete<T extends string>({
           </InputGroupAddon>
         </InputGroup>
       </CommandPrimitive.Input>
-      <div className="relative mt-2">
+      <div className="relative">
         <Activity mode={open && searchValue ? "visible" : "hidden"}>
-          <div className="fade-in-0 zoom-in-95 absolute top-0 z-10 w-full animate-in rounded-md bg-background outline-none">
+          <div className="fade-in-0 zoom-in-95 absolute top-0 z-10 mt-2 w-full animate-in rounded-md bg-background outline-none">
             <CommandList className="rounded-lg border">
               {/* Loading */}
               <Activity
