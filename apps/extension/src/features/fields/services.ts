@@ -3,7 +3,7 @@ import type {
   EditFieldPayload,
   GetFieldsPayload,
 } from "@/features/fields/types";
-import { type ConfigField, dexie } from "@/lib/dexie";
+import { type ConfigField, dexie, FieldType } from "@/lib/dexie";
 import { fieldInputToDb } from "@/utils/converts";
 
 export const getFields = async (
@@ -18,6 +18,12 @@ export const getFields = async (
       payload.isShowOnTable === undefined
         ? true
         : f.isShowOnTable === payload.isShowOnTable,
+    )
+    .and((f) =>
+      payload.isFilterable === undefined
+        ? true
+        : f.type === FieldType.InputSelect ||
+          f.type === FieldType.InputMultiSelect,
     )
     .sortBy("order");
 };

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +13,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useGetFields } from "@/features/fields/hooks";
 import { useImportRecords } from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { useDialog } from "@/hooks/use-dialog";
@@ -30,7 +32,7 @@ export function RecordTableToolbar({
 }: DataTableToolbarProps) {
   const { t } = useTranslation();
 
-  const { filterString } = useRecordStore();
+  const { configId, filterString } = useRecordStore();
   const { setFilterString } = useRecordStore((state) => state.actions);
 
   const [importPayload, setImportPayload] = useState<ScrapedRecord[]>();
@@ -38,6 +40,12 @@ export function RecordTableToolbar({
 
   const importConfirmDialog = useDialog();
   const { mutate: importRecords } = useImportRecords();
+
+  const { data: fields } = useGetFields({
+    configId,
+    isShowOnTable: true,
+    isFilterable: true,
+  });
 
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
   const isSelected = selectedCount > 0;
@@ -80,7 +88,7 @@ export function RecordTableToolbar({
       <div className="flex flex-1 items-center gap-2">
         <InputGroup className="w-full max-w-md">
           <InputGroupInput
-            placeholder="Name:john & Age>18 | Name:jane & Age>25"
+            placeholder={`Name:"john Doe" & Age>=18 | Name:jane & Age<25`}
             value={filterValue}
             onChange={(e) => setFilterValue(e.target.value)}
             onKeyDown={(e) => {
@@ -107,6 +115,24 @@ export function RecordTableToolbar({
             </InputGroupAddon>
           )}
         </InputGroup>
+
+        {fields?.map(
+          (field) =>
+            table.getColumn(field.name) && (
+              <DataTableFacetedFilter
+                key={field.id}
+                // biome-ignore lint/suspicious/noExplicitAny: <>
+                column={table.getColumn(field.name) as any}
+                title={field.name}
+                options={
+                  field.uiOptions?.options?.map((option) => ({
+                    value: option.value,
+                    label: option.label,
+                  })) || []
+                }
+              />
+            ),
+        )}
 
         {isSelected && (
           <Button

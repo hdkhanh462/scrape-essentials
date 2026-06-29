@@ -2,9 +2,10 @@ import type { FieldInput } from "@/features/fields/types/form-input";
 import type { ConfigField, ScrapeConfig } from "@/lib/dexie";
 import type { PayloadWithId } from "@/types/common";
 
-export type GetFieldsPayload = {
+export type GetFieldsPayload = Pick<ConfigField, "isShowOnTable"> & {
   configId?: ScrapeConfig["id"];
-} & Pick<ConfigField, "isShowOnTable">;
+  isFilterable?: boolean;
+};
 
 export type AddFieldPayload = FieldInput & { configId: ScrapeConfig["id"] };
 
