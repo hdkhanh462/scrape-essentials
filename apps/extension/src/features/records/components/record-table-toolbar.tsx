@@ -1,5 +1,5 @@
 import type { Table } from "@tanstack/react-table";
-import { DownloadIcon, UploadIcon, XIcon } from "lucide-react";
+import { DownloadIcon, SearchIcon, UploadIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -83,9 +83,17 @@ export function RecordTableToolbar({
             placeholder="Name:john & Age>18 | Name:jane & Age>25"
             value={filterValue}
             onChange={(e) => setFilterValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setFilterString(filterValue);
+              }
+            }}
           />
-          <InputGroupAddon align="inline-end">
-            {filterValue && (
+          <InputGroupAddon align="inline-start">
+            <SearchIcon />
+          </InputGroupAddon>
+          {filterValue && (
+            <InputGroupAddon align="inline-end">
               <InputGroupButton
                 variant="ghost"
                 size="icon-xs"
@@ -96,14 +104,8 @@ export function RecordTableToolbar({
               >
                 <XIcon className="text-destructive" />
               </InputGroupButton>
-            )}
-            <InputGroupButton
-              variant="secondary"
-              onClick={() => setFilterString(filterValue)}
-            >
-              {t("common.search")}
-            </InputGroupButton>
-          </InputGroupAddon>
+            </InputGroupAddon>
+          )}
         </InputGroup>
 
         {isSelected && (
