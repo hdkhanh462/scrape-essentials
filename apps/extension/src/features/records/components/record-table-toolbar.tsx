@@ -1,5 +1,5 @@
 import type { Table } from "@tanstack/react-table";
-import { DownloadIcon, SearchIcon, UploadIcon, XIcon } from "lucide-react";
+import { DownloadIcon, UploadIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -7,13 +7,8 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { Button } from "@/components/ui/button";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { useGetFields } from "@/features/fields/hooks";
+import { SearchHistory } from "@/features/records/components/search-history";
 import { useImportRecords } from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { useDialog } from "@/hooks/use-dialog";
@@ -86,7 +81,7 @@ export function RecordTableToolbar({
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex flex-1 items-center gap-2">
-        <InputGroup className="w-full max-w-md">
+        {/* <InputGroup className="w-full max-w-md">
           <InputGroupInput
             placeholder={`Name:"john Doe" & Age>=18 | Name:jane & Age<25`}
             value={filterValue}
@@ -114,25 +109,29 @@ export function RecordTableToolbar({
               </InputGroupButton>
             </InputGroupAddon>
           )}
-        </InputGroup>
+        </InputGroup> */}
 
-        {fields?.map(
-          (field) =>
-            table.getColumn(field.name) && (
-              <DataTableFacetedFilter
-                key={field.id}
-                // biome-ignore lint/suspicious/noExplicitAny: <>
-                column={table.getColumn(field.name) as any}
-                title={field.name}
-                options={
-                  field.uiOptions?.options?.map((option) => ({
-                    value: option.value,
-                    label: option.label,
-                  })) || []
-                }
-              />
-            ),
-        )}
+        <SearchHistory
+          placeholder={`Name:"john Doe" & Age>=18 | Name:jane & Age<25`}
+          value={filterValue}
+          onChange={setFilterValue}
+          onSearch={setFilterString}
+        />
+
+        {fields?.map((field) => (
+          <DataTableFacetedFilter
+            key={field.id}
+            // biome-ignore lint/suspicious/noExplicitAny: <>
+            column={table.getColumn(field.name) as any}
+            title={field.name}
+            options={
+              field.uiOptions?.options?.map((option) => ({
+                value: option.value,
+                label: option.label,
+              })) || []
+            }
+          />
+        ))}
 
         {isSelected && (
           <Button

@@ -279,9 +279,6 @@ export function SettingsContainer() {
                   <FieldLabel htmlFor="languages">
                     {t("language.label")}
                   </FieldLabel>
-                  <FieldDescription>
-                    {t("language.description")}
-                  </FieldDescription>
                   <RadioGroup
                     name={field.name}
                     value={field.value}
@@ -295,10 +292,14 @@ export function SettingsContainer() {
                         >
                           <FieldContent>
                             <FieldTitle className="capitalize">
-                              {t(`language.${language}`)}
+                              {language === "english"
+                                ? "English"
+                                : "Tiếng Việt"}
                             </FieldTitle>
                             <FieldDescription>
-                              {t("language.optionDescription ")}
+                              {language === "english"
+                                ? "Select your preferred language for the extension interface"
+                                : "Chọn ngôn ngữ ưa thích cho giao diện tiện ích"}
                             </FieldDescription>
                           </FieldContent>
                           <RadioGroupItem
