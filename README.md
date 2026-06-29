@@ -32,7 +32,7 @@ Follow these steps to install and use the application.
 Software:
 
 - [Node.js](https://nodejs.org/en/download) (version 20.10.0 or higher)
-- [Bun](https://bun.sh/) (recommended package manager)
+- [Bun](https://bun.sh/) (version 1.3.9)
 
 Hardware:
 
