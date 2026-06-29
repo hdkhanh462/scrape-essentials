@@ -30,26 +30,40 @@ export default function FieldSelector(props: FieldSelectorProps) {
   const { t } = useTranslation();
 
   useEffect(() => {
+    let ignore = false;
+
     const fetchSearchResults = async () => {
-      if (!debouncedSearch) return;
+      if (!debouncedSearch.trim()) {
+        setItems([]);
+        return;
+      }
 
       setLoading(true);
+
       try {
         const results = await props.fetchItems(debouncedSearch);
-        setItems(
-          results.map((field) => ({
-            label: field.name,
-            value: field.id.toString(),
-          })),
-        );
+
+        if (!ignore) {
+          setItems(
+            results.map((field) => ({
+              label: field.name,
+              value: field.id,
+            })),
+          );
+        }
       } catch (error) {
         logger.error("Error fetching search results:", error);
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     };
+
     fetchSearchResults();
-  }, [debouncedSearch, props]);
+
+    return () => {
+      ignore = true;
+    };
+  }, [debouncedSearch, props.fetchItems]);
 
   useEffect(() => {
     const fetchSelectedLabel = async () => {
@@ -59,7 +73,7 @@ export default function FieldSelector(props: FieldSelectorProps) {
       } else setSelectedLabel("");
     };
     fetchSelectedLabel();
-  }, [props]);
+  }, [props.fetchLabel, props.value]);
 
   return (
     <Field>
