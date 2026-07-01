@@ -11,6 +11,7 @@ import { useGetFields } from "@/features/fields/hooks";
 import { SearchHistory } from "@/features/records/components/search-history";
 import { useImportRecords } from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
+import { isValidFilter } from "@/features/records/utils/filter";
 import { useDialog } from "@/hooks/use-dialog";
 import { dexie, type ScrapedRecord } from "@/lib/dexie";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
@@ -78,43 +79,22 @@ export function RecordTableToolbar({
     });
   };
 
+  const handleValidateSearch = (value: string) => {
+    if (value !== "" && !isValidFilter(value)) {
+      toast.error("Invalid filter syntax. Please check your input");
+      return false;
+    }
+    return true;
+  };
+
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex flex-1 items-center gap-2">
-        {/* <InputGroup className="w-full max-w-md">
-          <InputGroupInput
-            placeholder={`Name:"john Doe" & Age>=18 | Name:jane & Age<25`}
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setFilterString(filterValue);
-              }
-            }}
-          />
-          <InputGroupAddon align="inline-start">
-            <SearchIcon />
-          </InputGroupAddon>
-          {filterValue && (
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton
-                variant="ghost"
-                size="icon-xs"
-                onClick={() => {
-                  setFilterValue("");
-                  setFilterString(undefined);
-                }}
-              >
-                <XIcon className="text-destructive" />
-              </InputGroupButton>
-            </InputGroupAddon>
-          )}
-        </InputGroup> */}
-
         <SearchHistory
           placeholder={`Name:"john Doe" & Age>=18 | Name:jane & Age<25`}
           value={filterValue}
           onChange={setFilterValue}
+          onValidate={handleValidateSearch}
           onSearch={setFilterString}
         />
 

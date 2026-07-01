@@ -22,10 +22,11 @@ type Props = {
   placeholder?: string;
   onChange: (value: string) => void;
   onSearch?: (value: string) => void;
+  onValidate?: (value: string) => boolean;
 };
 
 export const SearchHistory: React.FC<Props> = (props) => {
-  const { value, placeholder, onChange, onSearch } = props;
+  const { value, placeholder, onChange, onSearch, onValidate } = props;
 
   const { t } = useTranslation();
 
@@ -40,8 +41,6 @@ export const SearchHistory: React.FC<Props> = (props) => {
   const handleSelect = (val: string) => {
     logger.debug("Selected:", val);
 
-    console.time("select");
-
     setSearch(val);
     onChange(val);
     setOpen(false);
@@ -50,12 +49,10 @@ export const SearchHistory: React.FC<Props> = (props) => {
       saveFilterHistory(val);
       onSearch(val);
     }
-
-    console.timeEnd("select");
   };
 
   const handleSearch = () => {
-    if (!search?.trim()) return;
+    if (!search?.trim() || (onValidate && !onValidate(search))) return;
 
     saveFilterHistory(search);
 
@@ -70,8 +67,17 @@ export const SearchHistory: React.FC<Props> = (props) => {
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+
       handleSearch();
     }
+  };
+
+  const handleClear = () => {
+    setSearch("");
+    onChange("");
+    onSearch?.("");
   };
 
   return (
@@ -98,7 +104,7 @@ export const SearchHistory: React.FC<Props> = (props) => {
             <InputGroupAddon align="inline-end">
               <InputGroupButton
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => handleValueChange("")}
+                onClick={handleClear}
               >
                 <XIcon className="text-destructive" />
               </InputGroupButton>
