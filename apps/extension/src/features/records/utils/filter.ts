@@ -7,7 +7,9 @@ import type {
   Expression,
   Operator,
 } from "@/features/records/types/filter";
-import { logger } from "@/utils/logger";
+
+const RECORD_FILTER_REGEX =
+  /([\w\s]+?)\s*(>=|<=|!=|!?:|=|>|<|:)\s*(?:"([^"]*)"|([^\s&|]+))/g;
 
 function splitAtRoot(input: string, separator: string): string[] {
   const result: string[] = [];
@@ -53,18 +55,15 @@ function parseFilter(input: string): Expression | null {
 
   const conditions: Condition[] = [];
 
-  const regex =
-    /([\w\s]+?)\s*(>=|<=|!=|!?:|=|>|<|:)\s*(?:"([^"]*)"|([^\s&|]+))/g;
-
   for (const part of andParts) {
-    let match = regex.exec(part);
+    let match = RECORD_FILTER_REGEX.exec(part);
     while (match !== null) {
       conditions.push({
         column: match[1],
         operator: match[2] as Operator,
         value: match[3] ?? match[4],
       });
-      match = regex.exec(part);
+      match = RECORD_FILTER_REGEX.exec(part);
     }
   }
 
@@ -231,10 +230,7 @@ export const advancedGlobalFilter: FilterFn<any> = (
 
   const expression = parseFilter(filterValue);
 
-  if (!expression || expression.type === "ERROR") {
-    logger.error("Filter parse error:", expression?.message);
-    return true; // fail-safe
-  }
+  if (!expression || expression.type === "ERROR") return true; // fail-safe
 
   const evaluateExpression = (expr: Expression): boolean => {
     switch (expr.type) {
@@ -257,4 +253,10 @@ export const advancedGlobalFilter: FilterFn<any> = (
   };
 
   return evaluateExpression(expression);
+};
+
+export const isValidFilter = (filter: string): boolean => {
+  const expression = parseFilter(filter);
+
+  return expression !== null && expression.type !== "ERROR";
 };
