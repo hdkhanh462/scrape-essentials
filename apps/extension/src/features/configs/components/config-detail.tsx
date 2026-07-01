@@ -274,18 +274,65 @@ export const ConfigDetail = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Button variant="outline" onClick={reset}>
-          <ArrowLeftIcon />
-          {t("common.back")}
-        </Button>
-        <h2 className="font-semibold text-base">
-          {mode === "edit"
-            ? `${t("button.edit")} ${t("config.label")}`
-            : `${t("button.add")} ${t("config.label")}`}
-        </h2>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={reset}>
+            <ArrowLeftIcon />
+            {t("common.back")}
+          </Button>
+          <h2 className="font-semibold text-base">
+            {mode === "edit"
+              ? `${t("button.edit")} ${t("config.label")}`
+              : `${t("button.add")} ${t("config.label")}`}
+          </h2>
+        </div>
+        {/* Action Buttons */}
+        <Field orientation="horizontal" className="w-fit">
+          {mode === "add" && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8"
+              onClick={pasteConfig.paste}
+            >
+              <Loader
+                isLoading={pasteConfig.isPasted}
+                fallback={
+                  <>
+                    <CheckIcon />
+                    {t("button.pasted")}
+                  </>
+                }
+              >
+                <ClipboardPasteIcon />
+                {t("button.paste")}
+              </Loader>
+            </Button>
+          )}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-8"
+            onClick={() => form.reset()}
+          >
+            <RotateCcwIcon />
+            {t("common.reset")}
+          </Button>
+          <Button
+            type="submit"
+            form="config-form"
+            size="sm"
+            className="h-8"
+            disabled={!form.formState.isDirty}
+          >
+            <SaveIcon />
+            {mode === "edit" ? t("button.save") : t("button.add")}
+          </Button>
+        </Field>
       </div>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
+      <form id="config-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <FieldGroup>
           <FormInput
             control={form.control}
@@ -295,6 +342,12 @@ export const ConfigDetail = () => {
               placeholder: t("config.enterConfigName"),
               autoComplete: "off",
             }}
+          />
+
+          <FormSwitch
+            control={form.control}
+            name="isActive"
+            label={t("common.active")}
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -392,57 +445,6 @@ export const ConfigDetail = () => {
               </Button>
             </FieldSet>
           </div>
-
-          <FormSwitch
-            control={form.control}
-            name="isActive"
-            label={t("common.active")}
-          />
-
-          {/* Action Buttons */}
-          <Field orientation="horizontal">
-            {mode === "add" && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8"
-                onClick={pasteConfig.paste}
-              >
-                <Loader
-                  isLoading={pasteConfig.isPasted}
-                  fallback={
-                    <>
-                      <CheckIcon />
-                      {t("button.pasted")}
-                    </>
-                  }
-                >
-                  <ClipboardPasteIcon />
-                  {t("button.paste")}
-                </Loader>
-              </Button>
-            )}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-8"
-              onClick={() => form.reset()}
-            >
-              <RotateCcwIcon />
-              {t("common.reset")}
-            </Button>
-            <Button
-              type="submit"
-              size="sm"
-              className="h-8"
-              disabled={!form.formState.isDirty}
-            >
-              <SaveIcon />
-              {mode === "edit" ? t("button.save") : t("button.add")}
-            </Button>
-          </Field>
         </FieldGroup>
       </form>
 
