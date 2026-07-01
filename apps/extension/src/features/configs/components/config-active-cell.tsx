@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const ConfigActiveCell = ({ row }: Props) => {
-  const { t } = useTranslation("message");
+  const { t } = useTranslation();
 
   const [checked, setChecked] = useState(row.getValue<boolean>("isActive"));
 
@@ -30,10 +30,10 @@ export const ConfigActiveCell = ({ row }: Props) => {
       {
         onSuccess: () => {
           setChecked(toUpdate);
-          toast.success(t("configActiveStateToggled"));
+          toast.success(t("message.configActiveStateToggled"));
         },
         onError: (error) =>
-          toastError(error, t("failedToToggleConfigActiveState")),
+          toastError(error, t("message.failedToToggleConfigActiveState")),
       },
     );
   };
