@@ -2,7 +2,7 @@
   "name": "MangaDex",
   "domains": [
     {
-      "value": "mangadex.org"
+      "value": "mangadex\\.org/title/([0-9a-f-]{36})(?:/[a-z0-9-]+)?(?:\\?tab=chapters)?$"
     }
   ],
   "isActive": true,
@@ -15,7 +15,7 @@
       "isFilterable": true,
       "type": "page-url",
       "isPrimary": true,
-      "regex": "/title\\/([\\w-]{36})",
+      "regex": "/title/([0-9a-f-]{36})",
       "splitter": "",
       "removers": []
     },
