@@ -2,15 +2,28 @@
   "name": "CManga",
   "domains": [
     {
-      "value": "cmanga[a-z0-9]*\\."
+      "value": "cmanga[a-z0-9]*\\.[a-z]*/album/[a-z0-9-]*/?$"
     }
   ],
   "isActive": true,
   "fields": [
     {
       "parentFieldId": "",
-      "name": "Point",
+      "name": "Code",
       "order": 0,
+      "isRequired": true,
+      "isFilterable": true,
+      "isShowOnTable": true,
+      "type": "page-url",
+      "isPrimary": true,
+      "regex": "-(\\d+)$",
+      "splitter": "",
+      "removers": []
+    },
+    {
+      "parentFieldId": "",
+      "name": "Point",
+      "order": 1,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
@@ -69,7 +82,7 @@
     {
       "parentFieldId": "",
       "name": "Chapter",
-      "order": 1,
+      "order": 2,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
@@ -81,7 +94,7 @@
     {
       "parentFieldId": "",
       "name": "Status",
-      "order": 2,
+      "order": 3,
       "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
@@ -112,7 +125,7 @@
       "parentFieldId": "",
       "name": "Title",
       "order": 4,
-      "isRequired": true,
+      "isRequired": false,
       "isFilterable": true,
       "isShowOnTable": true,
       "type": "text",
@@ -122,7 +135,7 @@
         "attributeName": "",
         "isMultiple": false
       },
-      "isPrimary": true,
+      "isPrimary": false,
       "regex": "",
       "splitter": "",
       "removers": []
