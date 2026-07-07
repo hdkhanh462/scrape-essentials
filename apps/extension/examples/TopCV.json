@@ -1,0 +1,194 @@
+{
+    "name": "TopCV",
+    "domains": [
+        {
+            "value": "topcv.vn/viec-lam"
+        }
+    ],
+    "isActive": true,
+    "fields": [
+        {
+            "parentFieldId": "",
+            "name": "Code",
+            "order": 0,
+            "isRequired": true,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "page-url",
+            "isPrimary": true,
+            "regex": "/viec-lam/.+?/(\\d+)\\.html",
+            "splitter": "",
+            "removers": []
+        },
+        {
+            "parentFieldId": "",
+            "name": "Priority",
+            "order": 1,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "input-number",
+            "uiOptions": {
+                "label": "Priority",
+                "defaultValue": 1
+            }
+        },
+        {
+            "parentFieldId": "",
+            "name": "Status",
+            "order": 2,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "input-select",
+            "uiOptions": {
+                "label": "Status",
+                "defaultValue": "",
+                "options": [
+                    {
+                        "label": "Applied",
+                        "value": "Applied"
+                    },
+                    {
+                        "label": "Interviewed",
+                        "value": "Interviewed"
+                    },
+                    {
+                        "label": "Eliminated",
+                        "value": "Eliminated"
+                    },
+                    {
+                        "label": "Pass",
+                        "value": "Pass"
+                    }
+                ]
+            }
+        },
+        {
+            "parentFieldId": "",
+            "name": "Tags",
+            "order": 3,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "input-tags",
+            "uiOptions": {
+                "label": "Tags"
+            }
+        },
+        {
+            "parentFieldId": "",
+            "name": "Level",
+            "order": 4,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "text",
+            "scrapeOptions": {
+                "cssSelector": ".box-general-group:nth-child(1) .box-general-group-info-value",
+                "condition": "",
+                "attributeName": "",
+                "isMultiple": false
+            },
+            "isPrimary": false,
+            "regex": "",
+            "splitter": "",
+            "removers": []
+        },
+        {
+            "parentFieldId": "",
+            "name": "Title",
+            "order": 5,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "text",
+            "scrapeOptions": {
+                "cssSelector": "h1.job-detail__info--title",
+                "condition": "",
+                "attributeName": "",
+                "isMultiple": false
+            },
+            "isPrimary": false,
+            "regex": "",
+            "splitter": "",
+            "removers": []
+        },
+        {
+            "parentFieldId": "",
+            "name": "Salary",
+            "order": 6,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "text",
+            "scrapeOptions": {
+                "cssSelector": ".section-salary .job-detail__info--section-content-value",
+                "condition": "",
+                "attributeName": "",
+                "isMultiple": false
+            },
+            "isPrimary": false,
+            "regex": "",
+            "splitter": "",
+            "removers": []
+        },
+        {
+            "parentFieldId": "",
+            "name": "Location",
+            "order": 7,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "text",
+            "scrapeOptions": {
+                "cssSelector": ".section-location .job-detail__info--section-content-value",
+                "condition": "",
+                "attributeName": "",
+                "isMultiple": false
+            },
+            "isPrimary": false,
+            "regex": "",
+            "splitter": "",
+            "removers": []
+        },
+        {
+            "parentFieldId": "",
+            "name": "Experience",
+            "order": 8,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "text",
+            "scrapeOptions": {
+                "cssSelector": "#job-detail-info-experience .job-detail__info--section-content-value",
+                "condition": "",
+                "attributeName": "",
+                "isMultiple": false
+            },
+            "isPrimary": false,
+            "regex": "",
+            "splitter": "",
+            "removers": []
+        },
+        {
+            "parentFieldId": "",
+            "name": "Deadline",
+            "order": 9,
+            "isRequired": false,
+            "isFilterable": true,
+            "isShowOnTable": true,
+            "type": "text",
+            "scrapeOptions": {
+                "cssSelector": "div.job-detail__info--deadline-date",
+                "condition": "",
+                "attributeName": "",
+                "isMultiple": false
+            },
+            "isPrimary": false,
+            "regex": "",
+            "splitter": "",
+            "removers": []
+        }
+    ]
+}
