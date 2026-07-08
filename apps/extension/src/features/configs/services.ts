@@ -202,3 +202,10 @@ export const deleteConfig = async (
     },
   );
 };
+
+export const deleteMultipleConfigs = async (
+  ids: ScrapeConfig["id"][],
+): Promise<boolean> => {
+  await dexie.scrapeConfigs.bulkDelete(ids);
+  return true;
+};
