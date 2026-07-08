@@ -9,6 +9,7 @@ export type Friend = {
 export type ScrapeConfig = {
   id: string;
   name: string;
+  tags: string[];
   domains: string[];
   isActive?: boolean;
   createdAt: string;
@@ -87,16 +88,15 @@ const dexie = new Dexie("ScrapeEssentialsDB") as Dexie & {
 };
 
 dexie
-  .version(2)
+  .version(3)
   .stores({
-    scrapeConfigs: "id, name, isActive, createdAt, updatedAt",
+    scrapeConfigs: "id, name, isActive, tags, createdAt, updatedAt",
     configFields:
       "id, configId, parentFieldId, name, type, order, isShowOnTable",
     scrapedRecords: "id, [configId+key], createdAt, updatedAt",
   })
   .upgrade(async (tx) => {
     const table = tx.table("configFields");
-
     await table
       .toCollection()
       .modify((field: { splitter?: string; spliter?: string }) => {
@@ -105,6 +105,13 @@ dexie
           delete field.spliter;
         }
       });
+
+    const configs = tx.table("scrapeConfigs");
+    await configs.toCollection().modify((config: { tags?: string[] }) => {
+      if (!config.tags) {
+        config.tags = [];
+      }
+    });
   });
 
 export { dexie };
