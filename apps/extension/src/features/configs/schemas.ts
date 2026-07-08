@@ -15,6 +15,7 @@ export const ConfigSchema = z
         }),
       )
       .min(1, "atLeastOneDomain"),
+    tags: z.array(z.string().nonempty("fieldRequired")),
     isActive: z.boolean().optional(),
     fields: z.array(FieldSchema).min(1, "atLeastOneField"),
   })

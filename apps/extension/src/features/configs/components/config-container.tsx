@@ -65,8 +65,27 @@ export function ConfigContainer() {
       ),
     },
     {
+      accessorKey: "tags",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("config.tags")} />
+      ),
+      cell: ({ row }) => (
+        <BadgeOverflow
+          items={row.getValue<string[]>("tags") || []}
+          renderBadge={(_, label) => <Badge variant="outline">{label}</Badge>}
+        />
+      ),
+      filterFn: (row, id, value: string[]) => {
+        const lowerTags = new Set(
+          row.getValue<string[]>(id).map((t) => t.toLowerCase()),
+        );
+
+        return value.every((tag) => lowerTags.has(tag.toLowerCase()));
+      },
+    },
+    {
       accessorKey: "isActive",
-      filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      filterFn: (row, id, value: string) => value.includes(row.getValue(id)),
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("common.active")} />
       ),
