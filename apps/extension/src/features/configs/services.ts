@@ -34,6 +34,19 @@ export const getConfigById = async (payload: {
   return config;
 };
 
+export const getConfigTags = async (): Promise<ScrapeConfig["tags"]> => {
+  const configs = await dexie.scrapeConfigs
+    .filter((c) => c.tags && c.tags.length > 0)
+    .reverse()
+    .sortBy("createdAt");
+
+  return [
+    ...new Set(
+      configs.flatMap((config) => config.tags.map((tag) => tag.toLowerCase())),
+    ),
+  ];
+};
+
 export const importConfigs = async (
   payload: ImportConfigsPayload,
 ): Promise<boolean> => {
@@ -64,6 +77,7 @@ export const addConfig = async (
         id: crypto.randomUUID(),
         name: payload.name,
         isActive: payload.isActive,
+        tags: payload.tags,
         domains: payload.domains.map((d) => d.value),
         createdAt: now,
         updatedAt: now,
@@ -92,6 +106,7 @@ export const editConfig = async (
       const row = await tx.scrapeConfigs.update(payload.id, {
         name: payload.data.name,
         isActive: payload.data.isActive,
+        tags: payload.data.tags,
         domains: payload.data.domains.map((d) => d.value),
         updatedAt: new Date().toISOString(),
       });
@@ -154,6 +169,7 @@ export const duplicateConfig = async (
         id: crypto.randomUUID(),
         name: `${config.name} (Copy)`,
         isActive: config.isActive,
+        tags: config.tags,
         domains: config.domains,
         createdAt: now,
         updatedAt: now,
