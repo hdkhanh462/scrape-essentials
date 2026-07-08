@@ -9,6 +9,8 @@
     "search": "Tìm kiếm",
     "refresh": "Làm mới",
     "noResults": "Không có kết quả",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
     "cancel": "Hủy",
     "confirm": "Xác nhận"
   },
@@ -31,14 +33,14 @@
   "config": {
     "filterConfigs": "Lọc cấu hình...",
     "configName": "Tên Cấu hình",
+    "tags": "Tags",
     "enterConfigName": "Nhập tên cấu hình",
+    "enterTags": "Nhập thẻ",
     "selectConfig": "Chọn cấu hình...",
     "searchConfig": "Tìm kiếm cấu hình...",
     "label": "Cấu hình",
     "addDomain": "Thêm miền",
-    "domains": "Tên Miền",
-    "createdAt": "Ngày tạo",
-    "updatedAt": "Ngày cập nhật"
+    "domains": "Tên Miền"
   },
   "field": {
     "configFields": "Các trường",
@@ -148,7 +150,8 @@
     "failedToDeleteField": "Không thể xóa trường",
     "configDuplicated": "Cấu hình đã được nhân bản",
     "failedToDuplicateConfig": "Không thể nhân bản cấu hình",
-    "configDeleted": "Cấu hình đã được xóa",
+    "configDeletedSuccessfully": "Cấu hình đã được xóa thành công",
+    "configsDeletedSuccessfully": "Các cấu hình đã được xóa thành công",
     "failedToDeleteConfig": "Không thể xóa cấu hình",
     "configIdCopied": "ID cấu hình đã được sao chép",
     "failedToCopyConfig": "Không thể sao chép cấu hình",

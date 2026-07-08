@@ -42,7 +42,7 @@ export function ConfigTableRowActions({ row }: Props) {
   });
   const deleteConfigMutation = useDeleteConfig({
     onSuccess: () => {
-      toast.success(t("message.configDeleted"));
+      toast.success(t("message.configDeletedSuccessfully"));
       deleteConfirmDialog.close();
     },
     onError: (error) => toastError(error, t("message.failedToDeleteConfig")),

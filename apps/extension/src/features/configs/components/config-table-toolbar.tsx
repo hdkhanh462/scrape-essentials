@@ -14,7 +14,7 @@ import { DataTableFacetedFilter } from "@/components/data-table/data-table-facet
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useImportConfigs } from "@/features/configs/hooks";
+import { useGetConfigTags, useImportConfigs } from "@/features/configs/hooks";
 import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ImportConfigsPayload } from "@/features/configs/types";
 import { useDialog } from "@/hooks/use-dialog";
@@ -24,9 +24,13 @@ import { toastError } from "@/utils/toast";
 
 interface DataTableToolbarProps {
   table: Table<ScrapeConfig>;
+  onDeleteSelected?: (ids: ScrapeConfig["id"][]) => void;
 }
 
-export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
+export function ConfigTableToolbar({
+  table,
+  onDeleteSelected,
+}: DataTableToolbarProps) {
   const { t } = useTranslation();
   const [importPayload, setImportPayload] = useState<ImportConfigsPayload>();
 
@@ -43,7 +47,11 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
     onError: (error) => toastError(error, t("message.failedToImportConfigs")),
   });
 
+  const tagsQuery = useGetConfigTags();
+
   const isFiltered = table.getState().columnFilters.length > 0;
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+  const isSelected = selectedCount > 0;
 
   const handleExport = async () => {
     const allConfigs = await dexie.scrapeConfigs.toArray();
@@ -113,14 +121,46 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
             ]}
           />
         )}
+        {tagsQuery.data && (
+          <DataTableFacetedFilter
+            column={
+              table.getColumn("tags") as
+                // string[] is not assignable
+                // so leave it as string to prevent type error
+                Column<ScrapeConfig, string> | undefined
+            }
+            title={t("config.tags")}
+            options={tagsQuery.data.map((tag) => ({
+              value: tag,
+              label: tag,
+            }))}
+          />
+        )}
         {isFiltered && (
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             className="h-8"
             onClick={() => table.resetColumnFilters()}
           >
             {t("common.reset")}
+            <XIcon />
+          </Button>
+        )}
+
+        {isSelected && (
+          <Button
+            variant="destructive"
+            size="sm"
+            className="h-8"
+            onClick={() => {
+              const selectedIds = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id);
+              onDeleteSelected?.(selectedIds);
+            }}
+          >
+            Delete ({selectedCount})
             <XIcon />
           </Button>
         )}

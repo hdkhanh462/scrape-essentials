@@ -1,5 +1,6 @@
 {
   "common": {
+    "label": "Label",
     "status": "Status",
     "active": "Active",
     "inactive": "Inactive",
@@ -10,7 +11,6 @@
     "noResults": "No results",
     "createdAt": "Created At",
     "updatedAt": "Updated At",
-    "label": "Label",
     "cancel": "Cancel",
     "confirm": "Confirm"
   },
@@ -34,7 +34,9 @@
     "label": "Config",
     "filterConfigs": "Filter configs...",
     "configName": "Config Name",
+    "tags": "Tags",
     "enterConfigName": "Enter config name",
+    "enterTags": "Enter tags",
     "selectConfig": "Select config...",
     "searchConfig": "Search config...",
     "addDomain": "Add domain",
@@ -86,6 +88,7 @@
     "areYouSure": "Are you absolutely sure?",
     "importConfigConfirmation": "This action cannot be undone. This will permanently import and overwrite your existing configs.",
     "deleteConfigConfirmation": "This action cannot be undone. This will permanently delete your selected config.",
+    "deleteConfigsConfirmation": "This action cannot be undone. This will permanently delete your selected configs.",
     "deleteFieldConfirmation": "This action cannot be undone. This will permanently delete the selected field.",
     "deleteRecordConfirmation": "This action cannot be undone. This will permanently delete your selected record.",
     "deleteRecordsConfirmation": "This action cannot be undone. This will permanently delete your selected records.",
@@ -148,7 +151,8 @@
     "failedToDeleteField": "Failed to delete field",
     "configDuplicated": "Config duplicated",
     "failedToDuplicateConfig": "Failed to duplicate config",
-    "configDeleted": "Config deleted",
+    "configDeletedSuccessfully": "Config deleted successfully",
+    "configsDeletedSuccessfully": "Configs deleted successfully",
     "failedToDeleteConfig": "Failed to delete config",
     "configIdCopied": "Config ID copied",
     "failedToCopyConfig": "Failed to copy config",

@@ -58,6 +58,7 @@ const DEFAULT_VALUES: Partial<ConfigInput> = {
       value: "",
     },
   ],
+  tags: [],
   isActive: true,
   fields: [],
 };
@@ -92,6 +93,7 @@ export const ConfigDetail = () => {
 
     return {
       ...configQuery.data,
+      tags: configQuery.data.tags,
       domains: configQuery.data.domains.map((domain) => ({ value: domain })),
       fields: fieldsQuery.data
         ? fieldsQuery.data.map((field) => dbFieldToFieldInput(field, field.id))
@@ -103,6 +105,12 @@ export const ConfigDetail = () => {
     resolver: zodResolver(ConfigSchema),
     defaultValues: DEFAULT_VALUES,
   });
+
+  useEffect(() => {
+    if (configQuery.data) {
+      logger.debug("ConfigDetail - Fetched config data:", configQuery.data);
+    }
+  }, [configQuery.data]);
 
   const domainsFieldArray = useFieldArray({
     control: form.control,
@@ -341,6 +349,15 @@ export const ConfigDetail = () => {
             inputProps={{
               placeholder: t("config.enterConfigName"),
               autoComplete: "off",
+            }}
+          />
+
+          <FormTagsInput
+            control={form.control}
+            name="tags"
+            label={t("config.tags")}
+            inputProps={{
+              placeholder: t("config.enterTags"),
             }}
           />
 

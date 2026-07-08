@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
@@ -9,17 +10,33 @@ import { ConfigActiveCell } from "@/features/configs/components/config-active-ce
 import { ConfigDetail } from "@/features/configs/components/config-detail";
 import { ConfigTableRowActions } from "@/features/configs/components/config-table-row-actions";
 import { ConfigTableToolbar } from "@/features/configs/components/config-table-toolbar";
-import { useGetConfigs } from "@/features/configs/hooks";
+import {
+  useDeleteMultipleConfigs,
+  useGetConfigs,
+} from "@/features/configs/hooks";
 import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ScrapeConfig } from "@/lib/dexie";
 import { useColumnVisibility } from "@/utils/table";
 
 export function ConfigContainer() {
+  const [rowSelection, setRowSelection] = useState({});
+  const [selectedIds, setSelectedIds] = useState<ScrapeConfig["id"][]>([]);
+
   const { t } = useTranslation();
+  const deleteConfirmDialog = useDialog();
 
   const { data } = useGetConfigs({});
   const { showDetail } = useConfigStore();
   const columnVisibility = useColumnVisibility();
+
+  const deleteConfigsMutation = useDeleteMultipleConfigs({
+    onSuccess: () => {
+      setSelectedIds([]);
+      setRowSelection({});
+      deleteConfirmDialog.close();
+      toast.success(t("message.configsDeletedSuccessfully"));
+    },
+  });
 
   const columns: ColumnDef<ScrapeConfig>[] = [
     {
@@ -65,8 +82,27 @@ export function ConfigContainer() {
       ),
     },
     {
+      accessorKey: "tags",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("config.tags")} />
+      ),
+      cell: ({ row }) => (
+        <BadgeOverflow
+          items={row.getValue<string[]>("tags") || []}
+          renderBadge={(_, label) => <Badge variant="outline">{label}</Badge>}
+        />
+      ),
+      filterFn: (row, id, value: string[]) => {
+        const lowerTags = new Set(
+          row.getValue<string[]>(id).map((t) => t.toLowerCase()),
+        );
+
+        return value.some((tag) => lowerTags.has(tag.toLowerCase()));
+      },
+    },
+    {
       accessorKey: "isActive",
-      filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      filterFn: (row, id, value: string) => value.includes(row.getValue(id)),
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("common.active")} />
       ),
@@ -96,19 +132,39 @@ export function ConfigContainer() {
     },
   ];
 
+  const handleDeleteSelected = (ids: ScrapeConfig["id"][]) => {
+    deleteConfirmDialog.open();
+    setSelectedIds(ids);
+  };
+
   return (
     <div>
       {showDetail ? (
         <ConfigDetail />
       ) : (
-        <DataTable
-          columns={columns}
-          data={data ?? []}
-          columnVisibility={columnVisibility.value}
-          onColumnVisibilityChange={columnVisibility.onChange}
-        >
-          {(table) => <ConfigTableToolbar table={table} />}
-        </DataTable>
+        <>
+          <DataTable
+            columns={columns}
+            data={data ?? []}
+            columnVisibility={columnVisibility.value}
+            rowSelection={rowSelection}
+            onColumnVisibilityChange={columnVisibility.onChange}
+            onRowSelectionChange={setRowSelection}
+          >
+            {(table) => (
+              <ConfigTableToolbar
+                table={table}
+                onDeleteSelected={handleDeleteSelected}
+              />
+            )}
+          </DataTable>
+          <ConfirmDialog
+            control={deleteConfirmDialog}
+            title={t("dialog.areYouSure")}
+            description={t("dialog.deleteConfigsConfirmation")}
+            onConfirm={() => deleteConfigsMutation.mutate(selectedIds)}
+          />
+        </>
       )}
     </div>
   );
