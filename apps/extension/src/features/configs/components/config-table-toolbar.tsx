@@ -24,9 +24,13 @@ import { toastError } from "@/utils/toast";
 
 interface DataTableToolbarProps {
   table: Table<ScrapeConfig>;
+  onDeleteSelected?: (ids: ScrapeConfig["id"][]) => void;
 }
 
-export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
+export function ConfigTableToolbar({
+  table,
+  onDeleteSelected,
+}: DataTableToolbarProps) {
   const { t } = useTranslation();
   const [importPayload, setImportPayload] = useState<ImportConfigsPayload>();
 
@@ -46,6 +50,8 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
   const tagsQuery = useGetConfigTags();
 
   const isFiltered = table.getState().columnFilters.length > 0;
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+  const isSelected = selectedCount > 0;
 
   const handleExport = async () => {
     const allConfigs = await dexie.scrapeConfigs.toArray();
@@ -142,7 +148,22 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
           </Button>
         )}
 
-        {/* TODO: Add multiple delete functionality */}
+        {isSelected && (
+          <Button
+            variant="destructive"
+            size="sm"
+            className="h-8"
+            onClick={() => {
+              const selectedIds = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id);
+              onDeleteSelected?.(selectedIds);
+            }}
+          >
+            Delete ({selectedCount})
+            <XIcon />
+          </Button>
+        )}
       </div>
       <div className="flex items-center gap-2">
         <Button

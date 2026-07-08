@@ -8,6 +8,7 @@ import {
 import {
   addConfig,
   deleteConfig,
+  deleteMultipleConfigs,
   duplicateConfig,
   editConfig,
   getConfigById,
@@ -128,6 +129,18 @@ export const useDeleteConfig = (
   return useMutation({
     ...options,
     mutationFn: (payload) => deleteConfig(payload),
+    meta: {
+      invalidateQueries: configQueryKey.all,
+    },
+  });
+};
+
+export const useDeleteMultipleConfigs = (
+  options?: UseMutationOptions<boolean, Error, ScrapeConfig["id"][]>,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: (payload) => deleteMultipleConfigs(payload),
     meta: {
       invalidateQueries: configQueryKey.all,
     },
