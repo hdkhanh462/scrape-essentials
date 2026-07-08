@@ -14,7 +14,7 @@ import { DataTableFacetedFilter } from "@/components/data-table/data-table-facet
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useImportConfigs } from "@/features/configs/hooks";
+import { useGetConfigTags, useImportConfigs } from "@/features/configs/hooks";
 import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ImportConfigsPayload } from "@/features/configs/types";
 import { useDialog } from "@/hooks/use-dialog";
@@ -42,6 +42,8 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
     },
     onError: (error) => toastError(error, t("message.failedToImportConfigs")),
   });
+
+  const tagsQuery = useGetConfigTags();
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -113,9 +115,24 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
             ]}
           />
         )}
+        {tagsQuery.data && (
+          <DataTableFacetedFilter
+            column={
+              table.getColumn("tags") as
+                // string[] is not assignable
+                // so leave it as string to prevent type error
+                Column<ScrapeConfig, string> | undefined
+            }
+            title={t("config.tags")}
+            options={tagsQuery.data.map((tag) => ({
+              value: tag,
+              label: tag,
+            }))}
+          />
+        )}
         {isFiltered && (
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             className="h-8"
             onClick={() => table.resetColumnFilters()}
@@ -124,6 +141,8 @@ export function ConfigTableToolbar({ table }: DataTableToolbarProps) {
             <XIcon />
           </Button>
         )}
+
+        {/* TODO: Add multiple delete functionality */}
       </div>
       <div className="flex items-center gap-2">
         <Button

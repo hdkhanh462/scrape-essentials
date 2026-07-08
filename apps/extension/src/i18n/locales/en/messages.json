@@ -1,5 +1,6 @@
 {
   "common": {
+    "label": "Label",
     "status": "Status",
     "active": "Active",
     "inactive": "Inactive",
@@ -10,7 +11,6 @@
     "noResults": "No results",
     "createdAt": "Created At",
     "updatedAt": "Updated At",
-    "label": "Label",
     "cancel": "Cancel",
     "confirm": "Confirm"
   },
@@ -34,7 +34,9 @@
     "label": "Config",
     "filterConfigs": "Filter configs...",
     "configName": "Config Name",
+    "tags": "Tags",
     "enterConfigName": "Enter config name",
+    "enterTags": "Enter tags",
     "selectConfig": "Select config...",
     "searchConfig": "Search config...",
     "addDomain": "Add domain",

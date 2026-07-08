@@ -12,6 +12,7 @@ import {
   editConfig,
   getConfigById,
   getConfigs,
+  getConfigTags,
   importConfigs,
   toggleConfigActive,
 } from "@/features/configs/services";
@@ -23,7 +24,6 @@ import type {
   ToggleConfigActivePayload,
 } from "@/features/configs/types";
 import type { ScrapeConfig } from "@/lib/dexie";
-import { logger } from "@/utils/logger";
 
 export const configQueryKey = {
   all: ["configs"] as const,
@@ -31,6 +31,7 @@ export const configQueryKey = {
     [...configQueryKey.all, "list", payload] as const,
   detail: (payload: { id: ScrapeConfig["id"]; isActive?: boolean }) =>
     [...configQueryKey.all, "detail", payload] as const,
+  tags: () => [...configQueryKey.all, "tags"] as const,
 };
 
 export const useGetConfigs = (payload: GetConfigsPayload) => {
@@ -47,14 +48,17 @@ export const useGetConfigById = (
   },
   options?: Pick<UseQueryOptions<ScrapeConfig | undefined>, "enabled">,
 ) => {
-  logger.debug("useGetConfigById", {
-    enabled: options?.enabled ?? !!payload.id,
-  });
-
   return useQuery<ScrapeConfig | undefined>({
     enabled: options?.enabled ?? !!payload.id,
     queryKey: configQueryKey.detail(payload),
     queryFn: () => getConfigById(payload),
+  });
+};
+
+export const useGetConfigTags = () => {
+  return useQuery<ScrapeConfig["tags"]>({
+    queryKey: configQueryKey.tags(),
+    queryFn: () => getConfigTags(),
   });
 };
 
