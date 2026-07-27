@@ -6,6 +6,7 @@ import type {
   OAuthTokenResponse,
 } from "@/features/backup/types";
 import { apiUrl, oAuthUrl } from "@/features/backup/utils";
+import { logger } from "@/utils/logger";
 
 export async function launchWebAuthFlow(): Promise<OAuthTokenResponse> {
   const redirectUri = browser.identity.getRedirectURL();
@@ -113,14 +114,19 @@ export async function getAccessToken(
     return accessToken;
   }
 
-  const response = await refreshAccessToken(refreshToken);
-  refresh(response);
+  try {
+    const response = await refreshAccessToken(refreshToken);
+    refresh(response);
 
-  if (!userInfo && response.accessToken) {
-    await getUserInfo(response.accessToken);
+    if (!userInfo && response.accessToken) {
+      await getUserInfo(response.accessToken);
+    }
+
+    return response.accessToken;
+  } catch (error) {
+    logger.warn("Failed to refresh Google access token:", error);
+    throw error;
   }
-
-  return response.accessToken;
 }
 
 const getUserInfo = async (
