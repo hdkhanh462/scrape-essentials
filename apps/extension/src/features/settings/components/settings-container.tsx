@@ -14,6 +14,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -52,7 +58,7 @@ export function SettingsContainer() {
 
   const { debugMode, theme, language, autoBackup, updateSettings } =
     useSettingsStore();
-  const { userInfo, lastBackup } = useGoogleStore();
+  const { userInfo, lastBackup, logout } = useGoogleStore();
 
   const restoreConfirmDialog = useDialog();
 
@@ -113,6 +119,11 @@ export function SettingsContainer() {
     backupMutation.mutate();
   };
 
+  const handleLogout = async () => {
+    logout();
+    toast.success(t("message.logoutSuccessful"));
+  };
+
   return (
     <div className="py-8">
       <form onChange={form.handleSubmit(handleSubmit)}>
@@ -148,25 +159,53 @@ export function SettingsContainer() {
                 </FieldDescription>
               </FieldContent>
               <div className="flex min-w-75 flex-col gap-4">
-                <div className="flex items-center justify-between gap-4 rounded-xl border bg-accent/30 p-3 shadow-xs">
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <Avatar className="size-10 border-2 border-background shadow-sm">
-                      {userInfo?.picture && (
-                        <AvatarImage src={userInfo.picture} />
-                      )}
-                      <AvatarFallback className="bg-primary/10 font-bold text-primary text-xs">
-                        {userInfo?.name?.[0] || "N/A"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex min-w-0 flex-col">
-                      <span className="truncate font-semibold text-sm">
-                        {userInfo?.name || "Not signed in"}
-                      </span>
-                      <span className="truncate text-muted-foreground text-xs">
-                        {userInfo?.email || "Connect to Google Drive"}
-                      </span>
+                <div className="flex items-center gap-4 rounded-xl border bg-accent/30 p-3 shadow-xs">
+                  {userInfo ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex items-center gap-3 overflow-hidden rounded-xl border border-transparent p-2 text-left transition hover:border-border hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          <Avatar className="size-10 border-2 border-background shadow-sm">
+                            <AvatarImage src={userInfo.picture} />
+                          </Avatar>
+                          <div className="flex min-w-0 flex-col">
+                            <span className="truncate font-semibold text-sm">
+                              {userInfo.name}
+                            </span>
+                            <span className="truncate text-muted-foreground text-xs">
+                              {userInfo.email}
+                            </span>
+                          </div>
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="w-44">
+                        <DropdownMenuItem
+                          variant="destructive"
+                          onSelect={handleLogout}
+                        >
+                          {t("button.logout")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      <Avatar className="size-10 border-2 border-background shadow-sm">
+                        <AvatarFallback className="bg-primary/10 font-bold text-primary text-xs">
+                          N/A
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex min-w-0 flex-col">
+                        <span className="truncate font-semibold text-sm">
+                          {t("backup.notSignedIn")}
+                        </span>
+                        <span className="truncate text-muted-foreground text-xs">
+                          {t("backup.connectGoogleDrive")}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="flex gap-2">
                     <Button
                       type="button"
