@@ -29,7 +29,8 @@
     "paste": "Dán",
     "pasted": "Đã dán",
     "restore": "Khôi phục",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "restoring": "Đang khôi phục..."
   },
   "config": {
     "filterConfigs": "Lọc cấu hình...",
@@ -93,7 +94,8 @@
     "deleteRecordConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn bản ghi đã chọn.",
     "deleteRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn các bản ghi đã chọn.",
     "importRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ nhập và ghi đè lên các bản ghi hiện có.",
-    "restoreConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ khôi phục vĩnh viễn cài đặt của bạn và ghi đè lên cài đặt và cấu hình hiện có."
+    "restoreConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ khôi phục vĩnh viễn cài đặt của bạn và ghi đè lên cài đặt và cấu hình hiện có.",
+    "restoreFileName": "Tệp sao lưu: {{fileName}}"
   },
   "record": {
     "scrapedData": "Dữ liệu đã Scrape",
