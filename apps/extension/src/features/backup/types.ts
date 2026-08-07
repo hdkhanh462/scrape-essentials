@@ -17,6 +17,11 @@ export type ImportPayload = {
   records: ScrapedRecord[];
 };
 
+export type RestorePayload = {
+  payload: ImportPayload;
+  backupFileName: string;
+};
+
 export type GoogleUserInfo = {
   sub: string;
   name: string;

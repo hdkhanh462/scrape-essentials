@@ -4,7 +4,7 @@ import {
 } from "@/features/backup/constants";
 import { getAccessToken } from "@/features/backup/identity";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
-import type { ImportPayload } from "@/features/backup/types";
+import type { ImportPayload, RestorePayload } from "@/features/backup/types";
 import {
   driveApiUrl,
   driveUploadApiUrl,
@@ -152,7 +152,7 @@ export async function backupToDrive(
   logger.debug("Backup successfully uploaded to Google Drive");
 }
 
-export async function restoreBackup(): Promise<ImportPayload> {
+export async function restoreBackup(): Promise<RestorePayload> {
   const { backupFolderId, setBackupFolderId, setLastRestore } =
     useGoogleStore.getState();
 
@@ -173,7 +173,10 @@ export async function restoreBackup(): Promise<ImportPayload> {
 
   setLastRestore(Date.now());
 
-  return payload;
+  return {
+    payload,
+    backupFileName: latest.name,
+  };
 }
 
 export const autoBackup = async () => {

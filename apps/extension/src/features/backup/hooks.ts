@@ -1,7 +1,7 @@
 import { type UseMutationOptions, useMutation } from "@tanstack/react-query";
 import { backupToDrive, restoreBackup } from "@/features/backup/services";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
-import type { ImportPayload } from "@/features/backup/types";
+import type { RestorePayload } from "@/features/backup/types";
 
 export const useBackupToDrive = (options?: UseMutationOptions<void>) => {
   const { setLastBackup } = useGoogleStore();
@@ -17,7 +17,7 @@ export const useBackupToDrive = (options?: UseMutationOptions<void>) => {
 };
 
 export const useRestoreBackup = (
-  options?: UseMutationOptions<ImportPayload>,
+  options?: UseMutationOptions<RestorePayload>,
 ) => {
   const { setLastRestore } = useGoogleStore();
 
