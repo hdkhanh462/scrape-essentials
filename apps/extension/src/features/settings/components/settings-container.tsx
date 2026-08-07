@@ -2,6 +2,7 @@ import {
   CheckCircle2Icon,
   CloudUpload,
   History,
+  LogOutIcon,
   RotateCcwIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -34,7 +35,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { useBackupToDrive, useRestoreBackup } from "@/features/backup/hooks";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
-import type { ImportPayload } from "@/features/backup/types";
+import type { RestorePayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
 import { useImportRecords } from "@/features/records/hooks";
 import {
@@ -52,7 +53,7 @@ import { formatRelativeTime } from "@/utils/date";
 import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
-  const [importPayload, setImportPayload] = useState<ImportPayload>();
+  const [restoreInfo, setRestoreInfo] = useState<RestorePayload>();
 
   const { t } = useTranslation();
 
@@ -64,7 +65,7 @@ export function SettingsContainer() {
 
   const restoreMutation = useRestoreBackup({
     onSuccess: (data) => {
-      setImportPayload(data);
+      setRestoreInfo(data);
       restoreConfirmDialog.open();
     },
     onError: (error) => toastError(error, t("message.restoreFailed")),
@@ -98,22 +99,32 @@ export function SettingsContainer() {
   };
 
   const handleRestore = async () => {
-    if (!importPayload) return;
+    if (!restoreInfo?.payload) return;
 
-    importConfigsMutation.mutate(importPayload, {
+    setIsRestoring(true);
+
+    importConfigsMutation.mutate(restoreInfo.payload, {
       onSuccess: () => {
-        importRecordsMutation.mutate(importPayload.records, {
+        importRecordsMutation.mutate(restoreInfo.payload.records, {
           onSuccess: () => {
+            setIsRestoring(false);
             restoreConfirmDialog.close();
             toast.success(t("message.restoreSuccessful"));
           },
-          onError: (error) =>
-            toastError(error, t("message.importRecordsFailed")),
+          onError: (error) => {
+            setIsRestoring(false);
+            toastError(error, t("message.importRecordsFailed"));
+          },
         });
       },
-      onError: (error) => toastError(error, t("message.failedToImportConfigs")),
+      onError: (error) => {
+        setIsRestoring(false);
+        toastError(error, t("message.failedToImportConfigs"));
+      },
     });
   };
+
+  const [isRestoring, setIsRestoring] = useState(false);
 
   const handleBackup = async () => {
     backupMutation.mutate();
@@ -186,6 +197,7 @@ export function SettingsContainer() {
                           onSelect={handleLogout}
                         >
                           {t("button.logout")}
+                          <LogOutIcon />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -377,7 +389,27 @@ export function SettingsContainer() {
         title={t("dialog.areYouSure")}
         description={t("dialog.restoreConfirmation")}
         onConfirm={handleRestore}
-      />
+        cancelButton={{
+          override: {
+            disabled: isRestoring,
+          },
+        }}
+        confirmButton={{
+          label: isRestoring ? t("button.restoring") : t("common.confirm"),
+          isLoading: isRestoring,
+          override: {
+            disabled: isRestoring,
+          },
+        }}
+      >
+        {restoreInfo?.backupFileName && (
+          <p className="mt-3 rounded-md border border-border bg-muted p-3 text-muted-foreground text-sm">
+            {t("dialog.restoreFileName", {
+              fileName: restoreInfo.backupFileName,
+            })}
+          </p>
+        )}
+      </ConfirmDialog>
     </div>
   );
 }
