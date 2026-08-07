@@ -28,7 +28,8 @@
     "toggleColumns": "Ẩn/hiện cột",
     "paste": "Dán",
     "pasted": "Đã dán",
-    "restore": "Khôi phục"
+    "restore": "Khôi phục",
+    "logout": "Đăng xuất"
   },
   "config": {
     "filterConfigs": "Lọc cấu hình...",
@@ -117,7 +118,9 @@
   "backup": {
     "label": "Sao lưu",
     "backupDescription": "Tạo bản sao lưu của cài đặt và cấu hình hiện tại của bạn để lưu trữ an toàn hoặc chuyển sang thiết bị khác.",
-    "lastBackup": "Lần sao lưu gần nhất"
+    "lastBackup": "Lần sao lưu gần nhất",
+    "notSignedIn": "Chưa đăng nhập",
+    "connectGoogleDrive": "Kết nối với Google Drive"
   },
   "language": {
     "label": "Ngôn ngữ",
@@ -172,6 +175,7 @@
     "restoreSuccessful": "Khôi phục thành công",
     "importRecordsFailed": "Không thể nhập bản ghi",
     "restoreFailed": "Khôi phục thất bại",
+    "logoutSuccessful": "Đã đăng xuất thành công",
     "recentSearches": "Các tìm kiếm gần đây"
   }
 }

@@ -28,7 +28,8 @@
     "toggleColumns": "Toggle columns",
     "paste": "Paste",
     "pasted": "Pasted",
-    "restore": "Restore"
+    "restore": "Restore",
+    "logout": "Logout"
   },
   "config": {
     "label": "Config",
@@ -118,7 +119,9 @@
   "backup": {
     "label": "Backup",
     "backupDescription": "Securely backup your settings and configurations to your personal Google Drive account.",
-    "lastBackup": "Last backup"
+    "lastBackup": "Last backup",
+    "notSignedIn": "Not signed in",
+    "connectGoogleDrive": "Connect to Google Drive"
   },
   "language": {
     "label": "Language",
@@ -173,6 +176,7 @@
     "restoreSuccessful": "Restore successful",
     "importRecordsFailed": "Failed to import records",
     "restoreFailed": "Restore failed",
+    "logoutSuccessful": "Logged out successfully",
     "recentSearches": "Recent searches"
   }
 }
