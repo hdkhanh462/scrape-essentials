@@ -174,10 +174,7 @@ export function SettingsContainer() {
                   {userInfo ? (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button
-                          type="button"
-                          className="flex items-center gap-3 overflow-hidden rounded-xl border border-transparent p-2 text-left transition hover:border-border hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
-                        >
+                        <div className="flex items-center gap-3 overflow-hidden rounded-xl p-2 text-left hover:cursor-pointer hover:bg-accent hover:shadow-sm">
                           <Avatar className="size-10 border-2 border-background shadow-sm">
                             <AvatarImage src={userInfo.picture} />
                           </Avatar>
@@ -189,11 +186,12 @@ export function SettingsContainer() {
                               {userInfo.email}
                             </span>
                           </div>
-                        </button>
+                        </div>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="w-44">
                         <DropdownMenuItem
                           variant="destructive"
+                          className="justify-between"
                           onSelect={handleLogout}
                         >
                           {t("button.logout")}
