@@ -52,10 +52,12 @@ export async function uploadBackup(
   blob: Blob,
   version: string = "0.1.0",
 ) {
-  const date = new Date().toISOString().slice(0, 10);
+  const now = new Date().toISOString();
+  const date = now.slice(0, 10);
+  const time = now.slice(11, 16).replace(":", "-");
 
   const metadata = {
-    name: `${BACKUP_FILE_NAME_PREFIX}v${version}_${date}.json.gz`,
+    name: `${BACKUP_FILE_NAME_PREFIX}v${version}_${date}_${time}.json.gz`,
     parents: [folderId],
   };
 
