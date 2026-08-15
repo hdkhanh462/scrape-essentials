@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type {
+  BackupMetadata,
   GoogleUserInfo,
   OAuthRefreshResponse,
   OAuthTokenResponse,
@@ -14,14 +15,14 @@ type GoogleState = {
   userInfo: GoogleUserInfo | null;
   lastBackup: number | null;
   lastRestore: number | null;
-  backupFolderId: string | null;
+  backupMetadata: BackupMetadata | null;
 };
 
 type GoogleSlice = GoogleState & {
   setUserInfo: (userInfo: GoogleUserInfo | null) => void;
   setLastBackup: (lastBackup: number | null) => void;
   setLastRestore: (lastRestore: number | null) => void;
-  setBackupFolderId: (backupFolderId: string | null) => void;
+  setBackupMetadata: (backupMetadata: BackupMetadata | null) => void;
   login: (token: OAuthTokenResponse) => void;
   logout: () => void;
   refresh: (token: OAuthRefreshResponse) => void;
@@ -34,7 +35,7 @@ export const DEFAULT_GOOGLE: GoogleState = {
   userInfo: null,
   lastBackup: null,
   lastRestore: null,
-  backupFolderId: null,
+  backupMetadata: null,
 };
 
 export const useGoogleStore = create<GoogleSlice>()(
@@ -44,7 +45,7 @@ export const useGoogleStore = create<GoogleSlice>()(
       setUserInfo: (userInfo) => set(() => ({ userInfo })),
       setLastBackup: (lastBackup) => set(() => ({ lastBackup })),
       setLastRestore: (lastRestore) => set(() => ({ lastRestore })),
-      setBackupFolderId: (backupFolderId) => set(() => ({ backupFolderId })),
+      setBackupMetadata: (backupMetadata) => set(() => ({ backupMetadata })),
       login: (token) =>
         set(() => ({
           accessToken: token.accessToken,

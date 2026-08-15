@@ -1,16 +1,63 @@
-import { type UseMutationOptions, useMutation } from "@tanstack/react-query";
-import { backupToDrive, restoreBackup } from "@/features/backup/services";
+import {
+  type UseMutationOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  connectGoogle,
+  disconnectGoogle,
+  downloadBackup,
+  getBackupMetadata,
+  uploadBackup,
+} from "@/features/backup/google-drive";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
-import type { RestorePayload } from "@/features/backup/types";
+import type { BackupMetadata, RestorePayload } from "@/features/backup/types";
 
-export const useBackupToDrive = (options?: UseMutationOptions<void>) => {
-  const { setLastBackup } = useGoogleStore();
+export const backupQueryKey = {
+  metadata: ["backup", "metadata"] as const,
+};
+
+export const useBackupMetadata = () => {
+  const { userInfo } = useGoogleStore();
+
+  return useQuery<BackupMetadata | null>({
+    queryKey: backupQueryKey.metadata,
+    queryFn: getBackupMetadata,
+    enabled: !!userInfo,
+  });
+};
+
+export const useConnectGoogle = (options?: UseMutationOptions<void>) => {
+  return useMutation({
+    ...options,
+    mutationFn: connectGoogle,
+  });
+};
+
+export const useDisconnectGoogle = (options?: UseMutationOptions<void>) => {
+  const queryClient = useQueryClient();
 
   return useMutation({
     ...options,
-    mutationFn: () => backupToDrive(),
+    mutationFn: disconnectGoogle,
     onSuccess: (...params) => {
-      setLastBackup(Date.now());
+      queryClient.invalidateQueries({ queryKey: backupQueryKey.metadata });
+      options?.onSuccess?.(...params);
+    },
+  });
+};
+
+export const useBackupToDrive = (options?: UseMutationOptions<void>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    ...options,
+    mutationFn: async () => {
+      await uploadBackup();
+    },
+    onSuccess: (...params) => {
+      queryClient.invalidateQueries({ queryKey: backupQueryKey.metadata });
       options?.onSuccess?.(...params);
     },
   });
@@ -19,13 +66,13 @@ export const useBackupToDrive = (options?: UseMutationOptions<void>) => {
 export const useRestoreBackup = (
   options?: UseMutationOptions<RestorePayload>,
 ) => {
-  const { setLastRestore } = useGoogleStore();
+  const queryClient = useQueryClient();
 
   return useMutation({
     ...options,
-    mutationFn: restoreBackup,
+    mutationFn: downloadBackup,
     onSuccess: (...params) => {
-      setLastRestore(Date.now());
+      queryClient.invalidateQueries({ queryKey: backupQueryKey.metadata });
       options?.onSuccess?.(...params);
     },
   });

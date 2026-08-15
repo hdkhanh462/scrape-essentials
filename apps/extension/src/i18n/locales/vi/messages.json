@@ -29,7 +29,6 @@
     "paste": "Dán",
     "pasted": "Đã dán",
     "restore": "Khôi phục",
-    "logout": "Đăng xuất",
     "restoring": "Đang khôi phục..."
   },
   "config": {
@@ -95,7 +94,7 @@
     "deleteRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn các bản ghi đã chọn.",
     "importRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ nhập và ghi đè lên các bản ghi hiện có.",
     "restoreConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ khôi phục vĩnh viễn cài đặt của bạn và ghi đè lên cài đặt và cấu hình hiện có.",
-    "restoreFileName": "Tệp sao lưu: {{fileName}}"
+    "restoreBackupInfo": "Bản sao lưu được tạo {{time}}"
   },
   "record": {
     "scrapedData": "Dữ liệu đã Scrape",
@@ -122,7 +121,11 @@
     "backupDescription": "Tạo bản sao lưu của cài đặt và cấu hình hiện tại của bạn để lưu trữ an toàn hoặc chuyển sang thiết bị khác.",
     "lastBackup": "Lần sao lưu gần nhất",
     "notSignedIn": "Chưa đăng nhập",
-    "connectGoogleDrive": "Kết nối với Google Drive"
+    "connectGoogleDrive": "Kết nối với Google Drive",
+    "connect": "Kết nối",
+    "disconnect": "Ngắt kết nối",
+    "size": "Dung lượng sao lưu",
+    "noBackupYet": "Chưa có bản sao lưu"
   },
   "language": {
     "label": "Ngôn ngữ",
@@ -177,7 +180,10 @@
     "restoreSuccessful": "Khôi phục thành công",
     "importRecordsFailed": "Không thể nhập bản ghi",
     "restoreFailed": "Khôi phục thất bại",
-    "logoutSuccessful": "Đã đăng xuất thành công",
+    "connectSuccessful": "Đã kết nối với Google Drive",
+    "connectFailed": "Không thể kết nối với Google Drive",
+    "disconnectSuccessful": "Đã ngắt kết nối với Google Drive",
+    "disconnectFailed": "Không thể ngắt kết nối với Google Drive",
     "recentSearches": "Các tìm kiếm gần đây"
   }
 }
