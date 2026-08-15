@@ -1,6 +1,7 @@
 import {
   CheckCircle2Icon,
   CloudUpload,
+  FileDigitIcon,
   History,
   LogOutIcon,
   RotateCcwIcon,
@@ -33,7 +34,13 @@ import {
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import { useBackupToDrive, useRestoreBackup } from "@/features/backup/hooks";
+import {
+  useBackupMetadata,
+  useBackupToDrive,
+  useConnectGoogle,
+  useDisconnectGoogle,
+  useRestoreBackup,
+} from "@/features/backup/hooks";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
 import type { RestorePayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
@@ -50,6 +57,7 @@ import {
 import type { SettingsInput } from "@/features/settings/types/settings";
 import { useDialog } from "@/hooks/use-dialog";
 import { formatRelativeTime } from "@/utils/date";
+import { formatBytes } from "@/utils/format-bytes";
 import { toastError } from "@/utils/toast";
 
 export function SettingsContainer() {
@@ -59,10 +67,19 @@ export function SettingsContainer() {
 
   const { debugMode, theme, language, autoBackup, updateSettings } =
     useSettingsStore();
-  const { userInfo, lastBackup, logout } = useGoogleStore();
+  const { userInfo, lastBackup } = useGoogleStore();
 
   const restoreConfirmDialog = useDialog();
 
+  const backupMetadataQuery = useBackupMetadata();
+  const connectMutation = useConnectGoogle({
+    onSuccess: () => toast.success(t("message.connectSuccessful")),
+    onError: (error) => toastError(error, t("message.connectFailed")),
+  });
+  const disconnectMutation = useDisconnectGoogle({
+    onSuccess: () => toast.success(t("message.disconnectSuccessful")),
+    onError: (error) => toastError(error, t("message.disconnectFailed")),
+  });
   const restoreMutation = useRestoreBackup({
     onSuccess: (data) => {
       setRestoreInfo(data);
@@ -130,9 +147,12 @@ export function SettingsContainer() {
     backupMutation.mutate();
   };
 
-  const handleLogout = async () => {
-    logout();
-    toast.success(t("message.logoutSuccessful"));
+  const handleConnect = async () => {
+    connectMutation.mutate();
+  };
+
+  const handleDisconnect = async () => {
+    disconnectMutation.mutate();
   };
 
   return (
@@ -160,13 +180,28 @@ export function SettingsContainer() {
                 </div>
                 <FieldDescription className="max-w-100">
                   {t("backup.backupDescription")}
-                  <span className="mt-2 flex items-center gap-2 font-medium text-foreground/80 text-xs">
-                    <History className="size-3.5 text-muted-foreground" />
-                    {t("backup.lastBackup")}:{" "}
-                    <span className="font-normal text-muted-foreground">
-                      {formatRelativeTime(lastBackup)}
+                  <div className="mt-2 flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-2 font-medium text-foreground/80 text-xs">
+                      <History className="size-3.5 text-muted-foreground" />
+                      {t("backup.lastBackup")}:{" "}
+                      <span className="font-normal text-muted-foreground">
+                        {formatRelativeTime(lastBackup)}
+                      </span>
                     </span>
-                  </span>
+                    {userInfo && (
+                      <span className="flex items-center gap-2 font-medium text-foreground/80 text-xs">
+                        <FileDigitIcon className="size-3.5 text-muted-foreground" />
+                        {t("backup.size")}:{" "}
+                        <span className="font-normal text-muted-foreground">
+                          {backupMetadataQuery.isLoading
+                            ? "…"
+                            : backupMetadataQuery.data
+                              ? formatBytes(backupMetadataQuery.data.size)
+                              : t("backup.noBackupYet")}
+                        </span>
+                      </span>
+                    )}
+                  </div>
                 </FieldDescription>
               </FieldContent>
               <div className="flex min-w-75 flex-col gap-4">
@@ -192,29 +227,36 @@ export function SettingsContainer() {
                         <DropdownMenuItem
                           variant="destructive"
                           className="justify-between"
-                          onSelect={handleLogout}
+                          onSelect={handleDisconnect}
+                          disabled={disconnectMutation.isPending}
                         >
-                          {t("button.logout")}
+                          {t("backup.disconnect")}
                           <LogOutIcon />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   ) : (
-                    <div className="flex items-center gap-3 overflow-hidden">
+                    <button
+                      type="button"
+                      className="flex items-center gap-3 overflow-hidden rounded-xl p-2 text-start text-muted-foreground hover:bg-accent hover:shadow-sm disabled:cursor-not-allowed"
+                      disabled={connectMutation.isPending}
+                      onClick={handleConnect}
+                    >
                       <Avatar className="size-10 border-2 border-background shadow-sm">
                         <AvatarFallback className="bg-primary/10 font-bold text-primary text-xs">
                           N/A
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex min-w-0 flex-col">
-                        <span className="truncate font-semibold text-sm">
+                        <span className="truncate font-semibold text-black text-sm">
                           {t("backup.notSignedIn")}
                         </span>
                         <span className="truncate text-muted-foreground text-xs">
                           {t("backup.connectGoogleDrive")}
                         </span>
                       </div>
-                    </div>
+                      <Loader isLoading={connectMutation.isPending} />
+                    </button>
                   )}
                   <div className="flex gap-2">
                     <Button
@@ -222,7 +264,7 @@ export function SettingsContainer() {
                       variant="outline"
                       size="sm"
                       className="h-8 shadow-none"
-                      disabled={restoreMutation.isPending}
+                      disabled={!userInfo || restoreMutation.isPending}
                       onClick={handleRestoreClick}
                     >
                       <Loader isLoading={restoreMutation.isPending} />
@@ -235,7 +277,7 @@ export function SettingsContainer() {
                       type="button"
                       size="sm"
                       className="h-8 shadow-none"
-                      disabled={backupMutation.isPending}
+                      disabled={!userInfo || backupMutation.isPending}
                       onClick={handleBackup}
                     >
                       <Loader isLoading={backupMutation.isPending} />
@@ -400,10 +442,12 @@ export function SettingsContainer() {
           },
         }}
       >
-        {restoreInfo?.backupFileName && (
+        {restoreInfo?.modifiedTime && (
           <p className="mt-3 rounded-md border border-border bg-muted p-3 text-muted-foreground text-sm">
-            {t("dialog.restoreFileName", {
-              fileName: restoreInfo.backupFileName,
+            {t("dialog.restoreBackupInfo", {
+              time: formatRelativeTime(
+                new Date(restoreInfo.modifiedTime).getTime(),
+              ),
             })}
           </p>
         )}

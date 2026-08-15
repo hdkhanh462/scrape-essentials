@@ -12,6 +12,7 @@ export type OAuthRefreshResponse = {
 };
 
 export type ImportPayload = {
+  schemaVersion: number;
   configs: ScrapeConfig[];
   fields: ConfigField[];
   records: ScrapedRecord[];
@@ -20,6 +21,14 @@ export type ImportPayload = {
 export type RestorePayload = {
   payload: ImportPayload;
   backupFileName: string;
+  modifiedTime: string;
+};
+
+export type BackupMetadata = {
+  id: string;
+  name: string;
+  size: number;
+  modifiedTime: string;
 };
 
 export type GoogleUserInfo = {

@@ -29,7 +29,6 @@
     "paste": "Paste",
     "pasted": "Pasted",
     "restore": "Restore",
-    "logout": "Logout",
     "restoring": "Restoring..."
   },
   "config": {
@@ -96,7 +95,7 @@
     "deleteRecordsConfirmation": "This action cannot be undone. This will permanently delete your selected records.",
     "importRecordsConfirmation": "This action cannot be undone. This will permanently import and overwrite your existing records.",
     "restoreConfirmation": "This action cannot be undone. This will permanently restore your settings and overwrite your existing settings and configurations.",
-    "restoreFileName": "Backup file: {{fileName}}"
+    "restoreBackupInfo": "Backup created {{time}}"
   },
   "record": {
     "scrapedData": "Scraped Data",
@@ -123,7 +122,11 @@
     "backupDescription": "Securely backup your settings and configurations to your personal Google Drive account.",
     "lastBackup": "Last backup",
     "notSignedIn": "Not signed in",
-    "connectGoogleDrive": "Connect to Google Drive"
+    "connectGoogleDrive": "Connect to Google Drive",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "size": "Backup size",
+    "noBackupYet": "No backup yet"
   },
   "language": {
     "label": "Language",
@@ -178,7 +181,10 @@
     "restoreSuccessful": "Restore successful",
     "importRecordsFailed": "Failed to import records",
     "restoreFailed": "Restore failed",
-    "logoutSuccessful": "Logged out successfully",
+    "connectSuccessful": "Connected to Google Drive",
+    "connectFailed": "Failed to connect to Google Drive",
+    "disconnectSuccessful": "Disconnected from Google Drive",
+    "disconnectFailed": "Failed to disconnect from Google Drive",
     "recentSearches": "Recent searches"
   }
 }
