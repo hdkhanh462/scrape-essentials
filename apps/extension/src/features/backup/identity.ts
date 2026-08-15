@@ -18,7 +18,7 @@ export async function launchWebAuthFlow(): Promise<OAuthTokenResponse> {
       "openid",
       "https://www.googleapis.com/auth/userinfo.profile",
       "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/drive.appdata",
     ].join(" "),
     response_type: "code",
     access_type: "offline",
@@ -126,6 +126,18 @@ export async function getAccessToken(
   } catch (error) {
     logger.warn("Failed to refresh Google access token:", error);
     throw error;
+  }
+}
+
+export async function revokeToken(token: string): Promise<void> {
+  const response = await fetch(
+    `https://oauth2.googleapis.com/revoke?token=${encodeURIComponent(token)}`,
+    { method: "POST" },
+  );
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    logger.warn("Failed to revoke Google token:", data);
   }
 }
 
