@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
-type Props = React.ComponentProps<typeof Sheet> & DialogWrapperProps;
+type Props = Omit<React.ComponentProps<typeof Sheet>, "children"> &
+  DialogWrapperProps & { children?: React.ReactNode };
 
 export const SheetWrapper: React.FC<Props> = (props) => {
   const { title, description, trigger, children, footer, className, ...rest } =
@@ -18,7 +19,7 @@ export const SheetWrapper: React.FC<Props> = (props) => {
 
   return (
     <Sheet {...rest}>
-      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+      {trigger && <SheetTrigger render={trigger as React.ReactElement} />}
       <SheetContent
         className={cn("min-w-lg overflow-y-auto", className)}
         aria-describedby={undefined}

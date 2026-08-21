@@ -16,7 +16,8 @@ export type DialogWrapperProps = {
   className?: string;
 };
 
-type Props = React.ComponentProps<typeof Dialog> & DialogWrapperProps;
+type Props = Omit<React.ComponentProps<typeof Dialog>, "children"> &
+  DialogWrapperProps & { children?: React.ReactNode };
 
 export const DialogWrapper: React.FC<Props> = (props) => {
   const { title, description, trigger, children, footer, className, ...rest } =
@@ -24,7 +25,7 @@ export const DialogWrapper: React.FC<Props> = (props) => {
 
   return (
     <Dialog {...rest}>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      {trigger && <DialogTrigger render={trigger as React.ReactElement} />}
       <DialogContent className={className} aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
