@@ -67,6 +67,7 @@ export function ConfigTableRowActions({ row }: Props) {
       domains: row.original.domains.map((domain) => ({
         value: domain,
       })),
+      tags: row.original.tags,
       fields: fields.map((field) => dbFieldToFieldInput(field)),
     };
 
