@@ -1,0 +1,20 @@
+{
+  "label": "Cài đặt",
+  "settingsDescription": "Cấu hình cài đặt và tùy chọn cho tiện ích.",
+  "debugMode": "Chế độ gỡ lỗi",
+  "debugModeDescription": "Bật chế độ gỡ lỗi để xem nhật ký chi tiết và khắc phục sự cố.",
+  "themes": "Giao diện",
+  "themesDescription": "Các giao diện tùy chỉnh để cải thiện trải nghiệm người dùng và giảm mỏi mắt trong các môi trường sáng hoặc tối.",
+  "themeOptionDescription": "Sử dụng giao diện này để có khả năng hiển thị tốt hơn trong môi trường sáng hoặc tối.",
+  "resetDefaults": "Đặt lại mặc định",
+  "resetDefaultsDescription": "Đặt lại tất cả cài đặt và cấu hình về giá trị mặc định. Hành động này không thể hoàn tác.",
+  "light": "Sáng",
+  "dark": "Tối",
+  "system": "Hệ thống",
+  "dateTimeFormat": "Định dạng ngày & giờ",
+  "dateTimeFormatDescription": "Chọn cách hiển thị ngày và giờ trong tiện ích.",
+  "dateFormat": "Định dạng ngày",
+  "timeFormat": "Định dạng giờ",
+  "timeFormat24h": "24 giờ",
+  "timeFormat12h": "12 giờ (AM/PM)"
+}

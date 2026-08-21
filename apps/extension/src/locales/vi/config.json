@@ -1,0 +1,12 @@
+{
+  "filterConfigs": "Lọc cấu hình...",
+  "configName": "Tên Cấu hình",
+  "tags": "Tags",
+  "enterConfigName": "Nhập tên cấu hình",
+  "enterTags": "Nhập thẻ",
+  "selectConfig": "Chọn cấu hình...",
+  "searchConfig": "Tìm kiếm cấu hình...",
+  "label": "Cấu hình",
+  "addDomain": "Thêm miền",
+  "domains": "Tên Miền"
+}
