@@ -39,20 +39,22 @@ export const ConfigSelector = () => {
   return (
     <div className="flex items-center gap-2">
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            size="sm"
-            aria-expanded={open}
-            className="h-8 w-full max-w-35 justify-between lg:max-w-62"
-          >
-            {configId && configs
-              ? configs.find((config) => config.id === configId)?.name
-              : t("config.selectConfig")}
-            <ChevronsUpDownIcon className="opacity-50" />
-          </Button>
-        </PopoverTrigger>
+        <PopoverTrigger
+          render={
+            <Button
+              variant="outline"
+              role="combobox"
+              size="sm"
+              aria-expanded={open}
+              className="h-8 w-full max-w-35 justify-between lg:max-w-62"
+            >
+              {configId && configs
+                ? configs.find((config) => config.id === configId)?.name
+                : t("config.selectConfig")}
+              <ChevronsUpDownIcon className="opacity-50" />
+            </Button>
+          }
+        />
         <PopoverContent className="w-50 p-0">
           <Command
             filter={(_, search, keywords) => {

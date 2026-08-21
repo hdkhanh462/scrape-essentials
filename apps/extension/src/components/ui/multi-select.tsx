@@ -113,21 +113,23 @@ export function MultiSelectTrigger({
   const { open } = useMultiSelectContext()
 
   return (
-    <PopoverTrigger asChild>
-      <Button
-        {...props}
-        variant={props.variant ?? "outline"}
-        role={props.role ?? "combobox"}
-        aria-expanded={props["aria-expanded"] ?? open}
-        className={cn(
-          "flex h-auto w-fit items-center justify-between gap-1.5 overflow-hidden rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
-          className,
-        )}
-      >
-        {children}
-        <ChevronsUpDownIcon className="size-4 shrink-0 opacity-50" />
-      </Button>
-    </PopoverTrigger>
+    <PopoverTrigger
+      render={
+        <Button
+          {...props}
+          variant={props.variant ?? "outline"}
+          role={props.role ?? "combobox"}
+          aria-expanded={props["aria-expanded"] ?? open}
+          className={cn(
+            "flex h-auto w-fit items-center justify-between gap-1.5 overflow-hidden rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
+            className,
+          )}
+        >
+          {children}
+          <ChevronsUpDownIcon className="size-4 shrink-0 opacity-50" />
+        </Button>
+      }
+    />
   )
 }
 
@@ -278,7 +280,7 @@ export function MultiSelectContent({
           <CommandList>{children}</CommandList>
         </Command>
       </div>
-      <PopoverContent className="min-w-[var(--radix-popover-trigger-width)] p-0">
+      <PopoverContent className="min-w-[var(--anchor-width)] p-0">
         <Command {...props}>
           {canSearch ? (
             <CommandInput
