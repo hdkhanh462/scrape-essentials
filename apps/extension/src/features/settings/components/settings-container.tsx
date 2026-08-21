@@ -248,7 +248,7 @@ export function SettingsContainer() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex min-w-0 flex-col">
-                        <span className="truncate font-semibold text-black text-sm">
+                        <span className="truncate font-semibold text-sm">
                           {t("backup.notSignedIn")}
                         </span>
                         <span className="truncate text-muted-foreground text-xs">
