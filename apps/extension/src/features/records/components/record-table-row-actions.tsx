@@ -71,27 +71,29 @@ export function RecordTableRowActions({ row }: Props) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-8 data-[state=open]:bg-muted"
-        >
-          <MoreHorizontal />
-          <span className="sr-only">Open menu</span>
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-8 data-popup-open:bg-muted"
+          >
+            <MoreHorizontal />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        }
+      />
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onSelect={handleCopyRecord}>
+        <DropdownMenuItem onClick={handleCopyRecord}>
           {t("button.copy")}
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={handleOpenNewTab}>
+        <DropdownMenuItem onClick={handleOpenNewTab}>
           {t("record.gotoUrl")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
-          onSelect={deleteConfirmDialog.open}
+          onClick={deleteConfirmDialog.open}
         >
           {t("button.delete")}
         </DropdownMenuItem>

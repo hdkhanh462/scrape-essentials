@@ -62,7 +62,7 @@ export default function UiField({ field, control }: UiFieldProps) {
           name={field.name}
           label={field.name}
           inputProps={{
-            position: "popper",
+            alignItemWithTrigger: false,
             children: field.uiOptions?.options?.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}

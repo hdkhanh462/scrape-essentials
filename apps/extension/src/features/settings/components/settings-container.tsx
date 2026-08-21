@@ -212,26 +212,29 @@ export function SettingsContainer() {
                 <div className="flex items-center gap-4 rounded-xl border bg-accent/30 p-3 shadow-xs">
                   {userInfo ? (
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <div className="flex items-center gap-3 overflow-hidden rounded-xl p-2 text-left hover:cursor-pointer hover:bg-accent hover:shadow-sm">
-                          <Avatar className="size-10 border-2 border-background shadow-sm">
-                            <AvatarImage src={userInfo.picture} />
-                          </Avatar>
-                          <div className="flex min-w-0 flex-col">
-                            <span className="truncate font-semibold text-sm">
-                              {userInfo.name}
-                            </span>
-                            <span className="truncate text-muted-foreground text-xs">
-                              {userInfo.email}
-                            </span>
+                      <DropdownMenuTrigger
+                        nativeButton={false}
+                        render={
+                          <div className="flex items-center gap-3 overflow-hidden rounded-xl p-2 text-left hover:cursor-pointer hover:bg-accent hover:shadow-sm">
+                            <Avatar className="size-10 border-2 border-background shadow-sm">
+                              <AvatarImage src={userInfo.picture} />
+                            </Avatar>
+                            <div className="flex min-w-0 flex-col">
+                              <span className="truncate font-semibold text-sm">
+                                {userInfo.name}
+                              </span>
+                              <span className="truncate text-muted-foreground text-xs">
+                                {userInfo.email}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </DropdownMenuTrigger>
+                        }
+                      />
                       <DropdownMenuContent align="start" className="w-44">
                         <DropdownMenuItem
                           variant="destructive"
                           className="justify-between"
-                          onSelect={handleDisconnect}
+                          onClick={handleDisconnect}
                           disabled={disconnectMutation.isPending}
                         >
                           {t("backup.disconnect")}
