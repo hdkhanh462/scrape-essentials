@@ -1,0 +1,20 @@
+{
+  "label": "Settings",
+  "settingsDescription": "Configure your extension settings and preferences.",
+  "debugMode": "Debug mode",
+  "debugModeDescription": "Enable debug mode to see detailed logs and troubleshoot issues.",
+  "themes": "Themes",
+  "themesDescription": "Choose between light, dark, or system themes for the extension's appearance.",
+  "themeOptionDescription": "Use this theme for better visibility in bright or dark environments.",
+  "resetDefaults": "Reset defaults",
+  "resetDefaultsDescription": "Reset all settings and configurations to their default values. This action cannot be undone.",
+  "light": "Light",
+  "dark": "Dark",
+  "system": "System",
+  "dateTimeFormat": "Date & time format",
+  "dateTimeFormatDescription": "Choose how dates and times are displayed across the extension.",
+  "dateFormat": "Date format",
+  "timeFormat": "Time format",
+  "timeFormat24h": "24-hour",
+  "timeFormat12h": "12-hour (AM/PM)"
+}

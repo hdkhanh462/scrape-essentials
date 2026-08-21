@@ -1,0 +1,12 @@
+{
+  "label": "Config",
+  "filterConfigs": "Filter configs...",
+  "configName": "Config Name",
+  "tags": "Tags",
+  "enterConfigName": "Enter config name",
+  "enterTags": "Enter tags",
+  "selectConfig": "Select config...",
+  "searchConfig": "Search config...",
+  "addDomain": "Add domain",
+  "domains": "Domains"
+}

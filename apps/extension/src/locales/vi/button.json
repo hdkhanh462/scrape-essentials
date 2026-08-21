@@ -1,0 +1,17 @@
+{
+  "import": "Nhập",
+  "export": "Xuất",
+  "edit": "Chỉnh sửa",
+  "add": "Thêm",
+  "save": "Lưu",
+  "copy": "Sao chép",
+  "copied": "Đã sao chép",
+  "duplicate": "Nhân bản",
+  "delete": "Xóa",
+  "view": "Xem",
+  "toggleColumns": "Ẩn/hiện cột",
+  "paste": "Dán",
+  "pasted": "Đã dán",
+  "restore": "Khôi phục",
+  "restoring": "Đang khôi phục..."
+}

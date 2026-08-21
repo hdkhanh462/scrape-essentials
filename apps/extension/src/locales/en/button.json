@@ -1,0 +1,17 @@
+{
+  "import": "Import",
+  "export": "Export",
+  "edit": "Edit",
+  "add": "Add",
+  "save": "Save",
+  "copy": "Copy",
+  "copied": "Copied",
+  "duplicate": "Duplicate",
+  "delete": "Delete",
+  "view": "View",
+  "toggleColumns": "Toggle columns",
+  "paste": "Paste",
+  "pasted": "Pasted",
+  "restore": "Restore",
+  "restoring": "Restoring..."
+}
