@@ -124,6 +124,15 @@
     @apply font-sans! text-base! bg-background text-foreground;
     @apply h-screen overflow-hidden;
   }
+  /*
+    Popup windows are auto-sized by Chrome from document.scrollHeight.
+    Forcing h-screen + overflow-hidden clamps scrollHeight to the initial
+    (tiny) viewport, so the popup never grows to fit real content and
+    Radix Select never gets enough room to render its dropdown.
+  */
+  html[data-popup] body {
+    @apply h-auto overflow-visible;
+  }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
