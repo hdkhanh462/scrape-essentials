@@ -210,9 +210,9 @@ export function RecordCard({
             <UIInputs control={form.control} fields={uiFields} />
           </Activity>
           <Activity>
-            <Accordion type="single" defaultValue="item-1" collapsible>
+            <Accordion defaultValue={["item-1"]}>
               <AccordionItem value="item-1">
-                <AccordionTrigger className="py-0 data-[state=open]:pb-4!">
+                <AccordionTrigger className="py-0 data-panel-open:pb-4!">
                   {t("record.scrapedData")}
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pb-0">

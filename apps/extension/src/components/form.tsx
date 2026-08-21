@@ -155,7 +155,7 @@ export const FormTextarea: FormControlFunc = (props) => {
 
 export type FormSelectProps = PropsWithChildren<{
   placeholder?: string;
-  position?: "popper" | "item-aligned";
+  alignItemWithTrigger?: boolean;
 }>;
 
 export const FormSelect: FormControlFunc<FormSelectProps> = (props) => {
@@ -170,7 +170,7 @@ export const FormSelect: FormControlFunc<FormSelectProps> = (props) => {
           >
             <SelectValue placeholder={inputProps?.placeholder} />
           </SelectTrigger>
-          <SelectContent position={inputProps?.position}>
+          <SelectContent alignItemWithTrigger={inputProps?.alignItemWithTrigger}>
             {inputProps?.children}
           </SelectContent>
         </Select>

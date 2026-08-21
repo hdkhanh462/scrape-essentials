@@ -53,7 +53,7 @@ export function ConfigTableRowActions({ row }: Props) {
     toast.success(t("message.configIdCopied"));
   };
 
-  const handleCopyConfig = async (_e: Event) => {
+  const handleCopyConfig = async () => {
     let fields: ConfigField[] = fieldsQuery.data || [];
     if (!fields.length) {
       logger.debug("Fields not loaded, refetching...");
@@ -102,28 +102,30 @@ export function ConfigTableRowActions({ row }: Props) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-8 data-[state=open]:bg-muted"
-        >
-          <MoreHorizontal />
-          <span className="sr-only">Open menu</span>
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-8 data-popup-open:bg-muted"
+          >
+            <MoreHorizontal />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        }
+      />
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onSelect={handleEditSelect}>
+        <DropdownMenuItem onClick={handleEditSelect}>
           {t("button.edit")}
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={handleCopyId}>
+        <DropdownMenuItem onClick={handleCopyId}>
           {t("button.copy")} ID
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={handleCopyConfig}>
+        <DropdownMenuItem onClick={handleCopyConfig}>
           {t("button.copy")} JSON
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => duplicateConfigMutation.mutate(row.original.id)}
+          onClick={() => duplicateConfigMutation.mutate(row.original.id)}
         >
           {t("button.duplicate")}
         </DropdownMenuItem>
@@ -131,7 +133,7 @@ export function ConfigTableRowActions({ row }: Props) {
 
         <DropdownMenuItem
           variant="destructive"
-          onSelect={deleteConfirmDialog.open}
+          onClick={deleteConfirmDialog.open}
         >
           {t("button.delete")}
         </DropdownMenuItem>
