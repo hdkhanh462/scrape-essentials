@@ -136,6 +136,15 @@ export const ConfigDetail = () => {
         return;
       }
 
+      // Backfill tags for configs copied before this field existed.
+      if (
+        typeof valueFromClipboard === "object" &&
+        valueFromClipboard !== null &&
+        !Array.isArray((valueFromClipboard as { tags?: unknown }).tags)
+      ) {
+        (valueFromClipboard as { tags?: unknown }).tags = [];
+      }
+
       const { data, error } = ConfigSchema.safeParse(valueFromClipboard);
       if (error) {
         logger.error("Error parsing config from clipboard:", error);
