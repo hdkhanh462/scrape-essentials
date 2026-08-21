@@ -1,6 +1,7 @@
 "use client";
 
-import { Slot as SlotPrimitive } from "radix-ui";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import * as React from "react";
 import { useComposedRefs } from "@/lib/compose-refs";
 import { cn } from "@/lib/utils";
@@ -15,15 +16,14 @@ interface GetBadgeLabel<T> {
   getBadgeLabel: (item: T) => string;
 }
 
-type BadgeOverflowElement = React.ComponentRef<typeof BadgeOverflow>;
+type BadgeOverflowElement = HTMLDivElement;
 
-type BadgeOverflowProps<T = string> = React.ComponentProps<"div"> &
+type BadgeOverflowProps<T = string> = useRender.ComponentProps<"div"> &
   (T extends object ? GetBadgeLabel<T> : Partial<GetBadgeLabel<T>>) & {
     items: T[];
     lineCount?: number;
     renderBadge: (item: T, label: string) => React.ReactNode;
     renderOverflow?: (count: number) => React.ReactNode;
-    asChild?: boolean;
   };
 
 function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
@@ -33,7 +33,7 @@ function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
     lineCount = 1,
     renderBadge,
     renderOverflow,
-    asChild,
+    render,
     className,
     style,
     ref,
@@ -182,7 +182,59 @@ function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
     badgeWidths,
   ]);
 
-  const Comp = asChild ? SlotPrimitive.Slot : "div";
+  const rootStyle: React.CSSProperties = isMeasured
+    ? { gap: badgeGap, ...style }
+    : { gap: badgeGap, minHeight: placeholderHeight, ...style };
+
+  const rootChildren = isMeasured ? (
+    <>
+      {visibleItems.map((item, index) => (
+        <React.Fragment key={index}>
+          {renderBadge(item, getBadgeLabel(item))}
+        </React.Fragment>
+      ))}
+      {hiddenCount > 0 &&
+        (renderOverflow ? (
+          renderOverflow(hiddenCount)
+        ) : (
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="inline-flex h-5 shrink-0 items-center rounded-md border px-1.5 font-semibold text-xs">
+                +{hiddenCount}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="max-w-sm text-wrap">
+                {items.filter((i) => !visibleItems.includes(i)).join(", ")}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        ))}
+    </>
+  ) : (
+    items
+      .slice(0, Math.min(items.length, lineCount * 3 - (lineCount > 1 ? 1 : 0)))
+      .map((item, index) => (
+        <React.Fragment key={index}>
+          {renderBadge(item, getBadgeLabel(item))}
+        </React.Fragment>
+      ))
+  );
+
+  const root = useRender({
+    defaultTagName: "div",
+    render,
+    ref: composedRef,
+    props: mergeProps<"div">(
+      {
+        "data-slot": "badge-overflow",
+        className: cn("flex flex-wrap", className),
+        style: rootStyle,
+      } as React.ComponentProps<"div">,
+      rootProps,
+      { children: rootChildren },
+    ),
+  });
 
   return (
     <>
@@ -204,64 +256,7 @@ function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
           </div>
         )}
       </div>
-      {isMeasured ? (
-        <Comp
-          data-slot="badge-overflow"
-          {...rootProps}
-          ref={composedRef}
-          className={cn("flex flex-wrap", className)}
-          style={{
-            gap: badgeGap,
-            ...style,
-          }}
-        >
-          {visibleItems.map((item, index) => (
-            <React.Fragment key={index}>
-              {renderBadge(item, getBadgeLabel(item))}
-            </React.Fragment>
-          ))}
-          {hiddenCount > 0 &&
-            (renderOverflow ? (
-              renderOverflow(hiddenCount)
-            ) : (
-              <Tooltip>
-                <TooltipTrigger>
-                  <div className="inline-flex h-5 shrink-0 items-center rounded-md border px-1.5 font-semibold text-xs">
-                    +{hiddenCount}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="max-w-sm text-wrap">
-                    {items.filter((i) => !visibleItems.includes(i)).join(", ")}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-        </Comp>
-      ) : (
-        <Comp
-          data-slot="badge-overflow"
-          {...rootProps}
-          ref={composedRef}
-          className={cn("flex flex-wrap", className)}
-          style={{
-            gap: badgeGap,
-            minHeight: placeholderHeight,
-            ...style,
-          }}
-        >
-          {items
-            .slice(
-              0,
-              Math.min(items.length, lineCount * 3 - (lineCount > 1 ? 1 : 0)),
-            )
-            .map((item, index) => (
-              <React.Fragment key={index}>
-                {renderBadge(item, getBadgeLabel(item))}
-              </React.Fragment>
-            ))}
-        </Comp>
-      )}
+      {root}
     </>
   );
 }

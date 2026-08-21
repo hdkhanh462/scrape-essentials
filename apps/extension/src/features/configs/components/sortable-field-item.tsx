@@ -91,17 +91,19 @@ export default function SortableFieldItem({
               <InputGroupInput value={controllerField.value} readOnly />
               <InputGroupAddon align="inline-end">
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <InputGroupButton
-                      variant="ghost"
-                      aria-label="More"
-                      size="icon-xs"
-                    >
-                      <MoreHorizontalIcon />
-                    </InputGroupButton>
-                  </DropdownMenuTrigger>
+                  <DropdownMenuTrigger
+                    render={
+                      <InputGroupButton
+                        variant="ghost"
+                        aria-label="More"
+                        size="icon-xs"
+                      >
+                        <MoreHorizontalIcon />
+                      </InputGroupButton>
+                    }
+                  />
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onSelect={editFieldDialog.open}>
+                    <DropdownMenuItem onClick={editFieldDialog.open}>
                       {t("button.edit")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
