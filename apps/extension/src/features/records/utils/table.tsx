@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
+import { FormattedDateTime } from "@/components/formatted-date-time";
 import { Badge } from "@/components/ui/badge";
 import { BadgeOverflow } from "@/components/ui/badge-overflow";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -107,7 +108,7 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
         <DataTableColumnHeader column={column} title="Created At" />
       ),
       cell: ({ row }) => (
-        <span>{new Date(row.getValue("createdAt")).toLocaleString()}</span>
+        <FormattedDateTime value={row.getValue("createdAt")} />
       ),
     },
     {
@@ -116,7 +117,7 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
         <DataTableColumnHeader column={column} title="Updated At" />
       ),
       cell: ({ row }) => (
-        <span>{new Date(row.getValue("updatedAt")).toLocaleString()}</span>
+        <FormattedDateTime value={row.getValue("updatedAt")} />
       ),
     },
     {

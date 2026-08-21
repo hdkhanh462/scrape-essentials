@@ -114,7 +114,13 @@
     "resetDefaultsDescription": "Đặt lại tất cả cài đặt và cấu hình về giá trị mặc định. Hành động này không thể hoàn tác.",
     "light": "Sáng",
     "dark": "Tối",
-    "system": "Hệ thống"
+    "system": "Hệ thống",
+    "dateTimeFormat": "Định dạng ngày & giờ",
+    "dateTimeFormatDescription": "Chọn cách hiển thị ngày và giờ trong tiện ích.",
+    "dateFormat": "Định dạng ngày",
+    "timeFormat": "Định dạng giờ",
+    "timeFormat24h": "24 giờ",
+    "timeFormat12h": "12 giờ (AM/PM)"
   },
   "backup": {
     "label": "Sao lưu",
