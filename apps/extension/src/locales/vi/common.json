@@ -1,0 +1,15 @@
+{
+  "label": "Tên hiển thị",
+  "status": "Trạng thái",
+  "active": "Hoạt động",
+  "inactive": "Không hoạt động",
+  "reset": "Đặt lại",
+  "back": "Quay lại",
+  "search": "Tìm kiếm",
+  "refresh": "Làm mới",
+  "noResults": "Không có kết quả",
+  "createdAt": "Ngày tạo",
+  "updatedAt": "Ngày cập nhật",
+  "cancel": "Hủy",
+  "confirm": "Xác nhận"
+}

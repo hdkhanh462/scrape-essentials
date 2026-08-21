@@ -1,0 +1,11 @@
+{
+  "label": "Backup",
+  "backupDescription": "Securely backup your settings and configurations to your personal Google Drive account.",
+  "lastBackup": "Last backup",
+  "notSignedIn": "Not signed in",
+  "connectGoogleDrive": "Connect to Google Drive",
+  "connect": "Connect",
+  "disconnect": "Disconnect",
+  "size": "Backup size",
+  "noBackupYet": "No backup yet"
+}

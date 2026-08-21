@@ -1,0 +1,15 @@
+{
+  "label": "Label",
+  "status": "Status",
+  "active": "Active",
+  "inactive": "Inactive",
+  "reset": "Reset",
+  "back": "Back",
+  "search": "Search",
+  "refresh": "Refresh",
+  "noResults": "No results",
+  "createdAt": "Created At",
+  "updatedAt": "Updated At",
+  "cancel": "Cancel",
+  "confirm": "Confirm"
+}

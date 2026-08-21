@@ -1,0 +1,11 @@
+{
+  "label": "Sao lưu",
+  "backupDescription": "Tạo bản sao lưu của cài đặt và cấu hình hiện tại của bạn để lưu trữ an toàn hoặc chuyển sang thiết bị khác.",
+  "lastBackup": "Lần sao lưu gần nhất",
+  "notSignedIn": "Chưa đăng nhập",
+  "connectGoogleDrive": "Kết nối với Google Drive",
+  "connect": "Kết nối",
+  "disconnect": "Ngắt kết nối",
+  "size": "Dung lượng sao lưu",
+  "noBackupYet": "Chưa có bản sao lưu"
+}
