@@ -13,6 +13,8 @@ export const DEFAULT_SETTINGS: SettingsInput = {
   theme: "system",
   language: "english",
   autoBackup: false,
+  dateFormat: "DD/MM/YYYY",
+  timeFormat: "24h",
 };
 
 export const useSettingsStore = create<SettingsSlice>()(

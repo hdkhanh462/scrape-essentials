@@ -115,7 +115,13 @@
     "resetDefaultsDescription": "Reset all settings and configurations to their default values. This action cannot be undone.",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "dateTimeFormat": "Date & time format",
+    "dateTimeFormatDescription": "Choose how dates and times are displayed across the extension.",
+    "dateFormat": "Date format",
+    "timeFormat": "Time format",
+    "timeFormat24h": "24-hour",
+    "timeFormat12h": "12-hour (AM/PM)"
   },
   "backup": {
     "label": "Backup",

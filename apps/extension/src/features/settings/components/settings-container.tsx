@@ -11,6 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { FormSelect } from "@/components/form";
 import Loader from "@/components/loader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,7 @@ import {
   FieldTitle,
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { SelectItem } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import {
   useBackupMetadata,
@@ -46,9 +48,11 @@ import type { RestorePayload } from "@/features/backup/types";
 import { useImportConfigs } from "@/features/configs/hooks";
 import { useImportRecords } from "@/features/records/hooks";
 import {
+  dateFormatOptions,
   languageOptions,
   settingsSchema,
   themeOptions,
+  timeFormatOptions,
 } from "@/features/settings/schemas/settings";
 import {
   DEFAULT_SETTINGS,
@@ -56,7 +60,7 @@ import {
 } from "@/features/settings/stores/settings.store";
 import type { SettingsInput } from "@/features/settings/types/settings";
 import { useDialog } from "@/hooks/use-dialog";
-import { formatRelativeTime } from "@/utils/date";
+import { formatDateTime, formatRelativeTime } from "@/utils/date";
 import { formatBytes } from "@/utils/format-bytes";
 import { toastError } from "@/utils/toast";
 
@@ -405,6 +409,48 @@ export function SettingsContainer() {
                 </FieldSet>
               )}
             />
+            <FieldSeparator />
+            <FieldSet>
+              <FieldLabel htmlFor="date-time-format">
+                {t("settings.dateTimeFormat")}
+              </FieldLabel>
+              <FieldDescription>
+                {t("settings.dateTimeFormatDescription")}
+              </FieldDescription>
+              <div className="grid grid-cols-2 gap-4">
+                <FormSelect
+                  control={form.control}
+                  name="dateFormat"
+                  label={t("settings.dateFormat")}
+                  inputProps={{
+                    children: dateFormatOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {
+                          formatDateTime(Date.now(), {
+                            dateFormat: option,
+                            timeFormat: "24h",
+                          }).split(" ")[0]
+                        }
+                      </SelectItem>
+                    )),
+                  }}
+                />
+                <FormSelect
+                  control={form.control}
+                  name="timeFormat"
+                  label={t("settings.timeFormat")}
+                  inputProps={{
+                    children: timeFormatOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option === "24h"
+                          ? t("settings.timeFormat24h")
+                          : t("settings.timeFormat12h")}
+                      </SelectItem>
+                    )),
+                  }}
+                />
+              </div>
+            </FieldSet>
             <FieldSeparator />
             <Field orientation="responsive">
               <FieldContent>
