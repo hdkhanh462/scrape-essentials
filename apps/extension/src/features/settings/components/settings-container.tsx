@@ -6,7 +6,7 @@ import {
   LogOutIcon,
   RotateCcwIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { Activity, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -33,9 +33,11 @@ import {
   FieldSet,
   FieldTitle,
 } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SelectItem } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { RestoreBackupButton } from "@/features/backup/components/restore-backup-button";
 import {
   useBackupMetadata,
   useBackupToDrive,
@@ -69,8 +71,16 @@ export function SettingsContainer() {
 
   const { t } = useTranslation();
 
-  const { debugMode, theme, language, autoBackup, updateSettings } =
-    useSettingsStore();
+  const {
+    debugMode,
+    theme,
+    language,
+    autoBackup,
+    versionedBackup,
+    versionedBackupMinIntervalHours,
+    maxBackupsToKeep,
+    updateSettings,
+  } = useSettingsStore();
   const { userInfo, lastBackup } = useGoogleStore();
 
   const restoreConfirmDialog = useDialog();
@@ -104,8 +114,13 @@ export function SettingsContainer() {
       theme,
       language,
       autoBackup,
+      versionedBackup,
+      versionedBackupMinIntervalHours,
+      maxBackupsToKeep,
     }),
   });
+
+  const watchVersionedBackup = form.watch("versionedBackup");
 
   const handleSubmit = async (data: SettingsInput) => {
     updateSettings(data);
@@ -115,8 +130,8 @@ export function SettingsContainer() {
     form.reset(DEFAULT_SETTINGS);
   };
 
-  const handleRestoreClick = async () => {
-    restoreMutation.mutate();
+  const handleRestoreClick = (fileId?: string) => {
+    restoreMutation.mutate(fileId);
   };
 
   const handleRestore = async () => {
@@ -266,20 +281,11 @@ export function SettingsContainer() {
                     </button>
                   )}
                   <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="h-8 shadow-none"
-                      disabled={!userInfo || restoreMutation.isPending}
-                      onClick={handleRestoreClick}
-                    >
-                      <Loader isLoading={restoreMutation.isPending} />
-                      {!restoreMutation.isPending && (
-                        <History className="size-3.5" />
-                      )}
-                      {t("button.restore")}
-                    </Button>
+                    <RestoreBackupButton
+                      disabled={!userInfo}
+                      isPending={restoreMutation.isPending}
+                      onRestore={handleRestoreClick}
+                    />
                     <Button
                       type="button"
                       size="sm"
@@ -298,6 +304,87 @@ export function SettingsContainer() {
               </div>
             </Field>
 
+            <FieldSeparator />
+            <Controller
+              name="versionedBackup"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <FieldSet>
+                  <Field
+                    orientation="horizontal"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="versioned-backup">
+                        {t("backup.versionedBackup")}
+                      </FieldLabel>
+                      <FieldDescription>
+                        {t("backup.versionedBackupDescription")}
+                      </FieldDescription>
+                    </FieldContent>
+                    <Switch
+                      id="versioned-backup"
+                      name={field.name}
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      aria-invalid={fieldState.invalid}
+                    />
+                  </Field>
+                  <Activity
+                    mode={watchVersionedBackup ? "visible" : "hidden"}
+                  >
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                      <Controller
+                        name="versionedBackupMinIntervalHours"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor="versioned-backup-interval">
+                              {t("backup.minIntervalHours")}
+                            </FieldLabel>
+                            <Input
+                              id="versioned-backup-interval"
+                              type="number"
+                              min={1}
+                              max={720}
+                              name={field.name}
+                              value={field.value}
+                              onChange={(e) =>
+                                field.onChange(e.target.valueAsNumber)
+                              }
+                              aria-invalid={fieldState.invalid}
+                            />
+                          </Field>
+                        )}
+                      />
+                      <Controller
+                        name="maxBackupsToKeep"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor="max-backups-to-keep">
+                              {t("backup.maxBackupsToKeep")}
+                            </FieldLabel>
+                            <Input
+                              id="max-backups-to-keep"
+                              type="number"
+                              min={1}
+                              max={100}
+                              name={field.name}
+                              value={field.value}
+                              onChange={(e) =>
+                                field.onChange(e.target.valueAsNumber)
+                              }
+                              aria-invalid={fieldState.invalid}
+                            />
+                          </Field>
+                        )}
+                      />
+                    </div>
+                  </Activity>
+                </FieldSet>
+              )}
+            />
             <FieldSeparator />
             <Controller
               name="debugMode"

@@ -16,4 +16,11 @@ export const settingsSchema = z.object({
   autoBackup: z.boolean().default(false),
   dateFormat: z.enum(dateFormatOptions).default("DD/MM/YYYY"),
   timeFormat: z.enum(timeFormatOptions).default("24h"),
+  versionedBackup: z.boolean().default(true),
+  versionedBackupMinIntervalHours: z.coerce
+    .number()
+    .min(1)
+    .max(720)
+    .default(24),
+  maxBackupsToKeep: z.coerce.number().min(1).max(100).default(10),
 });

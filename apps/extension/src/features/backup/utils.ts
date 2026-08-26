@@ -1,5 +1,6 @@
 import { CHECK_BACKUP_ALARM_NAME } from "@/features/backup/constants";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
+import type { BackupMetadata } from "@/features/backup/types";
 import { useSettingsStore } from "@/features/settings/stores/settings.store";
 import { logger } from "@/utils/logger";
 
@@ -54,6 +55,31 @@ export const shouldBackup = (minutes: number): boolean => {
   );
 
   return Date.now() - lastBackup >= interval;
+};
+
+export const shouldCreateNewBackup = (
+  latest: BackupMetadata,
+  {
+    minIntervalHours,
+    currentVersion,
+  }: { minIntervalHours: number; currentVersion: string },
+): boolean => {
+  const lastTime = new Date(latest.createdTime).getTime();
+  const now = Date.now();
+
+  const differentDay =
+    new Date(lastTime).toDateString() !== new Date(now).toDateString();
+  const intervalExceeded = now - lastTime >= minIntervalHours * 60 * 60 * 1000;
+  const versionChanged =
+    !!latest.extensionVersion && latest.extensionVersion !== currentVersion;
+
+  logger.debug("Checking whether to create a new versioned backup:", {
+    differentDay,
+    intervalExceeded,
+    versionChanged,
+  });
+
+  return differentDay || intervalExceeded || versionChanged;
 };
 
 export const createCheckBackupAlarm = (minutes: number) => {
