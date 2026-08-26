@@ -9,6 +9,7 @@ import {
   disconnectGoogle,
   downloadBackup,
   getBackupMetadata,
+  listBackups,
   uploadBackup,
 } from "@/features/backup/google-drive";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
@@ -16,6 +17,7 @@ import type { BackupMetadata, RestorePayload } from "@/features/backup/types";
 
 export const backupQueryKey = {
   metadata: ["backup", "metadata"] as const,
+  list: ["backup", "list"] as const,
 };
 
 export const useBackupMetadata = () => {
@@ -24,6 +26,16 @@ export const useBackupMetadata = () => {
   return useQuery<BackupMetadata | null>({
     queryKey: backupQueryKey.metadata,
     queryFn: getBackupMetadata,
+    enabled: !!userInfo,
+  });
+};
+
+export const useBackupList = () => {
+  const { userInfo } = useGoogleStore();
+
+  return useQuery<BackupMetadata[]>({
+    queryKey: backupQueryKey.list,
+    queryFn: listBackups,
     enabled: !!userInfo,
   });
 };
@@ -58,13 +70,14 @@ export const useBackupToDrive = (options?: UseMutationOptions<void>) => {
     },
     onSuccess: (...params) => {
       queryClient.invalidateQueries({ queryKey: backupQueryKey.metadata });
+      queryClient.invalidateQueries({ queryKey: backupQueryKey.list });
       options?.onSuccess?.(...params);
     },
   });
 };
 
 export const useRestoreBackup = (
-  options?: UseMutationOptions<RestorePayload>,
+  options?: UseMutationOptions<RestorePayload, Error, string | undefined>,
 ) => {
   const queryClient = useQueryClient();
 

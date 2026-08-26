@@ -15,6 +15,9 @@ export const DEFAULT_SETTINGS: SettingsInput = {
   autoBackup: false,
   dateFormat: "DD/MM/YYYY",
   timeFormat: "24h",
+  versionedBackup: true,
+  versionedBackupMinIntervalHours: 24,
+  maxBackupsToKeep: 10,
 };
 
 export const useSettingsStore = create<SettingsSlice>()(

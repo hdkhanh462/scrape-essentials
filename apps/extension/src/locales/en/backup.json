@@ -7,5 +7,10 @@
   "connect": "Connect",
   "disconnect": "Disconnect",
   "size": "Backup size",
-  "noBackupYet": "No backup yet"
+  "noBackupYet": "No backup yet",
+  "latest": "latest",
+  "versionedBackup": "Versioned backups",
+  "versionedBackupDescription": "Keep multiple backups instead of always overwriting the last one. A new backup is created when it's a different day, the extension version changed, or the minimum interval below has passed since the last one.",
+  "minIntervalHours": "Minimum hours between new backups",
+  "maxBackupsToKeep": "Max backups to keep"
 }
