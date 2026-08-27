@@ -95,7 +95,7 @@ export function RestoreBackupButton({
                   className="flex-col items-start gap-0.5 [&>svg]:hidden"
                 >
                   <span className="font-medium text-sm">
-                    {formatDateTime(backup.createdTime, {
+                    {formatDateTime(backup.modifiedTime, {
                       dateFormat,
                       timeFormat,
                     })}
