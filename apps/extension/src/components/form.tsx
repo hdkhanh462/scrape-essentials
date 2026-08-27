@@ -170,7 +170,9 @@ export const FormSelect: FormControlFunc<FormSelectProps> = (props) => {
           >
             <SelectValue placeholder={inputProps?.placeholder} />
           </SelectTrigger>
-          <SelectContent alignItemWithTrigger={inputProps?.alignItemWithTrigger}>
+          <SelectContent
+            alignItemWithTrigger={inputProps?.alignItemWithTrigger}
+          >
             {inputProps?.children}
           </SelectContent>
         </Select>
