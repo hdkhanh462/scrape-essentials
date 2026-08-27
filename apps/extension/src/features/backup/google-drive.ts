@@ -16,7 +16,6 @@ import type { BackupMetadata, RestorePayload } from "@/features/backup/types";
 import {
   driveApiUrl,
   driveUploadApiUrl,
-  shouldBackup,
   shouldCreateNewBackup,
 } from "@/features/backup/utils";
 import { useSettingsStore } from "@/features/settings/stores/settings.store";
@@ -270,11 +269,3 @@ export async function deleteBackup(fileId?: string): Promise<void> {
 
   useGoogleStore.getState().setBackupMetadata(await getBackupMetadata());
 }
-
-export const autoBackup = async () => {
-  const { autoBackup: autoBackupEnabled } = useSettingsStore.getState();
-  if (!autoBackupEnabled || !shouldBackup(60)) return;
-
-  logger.debug("Auto backup triggered");
-  await uploadBackup({ authIfMissing: false });
-};

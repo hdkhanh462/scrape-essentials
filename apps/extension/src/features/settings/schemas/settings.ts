@@ -13,7 +13,6 @@ export const settingsSchema = z.object({
   debugMode: z.boolean().default(false),
   theme: z.enum(themeOptions).default("system"),
   language: z.enum(languageOptions).default("english"),
-  autoBackup: z.boolean().default(false),
   dateFormat: z.enum(dateFormatOptions).default("DD/MM/YYYY"),
   timeFormat: z.enum(timeFormatOptions).default("24h"),
   versionedBackup: z.boolean().default(true),

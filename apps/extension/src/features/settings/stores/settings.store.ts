@@ -12,7 +12,6 @@ export const DEFAULT_SETTINGS: SettingsInput = {
   debugMode: false,
   theme: "system",
   language: "english",
-  autoBackup: false,
   dateFormat: "DD/MM/YYYY",
   timeFormat: "24h",
   versionedBackup: true,
