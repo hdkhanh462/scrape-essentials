@@ -1,4 +1,7 @@
-import { BACKUP_FILE_NAME } from "@/features/backup/constants";
+import {
+  BACKUP_FILE_NAME,
+  BACKUP_FILE_PREFIX,
+} from "@/features/backup/constants";
 import {
   getAccessToken,
   launchWebAuthFlow,
@@ -14,6 +17,7 @@ import {
   driveApiUrl,
   driveUploadApiUrl,
   shouldBackup,
+  shouldCreateNewBackup,
 } from "@/features/backup/utils";
 import { useSettingsStore } from "@/features/settings/stores/settings.store";
 import { logger } from "@/utils/logger";
@@ -23,14 +27,28 @@ async function readDriveError(res: Response): Promise<string> {
   return data?.error?.message ?? `Google Drive request failed (${res.status})`;
 }
 
-export async function getBackupMetadata(): Promise<BackupMetadata | null> {
+// biome-ignore lint/suspicious/noExplicitAny: raw Google Drive API file resource
+function toBackupMetadata(file: any): BackupMetadata {
+  return {
+    id: file.id,
+    name: file.name,
+    size: Number(file.size ?? 0),
+    modifiedTime: file.modifiedTime,
+    createdTime: file.createdTime,
+    extensionVersion: file.appProperties?.extensionVersion,
+  };
+}
+
+/** Every backup file this extension has ever written, newest first (covers both the legacy single-file name and versioned `backup-<timestamp>` files). */
+export async function listBackups(): Promise<BackupMetadata[]> {
   const accessToken = await getAccessToken({ authIfMissing: false });
-  if (!accessToken) return null;
+  if (!accessToken) return [];
 
   const url = driveApiUrl("/files", {
     spaces: "appDataFolder",
-    q: `name='${BACKUP_FILE_NAME}' and trashed=false`,
-    fields: "files(id,name,size,modifiedTime)",
+    q: "name contains 'backup' and trashed=false",
+    fields: "files(id,name,size,modifiedTime,createdTime,appProperties)",
+    orderBy: "createdTime desc",
   });
 
   const res = await fetch(url, {
@@ -40,16 +58,12 @@ export async function getBackupMetadata(): Promise<BackupMetadata | null> {
   if (!res.ok) throw new Error(await readDriveError(res));
 
   const data = await res.json();
-  const file = data.files?.[0];
+  return (data.files ?? []).map(toBackupMetadata);
+}
 
-  return file
-    ? {
-        id: file.id,
-        name: file.name,
-        size: Number(file.size ?? 0),
-        modifiedTime: file.modifiedTime,
-      }
-    : null;
+export async function getBackupMetadata(): Promise<BackupMetadata | null> {
+  const backups = await listBackups();
+  return backups[0] ?? null;
 }
 
 export async function connectGoogle(): Promise<void> {
@@ -78,6 +92,73 @@ export async function disconnectGoogle(): Promise<void> {
   logout();
 }
 
+async function createBackupFile(
+  accessToken: string,
+  blob: Blob,
+  name: string,
+  extensionVersion: string,
+): Promise<Response> {
+  const form = new FormData();
+  form.append(
+    "metadata",
+    new Blob(
+      [
+        JSON.stringify({
+          name,
+          parents: ["appDataFolder"],
+          appProperties: { extensionVersion },
+        }),
+      ],
+      { type: "application/json" },
+    ),
+  );
+  form.append("file", blob);
+
+  return fetch(driveUploadApiUrl("/files", { uploadType: "multipart" }), {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: form,
+  });
+}
+
+async function overwriteBackupFile(
+  accessToken: string,
+  blob: Blob,
+  fileId: string,
+): Promise<Response> {
+  return fetch(driveUploadApiUrl(`/files/${fileId}`, { uploadType: "media" }), {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: blob,
+  });
+}
+
+async function deleteBackupFile(
+  accessToken: string,
+  fileId: string,
+): Promise<void> {
+  const res = await fetch(driveApiUrl(`/files/${fileId}`), {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (!res.ok) throw new Error(await readDriveError(res));
+}
+
+async function enforceRetention(
+  accessToken: string,
+  backups: BackupMetadata[],
+  maxCount: number,
+): Promise<void> {
+  // `backups` is newest-first; drop the oldest ones beyond the retention limit.
+  const toDelete = backups.slice(maxCount);
+
+  for (const backup of toDelete) {
+    logger.debug("Pruning old backup beyond retention limit:", backup.name);
+    await deleteBackupFile(accessToken, backup.id);
+  }
+}
+
 export async function uploadBackup(
   { authIfMissing } = { authIfMissing: true },
 ): Promise<BackupMetadata | undefined> {
@@ -87,39 +168,51 @@ export async function uploadBackup(
     return;
   }
 
-  const blob = await serializeBackup();
-  const existing = await getBackupMetadata();
+  const { versionedBackup, versionedBackupMinIntervalHours, maxBackupsToKeep } =
+    useSettingsStore.getState();
 
-  const res = existing
-    ? await fetch(
-        driveUploadApiUrl(`/files/${existing.id}`, { uploadType: "media" }),
-        {
-          method: "PATCH",
-          headers: { Authorization: `Bearer ${accessToken}` },
-          body: blob,
-        },
-      )
-    : await fetch(driveUploadApiUrl("/files", { uploadType: "multipart" }), {
-        method: "POST",
-        headers: { Authorization: `Bearer ${accessToken}` },
-        body: (() => {
-          const form = new FormData();
-          form.append(
-            "metadata",
-            new Blob(
-              [
-                JSON.stringify({
-                  name: BACKUP_FILE_NAME,
-                  parents: ["appDataFolder"],
-                }),
-              ],
-              { type: "application/json" },
-            ),
-          );
-          form.append("file", blob);
-          return form;
-        })(),
+  const blob = await serializeBackup();
+  const currentVersion = browser.runtime.getManifest().version;
+
+  let res: Response;
+
+  if (!versionedBackup) {
+    const existing = await getBackupMetadata();
+    res = existing
+      ? await overwriteBackupFile(accessToken, blob, existing.id)
+      : await createBackupFile(
+          accessToken,
+          blob,
+          BACKUP_FILE_NAME,
+          currentVersion,
+        );
+  } else {
+    const backups = await listBackups();
+    const latest = backups[0];
+    const createNew =
+      !latest ||
+      shouldCreateNewBackup(latest, {
+        minIntervalHours: versionedBackupMinIntervalHours,
+        currentVersion,
       });
+
+    res = createNew
+      ? await createBackupFile(
+          accessToken,
+          blob,
+          `${BACKUP_FILE_PREFIX}${Date.now()}.json.gz`,
+          currentVersion,
+        )
+      : await overwriteBackupFile(accessToken, blob, latest.id);
+
+    if (res.ok && createNew) {
+      await enforceRetention(
+        accessToken,
+        await listBackups(),
+        maxBackupsToKeep,
+      );
+    }
+  }
 
   if (!res.ok) {
     const message = await readDriveError(res);
@@ -136,11 +229,13 @@ export async function uploadBackup(
   return metadata ?? undefined;
 }
 
-export async function downloadBackup(): Promise<RestorePayload> {
+export async function downloadBackup(fileId?: string): Promise<RestorePayload> {
   const accessToken = await getAccessToken();
   if (!accessToken) throw new Error("No access token found");
 
-  const metadata = await getBackupMetadata();
+  const metadata = fileId
+    ? ((await listBackups()).find((backup) => backup.id === fileId) ?? null)
+    : await getBackupMetadata();
   if (!metadata) throw new Error("No backup found");
 
   const url = driveApiUrl(`/files/${metadata.id}`, { alt: "media" });
@@ -162,21 +257,18 @@ export async function downloadBackup(): Promise<RestorePayload> {
   };
 }
 
-export async function deleteBackup(): Promise<void> {
+export async function deleteBackup(fileId?: string): Promise<void> {
   const accessToken = await getAccessToken({ authIfMissing: false });
   if (!accessToken) return;
 
-  const metadata = await getBackupMetadata();
+  const metadata = fileId
+    ? ((await listBackups()).find((backup) => backup.id === fileId) ?? null)
+    : await getBackupMetadata();
   if (!metadata) return;
 
-  const res = await fetch(driveApiUrl(`/files/${metadata.id}`), {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  await deleteBackupFile(accessToken, metadata.id);
 
-  if (!res.ok) throw new Error(await readDriveError(res));
-
-  useGoogleStore.getState().setBackupMetadata(null);
+  useGoogleStore.getState().setBackupMetadata(await getBackupMetadata());
 }
 
 export const autoBackup = async () => {

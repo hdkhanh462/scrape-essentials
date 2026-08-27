@@ -29,13 +29,13 @@ export function DataTableViewOptions<TData>({
             className="invisible ml-auto h-8 lg:visible"
           >
             <Settings2 />
-            {t("button.view")}
+            {t("button:view")}
           </Button>
         }
       />
       <DropdownMenuContent align="end" className="w-37.5">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>{t("button.toggleColumns")}</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("button:toggleColumns")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {table
             .getAllColumns()

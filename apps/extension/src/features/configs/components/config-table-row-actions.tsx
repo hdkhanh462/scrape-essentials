@@ -36,21 +36,21 @@ export function ConfigTableRowActions({ row }: Props) {
   const fieldsQuery = useGetFields({ configId: row.original.id });
   const duplicateConfigMutation = useDuplicateConfig({
     onSuccess: () => {
-      toast.success(t("message.configDuplicated"));
+      toast.success(t("message:configDuplicated"));
     },
-    onError: (error) => toastError(error, t("message.failedToDuplicateConfig")),
+    onError: (error) => toastError(error, t("message:failedToDuplicateConfig")),
   });
   const deleteConfigMutation = useDeleteConfig({
     onSuccess: () => {
-      toast.success(t("message.configDeletedSuccessfully"));
+      toast.success(t("message:configDeletedSuccessfully"));
       deleteConfirmDialog.close();
     },
-    onError: (error) => toastError(error, t("message.failedToDeleteConfig")),
+    onError: (error) => toastError(error, t("message:failedToDeleteConfig")),
   });
 
   const handleCopyId = () => {
     navigator.clipboard.writeText(row.original.id);
-    toast.success(t("message.configIdCopied"));
+    toast.success(t("message:configIdCopied"));
   };
 
   const handleCopyConfig = async () => {
@@ -76,7 +76,7 @@ export function ConfigTableRowActions({ row }: Props) {
     const result = ConfigSchema.safeParse(configData);
     if (!result.success) {
       logger.error("Error copying config:", result.error);
-      toast.error(t("message.failedToCopyConfig"), {
+      toast.error(t("message:failedToCopyConfig"), {
         description: () => (
           <ul>
             {result.error.issues.map((err) => (
@@ -91,7 +91,7 @@ export function ConfigTableRowActions({ row }: Props) {
     }
 
     navigator.clipboard.writeText(JSON.stringify(result.data));
-    toast.success(t("message.configCopied"));
+    toast.success(t("message:configCopied"));
   };
 
   const handleEditSelect = () => {
@@ -116,18 +116,18 @@ export function ConfigTableRowActions({ row }: Props) {
       />
       <DropdownMenuContent align="end" className="w-40">
         <DropdownMenuItem onClick={handleEditSelect}>
-          {t("button.edit")}
+          {t("button:edit")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleCopyId}>
-          {t("button.copy")} ID
+          {t("button:copy")} ID
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleCopyConfig}>
-          {t("button.copy")} JSON
+          {t("button:copy")} JSON
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => duplicateConfigMutation.mutate(row.original.id)}
         >
-          {t("button.duplicate")}
+          {t("button:duplicate")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
@@ -135,14 +135,14 @@ export function ConfigTableRowActions({ row }: Props) {
           variant="destructive"
           onClick={deleteConfirmDialog.open}
         >
-          {t("button.delete")}
+          {t("button:delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title={t("dialog.areYouSure")}
-        description={t("dialog.deleteConfigConfirmation")}
+        title={t("dialog:areYouSure")}
+        description={t("dialog:deleteConfigConfirmation")}
         onConfirm={() => deleteConfigMutation.mutate(row.original.id)}
       />
     </DropdownMenu>

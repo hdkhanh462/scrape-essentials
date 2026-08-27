@@ -29,6 +29,8 @@ export type BackupMetadata = {
   name: string;
   size: number;
   modifiedTime: string;
+  createdTime: string;
+  extensionVersion?: string;
 };
 
 export type GoogleUserInfo = {

@@ -27,18 +27,18 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="regex"
-          label={t("field.regexPattern")}
+          label={t("field:regexPattern")}
           inputProps={{
-            placeholder: t("field.enterRegexPattern"),
+            placeholder: t("field:enterRegexPattern"),
             autoComplete: "off",
           }}
         />
         <FormInput
           control={form.control}
           name="splitter"
-          label={t("field.splitter")}
+          label={t("field:splitter")}
           inputProps={{
-            placeholder: t("field.enterSplitter"),
+            placeholder: t("field:enterSplitter"),
             autoComplete: "off",
           }}
         />
@@ -47,7 +47,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
         )}
       </div>
       <FieldSet>
-        <FieldLegend className="text-sm!">{t("field.removers")}</FieldLegend>
+        <FieldLegend className="text-sm!">{t("field:removers")}</FieldLegend>
         <FieldGroup className="gap-3">
           {fields.map((item, index) => (
             <Controller
@@ -59,7 +59,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
                   <div className="flex gap-2">
                     <Input
                       {...field}
-                      placeholder={t("field.enterRemover")}
+                      placeholder={t("field:enterRemover")}
                       autoComplete="off"
                     />
                     <Button
@@ -87,7 +87,7 @@ export default function TextFields({ form, fullErrors }: FieldTypePropsV2) {
           className="h-8"
           onClick={() => append({ value: "" })}
         >
-          {t("field.addRemover")}
+          {t("field:addRemover")}
         </Button>
       </FieldSet>
     </>

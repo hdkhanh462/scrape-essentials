@@ -125,9 +125,9 @@ export function RecordCard({
       },
       {
         onSuccess: () => {
-          toast.success(t("message.recordAddedSuccessfully"));
+          toast.success(t("message:recordAddedSuccessfully"));
         },
-        onError: (error) => toastError(error, t("message.failedToAddRecord")),
+        onError: (error) => toastError(error, t("message:failedToAddRecord")),
       },
     );
   };
@@ -140,9 +140,9 @@ export function RecordCard({
       { id, data: { data } },
       {
         onSuccess: () => {
-          toast.success(t("message.recordEditedSuccessfully"));
+          toast.success(t("message:recordEditedSuccessfully"));
         },
-        onError: (error) => toastError(error, t("message.failedToEditRecord")),
+        onError: (error) => toastError(error, t("message:failedToEditRecord")),
       },
     );
   };
@@ -213,7 +213,7 @@ export function RecordCard({
             <Accordion defaultValue={["item-1"]}>
               <AccordionItem value="item-1">
                 <AccordionTrigger className="py-0 data-panel-open:pb-4!">
-                  {t("record.scrapedData")}
+                  {t("record:scrapedData")}
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pb-0">
                   {fields.map(

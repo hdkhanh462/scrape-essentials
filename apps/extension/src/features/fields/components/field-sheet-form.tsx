@@ -98,8 +98,8 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
       onOpenChange={control.onChange}
       title={
         field
-          ? `${t("button.edit")} ${t("field.label")}`
-          : `${t("button.add")} ${t("field.label")}`
+          ? `${t("button:edit")} ${t("field:label")}`
+          : `${t("button:add")} ${t("field:label")}`
       }
       footer={
         <FieldSheetFooter
@@ -122,17 +122,17 @@ export const FieldSheetForm: React.FC<Props> = (props) => {
             <FormInput
               control={form.control}
               name="name"
-              label={t("field.fieldName")}
+              label={t("field:fieldName")}
               hideError
               inputProps={{
-                placeholder: t("field.enterFieldName"),
+                placeholder: t("field:enterFieldName"),
                 autoComplete: "off",
               }}
             />
             <FormSelect
               control={form.control}
               name="type"
-              label={t("field.fieldType")}
+              label={t("field:fieldType")}
               inputProps={{
                 children: Object.values(FieldType).map((type) => (
                   <SelectItem key={type} value={type}>

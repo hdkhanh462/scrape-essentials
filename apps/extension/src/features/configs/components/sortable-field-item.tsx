@@ -104,14 +104,14 @@ export default function SortableFieldItem({
                   />
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={editFieldDialog.open}>
-                      {t("button.edit")}
+                      {t("button:edit")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={deleteConfirmDialog.open}
                       disabled={isTextField(field) && field.isPrimary}
                     >
-                      {t("button.delete")}
+                      {t("button:delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -129,8 +129,8 @@ export default function SortableFieldItem({
       />
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title={t("dialog.areYouSure")}
-        description={t("dialog.deleteFieldConfirmation")}
+        title={t("dialog:areYouSure")}
+        description={t("dialog:deleteFieldConfirmation")}
         onConfirm={() => onDelete(index, field.fieldId)}
       />
     </div>

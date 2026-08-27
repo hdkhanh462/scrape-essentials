@@ -50,7 +50,7 @@ export const ConfigSelector = () => {
             >
               {configId && configs
                 ? configs.find((config) => config.id === configId)?.name
-                : t("config.selectConfig")}
+                : t("config:selectConfig")}
               <ChevronsUpDownIcon className="opacity-50" />
             </Button>
           }
@@ -64,11 +64,11 @@ export const ConfigSelector = () => {
             }}
           >
             <CommandInput
-              placeholder={t("config.searchConfig")}
+              placeholder={t("config:searchConfig")}
               className="h-9"
             />
             <CommandList>
-              <CommandEmpty>{t("common.noResults")}</CommandEmpty>
+              <CommandEmpty>{t("common:noResults")}</CommandEmpty>
               <CommandGroup>
                 {configs?.map((config) => (
                   <CommandItem
@@ -98,7 +98,7 @@ export const ConfigSelector = () => {
           onClick={handleRefresh}
         >
           <RefreshCwIcon />
-          {t("common.refresh")}
+          {t("common:refresh")}
         </Button>
       )}
     </div>

@@ -6,6 +6,12 @@
   "connectGoogleDrive": "Kết nối với Google Drive",
   "connect": "Kết nối",
   "disconnect": "Ngắt kết nối",
-  "size": "Dung lượng sao lưu",
-  "noBackupYet": "Chưa có bản sao lưu"
+  "size": "Tổng dung lượng",
+  "files": "file",
+  "noBackupYet": "Chưa có bản sao lưu",
+  "latest": "mới nhất",
+  "versionedBackup": "Sao lưu nhiều phiên bản",
+  "versionedBackupDescription": "Giữ lại nhiều bản sao lưu thay vì luôn ghi đè bản gần nhất. Một bản sao lưu mới sẽ được tạo khi khác ngày, phiên bản extension thay đổi, hoặc đã vượt quá khoảng thời gian tối thiểu bên dưới kể từ lần sao lưu gần nhất.",
+  "minIntervalHours": "Số giờ tối thiểu giữa 2 bản sao lưu mới",
+  "maxBackupsToKeep": "Số bản sao lưu tối đa giữ lại"
 }

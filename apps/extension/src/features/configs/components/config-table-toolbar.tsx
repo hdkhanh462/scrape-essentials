@@ -41,10 +41,10 @@ export function ConfigTableToolbar({
 
   const importConfigsMutation = useImportConfigs({
     onSuccess: () => {
-      toast.success(t("message.configsImportedSuccessfully"));
+      toast.success(t("message:configsImportedSuccessfully"));
       importConfirmDialog.close();
     },
-    onError: (error) => toastError(error, t("message.failedToImportConfigs")),
+    onError: (error) => toastError(error, t("message:failedToImportConfigs")),
   });
 
   const tagsQuery = useGetConfigTags();
@@ -65,7 +65,7 @@ export function ConfigTableToolbar({
       blob,
       prefix: "configs-export",
     });
-    toast.success(t("message.exportSuccessful"));
+    toast.success(t("message:exportSuccessful"));
   };
 
   const handleImport = async () => {
@@ -92,7 +92,7 @@ export function ConfigTableToolbar({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center gap-2">
         <Input
-          placeholder={t("config.filterConfigs")}
+          placeholder={t("config:filterConfigs")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -106,16 +106,16 @@ export function ConfigTableToolbar({
                 | Column<ScrapeConfig, boolean>
                 | undefined
             }
-            title={t("common.status")}
+            title={t("common:status")}
             options={[
               {
                 value: true,
-                label: t("common.active"),
+                label: t("common:active"),
                 icon: CheckIcon,
               },
               {
                 value: false,
-                label: t("common.inactive"),
+                label: t("common:inactive"),
                 icon: XIcon,
               },
             ]}
@@ -129,7 +129,7 @@ export function ConfigTableToolbar({
                 // so leave it as string to prevent type error
                 Column<ScrapeConfig, string> | undefined
             }
-            title={t("config.tags")}
+            title={t("config:tags")}
             options={tagsQuery.data.map((tag) => ({
               value: tag,
               label: tag,
@@ -143,7 +143,24 @@ export function ConfigTableToolbar({
             className="h-8"
             onClick={() => table.resetColumnFilters()}
           >
-            {t("common.reset")}
+            {t("common:reset")}
+            <XIcon />
+          </Button>
+        )}
+
+        {isSelected && (
+          <Button
+            variant="destructive"
+            size="sm"
+            className="h-8"
+            onClick={() => {
+              const selectedIds = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id);
+              onDeleteSelected?.(selectedIds);
+            }}
+          >
+            Delete ({selectedCount})
             <XIcon />
           </Button>
         )}
@@ -173,7 +190,7 @@ export function ConfigTableToolbar({
           onClick={handleImport}
         >
           <DownloadIcon />
-          {t("button.import")}
+          {t("button:import")}
         </Button>
         <Button
           size="sm"
@@ -182,18 +199,18 @@ export function ConfigTableToolbar({
           onClick={handleExport}
         >
           <UploadIcon />
-          {t("button.export")}
+          {t("button:export")}
         </Button>
         <ConfirmDialog
           control={importConfirmDialog}
-          title={t("dialog.areYouSure")}
-          description={t("dialog.importConfigConfirmation")}
+          title={t("dialog:areYouSure")}
+          description={t("dialog:importConfigConfirmation")}
           onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />
         <Button size="sm" className="h-8" onClick={handleAddConfigClick}>
           <PlusIcon />
-          {`${t("button.add")} ${t("config.label")}`}
+          {`${t("button:add")} ${t("config:label")}`}
         </Button>
       </div>
     </div>
