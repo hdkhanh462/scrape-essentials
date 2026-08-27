@@ -1,7 +1,7 @@
 import type {
   dateFormatOptions,
   timeFormatOptions,
-} from "@/features/settings/schemas/settings";
+} from "@/features/settings/schemas/settings.schema";
 
 type DateFormat = (typeof dateFormatOptions)[number];
 type TimeFormat = (typeof timeFormatOptions)[number];

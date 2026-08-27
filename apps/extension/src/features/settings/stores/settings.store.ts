@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { SettingsInput } from "@/features/settings/types/settings";
+import type { SettingsInput } from "@/features/settings/types/settings.types";
 import { wxtStorage } from "@/features/shared/stores/wxt-storage";
 
 type SettingsSlice = SettingsInput & {

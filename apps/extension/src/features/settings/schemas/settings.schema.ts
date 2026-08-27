@@ -9,7 +9,7 @@ export const dateFormatOptions = [
 ] as const;
 export const timeFormatOptions = ["24h", "12h"] as const;
 
-export const settingsSchema = z.object({
+export const SettingsSchema = z.object({
   debugMode: z.boolean().default(false),
   theme: z.enum(themeOptions).default("system"),
   language: z.enum(languageOptions).default("english"),

@@ -52,15 +52,15 @@ import { useImportRecords } from "@/features/records/hooks";
 import {
   dateFormatOptions,
   languageOptions,
-  settingsSchema,
+  SettingsSchema,
   themeOptions,
   timeFormatOptions,
-} from "@/features/settings/schemas/settings";
+} from "@/features/settings/schemas/settings.schema";
 import {
   DEFAULT_SETTINGS,
   useSettingsStore,
 } from "@/features/settings/stores/settings.store";
-import type { SettingsInput } from "@/features/settings/types/settings";
+import type { SettingsInput } from "@/features/settings/types/settings.types";
 import { useDialog } from "@/hooks/use-dialog";
 import { formatDateTime, formatRelativeTime } from "@/utils/date";
 import { formatBytes } from "@/utils/format-bytes";
@@ -112,7 +112,7 @@ export function SettingsContainer() {
   const importRecordsMutation = useImportRecords();
 
   const form = useForm<SettingsInput>({
-    defaultValues: settingsSchema.parse({
+    defaultValues: SettingsSchema.parse({
       debugMode,
       theme,
       language,
