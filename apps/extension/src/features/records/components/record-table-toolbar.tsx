@@ -55,7 +55,7 @@ export function RecordTableToolbar({
       blob,
       prefix: "records-export",
     });
-    toast.success(t("message.exportSuccessful"));
+    toast.success(t("message:exportSuccessful"));
   };
 
   const handleImportClick = async () => {
@@ -72,10 +72,10 @@ export function RecordTableToolbar({
 
     importRecords(importPayload, {
       onSuccess: () => {
-        toast.success(t("message.configsImportedSuccessfully"));
+        toast.success(t("message:configsImportedSuccessfully"));
         importConfirmDialog.close();
       },
-      onError: (error) => toastError(error, t("message.failedToImportConfigs")),
+      onError: (error) => toastError(error, t("message:failedToImportConfigs")),
     });
   };
 
@@ -139,7 +139,7 @@ export function RecordTableToolbar({
           onClick={handleImportClick}
         >
           <DownloadIcon />
-          {t("button.import")}
+          {t("button:import")}
         </Button>
         <Button
           size="sm"
@@ -148,12 +148,12 @@ export function RecordTableToolbar({
           onClick={handleExport}
         >
           <UploadIcon />
-          {t("button.export")}
+          {t("button:export")}
         </Button>
         <ConfirmDialog
           control={importConfirmDialog}
-          title={t("dialog.areYouSure")}
-          description={t("dialog.importRecordsConfirmation")}
+          title={t("dialog:areYouSure")}
+          description={t("dialog:importRecordsConfirmation")}
           onConfirm={handleImportConfirm}
         />
         <DataTableViewOptions table={table} />

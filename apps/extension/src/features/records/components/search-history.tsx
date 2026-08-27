@@ -117,9 +117,9 @@ export const SearchHistory: React.FC<Props> = (props) => {
         {open && (
           <div className="fade-in-0 zoom-in-95 absolute top-0 z-10 mt-2 w-full animate-in rounded-md bg-background outline-none">
             <CommandList className="rounded-lg border">
-              <CommandGroup heading={t("message.recentSearches")}>
+              <CommandGroup heading={t("message:recentSearches")}>
                 {filterHistory.length === 0 && (
-                  <CommandEmpty>{t("common.noResults")}</CommandEmpty>
+                  <CommandEmpty>{t("common:noResults")}</CommandEmpty>
                 )}
 
                 {filterHistory.map((item) => (

@@ -43,7 +43,7 @@ export function RecordCardFooter({
       onSuccess: () => {
         onDeleteSuccess?.();
       },
-      onError: (error) => toastError(error, t("message.failedToDeleteRecord")),
+      onError: (error) => toastError(error, t("message:failedToDeleteRecord")),
     });
   };
 
@@ -84,7 +84,7 @@ export function RecordCardFooter({
           onClick={handleDelete}
         >
           <Trash2Icon />
-          {t("button.delete")}
+          {t("button:delete")}
         </Button>
       )}
       <Button
@@ -100,12 +100,12 @@ export function RecordCardFooter({
           fallback={
             <>
               <CheckIcon />
-              {t("button.copied")}
+              {t("button:copied")}
             </>
           }
         >
           <CopyIcon />
-          {t("button.copy")}
+          {t("button:copy")}
         </Loader>
       </Button>
       <Button
@@ -116,7 +116,7 @@ export function RecordCardFooter({
         disabled={!isDirty && !!scrapedRecord}
       >
         <SaveIcon />
-        {t("button.save")}
+        {t("button:save")}
       </Button>
     </Field>
   );

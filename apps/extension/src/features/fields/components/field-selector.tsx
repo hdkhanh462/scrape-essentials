@@ -83,7 +83,7 @@ export default function FieldSelector(props: FieldSelectorProps) {
         items={items}
         isLoading={loading}
         placeholder={props.placeholder}
-        emptyMessage={t("common.noResults")}
+        emptyMessage={t("common:noResults")}
         onSelectedValueChange={props.onChange}
         onSearchValueChange={(val) => {
           setItems(undefined);

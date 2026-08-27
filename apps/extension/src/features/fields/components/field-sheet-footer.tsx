@@ -34,7 +34,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
       try {
         valueFromClipboard = JSON.parse(text);
       } catch (error) {
-        toast.error(t("message.invalidJsonFormat"), {
+        toast.error(t("message:invalidJsonFormat"), {
           description: error instanceof Error ? error.message : "Unknown error",
         });
         return;
@@ -43,7 +43,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
       const { data, error } = FieldSchema.safeParse(valueFromClipboard);
       if (error) {
         logger.error("Error parsing field from clipboard:", error);
-        toast.error(t("message.pasteFailed"), {
+        toast.error(t("message:pasteFailed"), {
           description: () => (
             <ul>
               {error.issues.map((err) => (
@@ -82,12 +82,12 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
             fallback={
               <>
                 <CheckIcon />
-                {t("button.pasted")}
+                {t("button:pasted")}
               </>
             }
           >
             <ClipboardPasteIcon />
-            {t("button.paste")}
+            {t("button:paste")}
           </Loader>
         </Button>
       ) : (
@@ -103,12 +103,12 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
             fallback={
               <>
                 <CheckIcon />
-                {t("button.copied")}
+                {t("button:copied")}
               </>
             }
           >
             <CopyIcon />
-            {t("button.copy")}
+            {t("button:copy")}
           </Loader>
         </Button>
       )}
@@ -120,7 +120,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         onClick={() => form.reset()}
       >
         <RotateCcwIcon />
-        {t("common.reset")}
+        {t("common:reset")}
       </Button>
       <Button
         form={id}
@@ -130,7 +130,7 @@ export function FieldSheetFooter({ id, mode, form }: Props) {
         disabled={!form.formState.isDirty}
       >
         <SaveIcon />
-        {mode === "add" ? t("button.add") : t("button.save")}
+        {mode === "add" ? t("button:add") : t("button:save")}
       </Button>
     </Field>
   );

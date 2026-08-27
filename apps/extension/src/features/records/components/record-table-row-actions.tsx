@@ -44,23 +44,23 @@ export function RecordTableRowActions({ row }: Props) {
         key: row.original.key,
       });
       copyRecord.copy(copyData);
-      toast.success(t("record.recordDataCopied"));
+      toast.success(t("record:recordDataCopied"));
     }
   };
 
   const handleDeleteRecord = () => {
     deleteRecord(row.original.id, {
       onSuccess: () => {
-        toast.success(t("message.recordDeletedSuccessfully"));
+        toast.success(t("message:recordDeletedSuccessfully"));
         deleteConfirmDialog.close();
       },
-      onError: (error) => toastError(error, t("message.failedToDeleteRecord")),
+      onError: (error) => toastError(error, t("message:failedToDeleteRecord")),
     });
   };
 
   const handleOpenNewTab = () => {
     if (!row.original.url) {
-      toast.error(t("record.urlNotFound"));
+      toast.error(t("record:urlNotFound"));
       return;
     }
 
@@ -85,24 +85,24 @@ export function RecordTableRowActions({ row }: Props) {
       />
       <DropdownMenuContent align="end" className="w-40">
         <DropdownMenuItem onClick={handleCopyRecord}>
-          {t("button.copy")}
+          {t("button:copy")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleOpenNewTab}>
-          {t("record.gotoUrl")}
+          {t("record:gotoUrl")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           onClick={deleteConfirmDialog.open}
         >
-          {t("button.delete")}
+          {t("button:delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title={t("dialog.areYouSure")}
-        description={t("dialog.deleteRecordConfirmation")}
+        title={t("dialog:areYouSure")}
+        description={t("dialog:deleteRecordConfirmation")}
         onConfirm={handleDeleteRecord}
       />
     </DropdownMenu>

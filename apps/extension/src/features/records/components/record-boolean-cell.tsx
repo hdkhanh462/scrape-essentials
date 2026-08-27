@@ -30,7 +30,7 @@ export const RecordCell = ({ row, columnId, value, url }: Props) => {
       },
       {
         onError: (error) =>
-          toastError(error, t("message.failedToUpdateRecord")),
+          toastError(error, t("message:failedToUpdateRecord")),
       },
     );
   };

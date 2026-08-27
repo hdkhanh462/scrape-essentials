@@ -30,10 +30,10 @@ export const ConfigActiveCell = ({ row }: Props) => {
       {
         onSuccess: () => {
           setChecked(toUpdate);
-          toast.success(t("message.configActiveStateToggled"));
+          toast.success(t("message:configActiveStateToggled"));
         },
         onError: (error) =>
-          toastError(error, t("message.failedToToggleConfigActiveState")),
+          toastError(error, t("message:failedToToggleConfigActiveState")),
       },
     );
   };
