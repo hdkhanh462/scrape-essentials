@@ -21,24 +21,24 @@ export default function CheckboxFields({ form }: FieldTypePropsV2) {
       <FormCheckbox
         control={form.control}
         name="isShowOnTable"
-        label={t("field.showOnTable")}
+        label={t("field:showOnTable")}
       />
       <FormCheckbox
         control={form.control}
         name="isFilterable"
-        label={t("field.filterable")}
+        label={t("field:filterable")}
       />
       <FormCheckbox
         control={form.control}
         name="isRequired"
-        label={t("field.required")}
+        label={t("field:required")}
         inputProps={{ disabled: isPrimary }}
       />
       {(isScrapeFieldType(type) || isPageUrlFieldType(type)) && (
         <FormCheckbox
           control={form.control}
           name="isPrimary"
-          label={t("field.primary")}
+          label={t("field:primary")}
         />
       )}
       {isScrapeFieldType(type) && (
@@ -46,12 +46,12 @@ export default function CheckboxFields({ form }: FieldTypePropsV2) {
           <FormCheckbox
             control={form.control}
             name="scrapeOptions.isMultiple"
-            label={t("field.multiple")}
+            label={t("field:multiple")}
           />
           <FormCheckbox
             control={form.control}
             name="isParent"
-            label={t("field.parent")}
+            label={t("field:parent")}
           />
         </>
       )}

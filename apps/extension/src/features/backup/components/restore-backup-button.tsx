@@ -55,7 +55,7 @@ export function RestoreBackupButton({
       >
         <Loader isLoading={!!isPending} />
         {!isPending && <HistoryIcon className="size-3.5" />}
-        {t("button.restore")}
+        {t("button:restore")}
       </Button>
     );
   }
@@ -73,7 +73,7 @@ export function RestoreBackupButton({
           >
             <Loader isLoading={!!isPending} />
             {!isPending && <HistoryIcon className="size-3.5" />}
-            {t("button.restore")}
+            {t("button:restore")}
             <ChevronDownIcon className="size-3.5 opacity-50" />
           </Button>
         }
@@ -81,7 +81,7 @@ export function RestoreBackupButton({
       <PopoverContent className="w-72 p-0" align="end">
         <Command>
           <CommandList>
-            <CommandEmpty>{t("backup.noBackupYet")}</CommandEmpty>
+            <CommandEmpty>{t("backup:noBackupYet")}</CommandEmpty>
             <CommandGroup>
               {backups.map((backup, index) => (
                 <CommandItem
@@ -101,7 +101,7 @@ export function RestoreBackupButton({
                     })}
                     {index === 0 && (
                       <span className="ml-2 text-muted-foreground text-xs">
-                        {t("backup.latest")}
+                        {t("backup:latest")}
                       </span>
                     )}
                   </span>

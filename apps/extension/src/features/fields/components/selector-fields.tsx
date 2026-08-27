@@ -25,11 +25,11 @@ export default function SelectorFields({ form, fullErrors }: FieldTypePropsV2) {
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>{t("field.parent")}</FieldLabel>
+            <FieldLabel>{t("field:parent")}</FieldLabel>
             <FieldSelector
               value={field.value}
               onChange={field.onChange}
-              placeholder={t("field.selectParentField")}
+              placeholder={t("field:selectParentField")}
               fetchItems={fetchFieldItems}
               fetchLabel={fetchFieldLabel}
             />

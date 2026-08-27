@@ -39,7 +39,7 @@ import { SelectItem } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { RestoreBackupButton } from "@/features/backup/components/restore-backup-button";
 import {
-  useBackupMetadata,
+  useBackupList,
   useBackupToDrive,
   useConnectGoogle,
   useDisconnectGoogle,
@@ -85,25 +85,29 @@ export function SettingsContainer() {
 
   const restoreConfirmDialog = useDialog();
 
-  const backupMetadataQuery = useBackupMetadata();
+  const backupListQuery = useBackupList();
+  const totalBackupSize = backupListQuery.data?.reduce(
+    (sum, backup) => sum + backup.size,
+    0,
+  );
   const connectMutation = useConnectGoogle({
-    onSuccess: () => toast.success(t("message.connectSuccessful")),
-    onError: (error) => toastError(error, t("message.connectFailed")),
+    onSuccess: () => toast.success(t("message:connectSuccessful")),
+    onError: (error) => toastError(error, t("message:connectFailed")),
   });
   const disconnectMutation = useDisconnectGoogle({
-    onSuccess: () => toast.success(t("message.disconnectSuccessful")),
-    onError: (error) => toastError(error, t("message.disconnectFailed")),
+    onSuccess: () => toast.success(t("message:disconnectSuccessful")),
+    onError: (error) => toastError(error, t("message:disconnectFailed")),
   });
   const restoreMutation = useRestoreBackup({
     onSuccess: (data) => {
       setRestoreInfo(data);
       restoreConfirmDialog.open();
     },
-    onError: (error) => toastError(error, t("message.restoreFailed")),
+    onError: (error) => toastError(error, t("message:restoreFailed")),
   });
   const backupMutation = useBackupToDrive({
-    onSuccess: () => toast.success(t("message.backupSuccessful")),
-    onError: (error) => toastError(error, t("message.backupFailed")),
+    onSuccess: () => toast.success(t("message:backupSuccessful")),
+    onError: (error) => toastError(error, t("message:backupFailed")),
   });
   const importConfigsMutation = useImportConfigs();
   const importRecordsMutation = useImportRecords();
@@ -145,17 +149,17 @@ export function SettingsContainer() {
           onSuccess: () => {
             setIsRestoring(false);
             restoreConfirmDialog.close();
-            toast.success(t("message.restoreSuccessful"));
+            toast.success(t("message:restoreSuccessful"));
           },
           onError: (error) => {
             setIsRestoring(false);
-            toastError(error, t("message.importRecordsFailed"));
+            toastError(error, t("message:importRecordsFailed"));
           },
         });
       },
       onError: (error) => {
         setIsRestoring(false);
-        toastError(error, t("message.failedToImportConfigs"));
+        toastError(error, t("message:failedToImportConfigs"));
       },
     });
   };
@@ -178,9 +182,9 @@ export function SettingsContainer() {
     <div className="py-8">
       <form onChange={form.handleSubmit(handleSubmit)}>
         <FieldSet>
-          <FieldLegend>{t("settings.label")}</FieldLegend>
+          <FieldLegend>{t("settings:label")}</FieldLegend>
           <FieldDescription>
-            {t("settings.settingsDescription")}
+            {t("settings:settingsDescription")}
           </FieldDescription>
 
           <FieldGroup>
@@ -188,7 +192,7 @@ export function SettingsContainer() {
             <Field orientation="responsive">
               <FieldContent>
                 <div className="flex items-center gap-2">
-                  <FieldLabel htmlFor="backup">{t("backup.label")}</FieldLabel>
+                  <FieldLabel htmlFor="backup">{t("backup:label")}</FieldLabel>
                   <Badge
                     variant="outline"
                     className="gap-1.5 border-green-500/20 bg-green-500/5 px-2 font-normal text-green-600 dark:text-green-400"
@@ -198,11 +202,11 @@ export function SettingsContainer() {
                   </Badge>
                 </div>
                 <FieldDescription className="max-w-100">
-                  {t("backup.backupDescription")}
+                  {t("backup:backupDescription")}
                   <div className="mt-2 flex items-center justify-between gap-2">
                     <span className="flex items-center gap-2 font-medium text-foreground/80 text-xs">
                       <History className="size-3.5 text-muted-foreground" />
-                      {t("backup.lastBackup")}:{" "}
+                      {t("backup:lastBackup")}:{" "}
                       <span className="font-normal text-muted-foreground">
                         {formatRelativeTime(lastBackup)}
                       </span>
@@ -210,13 +214,17 @@ export function SettingsContainer() {
                     {userInfo && (
                       <span className="flex items-center gap-2 font-medium text-foreground/80 text-xs">
                         <FileDigitIcon className="size-3.5 text-muted-foreground" />
-                        {t("backup.size")}:{" "}
+                        {t("backup:size")}:{" "}
                         <span className="font-normal text-muted-foreground">
-                          {backupMetadataQuery.isLoading
+                          {backupListQuery.isLoading
                             ? "…"
-                            : backupMetadataQuery.data
-                              ? formatBytes(backupMetadataQuery.data.size)
-                              : t("backup.noBackupYet")}
+                            : totalBackupSize
+                              ? `${formatBytes(totalBackupSize)}${
+                                  (backupListQuery.data?.length ?? 0) > 1
+                                    ? ` (${backupListQuery.data?.length} ${t("backup:files")})`
+                                    : ""
+                                }`
+                              : t("backup:noBackupYet")}
                         </span>
                       </span>
                     )}
@@ -252,7 +260,7 @@ export function SettingsContainer() {
                           onClick={handleDisconnect}
                           disabled={disconnectMutation.isPending}
                         >
-                          {t("backup.disconnect")}
+                          {t("backup:disconnect")}
                           <LogOutIcon />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -271,10 +279,10 @@ export function SettingsContainer() {
                       </Avatar>
                       <div className="flex min-w-0 flex-col">
                         <span className="truncate font-semibold text-sm">
-                          {t("backup.notSignedIn")}
+                          {t("backup:notSignedIn")}
                         </span>
                         <span className="truncate text-muted-foreground text-xs">
-                          {t("backup.connectGoogleDrive")}
+                          {t("backup:connectGoogleDrive")}
                         </span>
                       </div>
                       <Loader isLoading={connectMutation.isPending} />
@@ -297,7 +305,7 @@ export function SettingsContainer() {
                       {!backupMutation.isPending && (
                         <CloudUpload className="size-3.5" />
                       )}
-                      {t("backup.label")}
+                      {t("backup:label")}
                     </Button>
                   </div>
                 </div>
@@ -316,10 +324,10 @@ export function SettingsContainer() {
                   >
                     <FieldContent>
                       <FieldLabel htmlFor="versioned-backup">
-                        {t("backup.versionedBackup")}
+                        {t("backup:versionedBackup")}
                       </FieldLabel>
                       <FieldDescription>
-                        {t("backup.versionedBackupDescription")}
+                        {t("backup:versionedBackupDescription")}
                       </FieldDescription>
                     </FieldContent>
                     <Switch
@@ -330,9 +338,7 @@ export function SettingsContainer() {
                       aria-invalid={fieldState.invalid}
                     />
                   </Field>
-                  <Activity
-                    mode={watchVersionedBackup ? "visible" : "hidden"}
-                  >
+                  <Activity mode={watchVersionedBackup ? "visible" : "hidden"}>
                     <div className="mt-4 grid grid-cols-2 gap-4">
                       <Controller
                         name="versionedBackupMinIntervalHours"
@@ -340,7 +346,7 @@ export function SettingsContainer() {
                         render={({ field, fieldState }) => (
                           <Field data-invalid={fieldState.invalid}>
                             <FieldLabel htmlFor="versioned-backup-interval">
-                              {t("backup.minIntervalHours")}
+                              {t("backup:minIntervalHours")}
                             </FieldLabel>
                             <Input
                               id="versioned-backup-interval"
@@ -363,7 +369,7 @@ export function SettingsContainer() {
                         render={({ field, fieldState }) => (
                           <Field data-invalid={fieldState.invalid}>
                             <FieldLabel htmlFor="max-backups-to-keep">
-                              {t("backup.maxBackupsToKeep")}
+                              {t("backup:maxBackupsToKeep")}
                             </FieldLabel>
                             <Input
                               id="max-backups-to-keep"
@@ -396,10 +402,10 @@ export function SettingsContainer() {
                 >
                   <FieldContent>
                     <FieldLabel htmlFor="debug-mode">
-                      {t("settings.debugMode")}
+                      {t("settings:debugMode")}
                     </FieldLabel>
                     <FieldDescription>
-                      {t("settings.debugModeDescription")}
+                      {t("settings:debugModeDescription")}
                     </FieldDescription>
                   </FieldContent>
                   <Switch
@@ -419,10 +425,10 @@ export function SettingsContainer() {
               render={({ field, fieldState }) => (
                 <FieldSet>
                   <FieldLabel htmlFor="themes">
-                    {t("settings.themes")}
+                    {t("settings:themes")}
                   </FieldLabel>
                   <FieldDescription>
-                    {t("settings.themesDescription")}
+                    {t("settings:themesDescription")}
                   </FieldDescription>
                   <RadioGroup
                     name={field.name}
@@ -437,10 +443,10 @@ export function SettingsContainer() {
                         >
                           <FieldContent>
                             <FieldTitle className="capitalize">
-                              {t(`settings.${theme}`)}
+                              {t(`settings:${theme}`)}
                             </FieldTitle>
                             <FieldDescription>
-                              {t("settings.themeOptionDescription")}
+                              {t("settings:themeOptionDescription")}
                             </FieldDescription>
                           </FieldContent>
                           <RadioGroupItem
@@ -462,7 +468,7 @@ export function SettingsContainer() {
               render={({ field, fieldState }) => (
                 <FieldSet>
                   <FieldLabel htmlFor="languages">
-                    {t("language.label")}
+                    {t("language:label")}
                   </FieldLabel>
                   <RadioGroup
                     name={field.name}
@@ -502,16 +508,16 @@ export function SettingsContainer() {
             <FieldSeparator />
             <FieldSet>
               <FieldLabel htmlFor="date-time-format">
-                {t("settings.dateTimeFormat")}
+                {t("settings:dateTimeFormat")}
               </FieldLabel>
               <FieldDescription>
-                {t("settings.dateTimeFormatDescription")}
+                {t("settings:dateTimeFormatDescription")}
               </FieldDescription>
               <div className="grid grid-cols-2 gap-4">
                 <FormSelect
                   control={form.control}
                   name="dateFormat"
-                  label={t("settings.dateFormat")}
+                  label={t("settings:dateFormat")}
                   inputProps={{
                     children: dateFormatOptions.map((option) => (
                       <SelectItem key={option} value={option}>
@@ -528,13 +534,13 @@ export function SettingsContainer() {
                 <FormSelect
                   control={form.control}
                   name="timeFormat"
-                  label={t("settings.timeFormat")}
+                  label={t("settings:timeFormat")}
                   inputProps={{
                     children: timeFormatOptions.map((option) => (
                       <SelectItem key={option} value={option}>
                         {option === "24h"
-                          ? t("settings.timeFormat24h")
-                          : t("settings.timeFormat12h")}
+                          ? t("settings:timeFormat24h")
+                          : t("settings:timeFormat12h")}
                       </SelectItem>
                     )),
                   }}
@@ -545,15 +551,15 @@ export function SettingsContainer() {
             <Field orientation="responsive">
               <FieldContent>
                 <FieldLabel htmlFor="reset-default">
-                  {t("settings.resetDefaults")}
+                  {t("settings:resetDefaults")}
                 </FieldLabel>
                 <FieldDescription>
-                  {t("settings.resetDefaultsDescription")}
+                  {t("settings:resetDefaultsDescription")}
                 </FieldDescription>
               </FieldContent>
               <Button type="button" variant="destructive" onClick={handleReset}>
                 <RotateCcwIcon />
-                {t("common.reset")}
+                {t("common:reset")}
               </Button>
             </Field>
           </FieldGroup>
@@ -562,8 +568,8 @@ export function SettingsContainer() {
 
       <ConfirmDialog
         control={restoreConfirmDialog}
-        title={t("dialog.areYouSure")}
-        description={t("dialog.restoreConfirmation")}
+        title={t("dialog:areYouSure")}
+        description={t("dialog:restoreConfirmation")}
         onConfirm={handleRestore}
         cancelButton={{
           override: {
@@ -571,7 +577,7 @@ export function SettingsContainer() {
           },
         }}
         confirmButton={{
-          label: isRestoring ? t("button.restoring") : t("common.confirm"),
+          label: isRestoring ? t("button:restoring") : t("common:confirm"),
           isLoading: isRestoring,
           override: {
             disabled: isRestoring,
@@ -580,7 +586,7 @@ export function SettingsContainer() {
       >
         {restoreInfo?.modifiedTime && (
           <p className="mt-3 rounded-md border border-border bg-muted p-3 text-muted-foreground text-sm">
-            {t("dialog.restoreBackupInfo", {
+            {t("dialog:restoreBackupInfo", {
               time: formatRelativeTime(
                 new Date(restoreInfo.modifiedTime).getTime(),
               ),

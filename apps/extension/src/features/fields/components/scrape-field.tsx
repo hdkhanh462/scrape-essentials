@@ -11,9 +11,9 @@ export function ScrapeField({ form, fullErrors }: FieldTypePropsV2) {
       <FormInput
         control={form.control}
         name="scrapeOptions.cssSelector"
-        label={t("field.cssSelector")}
+        label={t("field:cssSelector")}
         inputProps={{
-          placeholder: t("field.enterCssSelector"),
+          placeholder: t("field:enterCssSelector"),
           autoComplete: "off",
         }}
       />
@@ -21,18 +21,18 @@ export function ScrapeField({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="scrapeOptions.condition"
-          label={t("field.condition")}
+          label={t("field:condition")}
           inputProps={{
-            placeholder: t("field.enterCondition"),
+            placeholder: t("field:enterCondition"),
             autoComplete: "off",
           }}
         />
         <FormInput
           control={form.control}
           name="scrapeOptions.attributeName"
-          label={t("field.attributeName")}
+          label={t("field:attributeName")}
           inputProps={{
-            placeholder: t("field.enterAttributeName"),
+            placeholder: t("field:enterAttributeName"),
             autoComplete: "off",
           }}
         />

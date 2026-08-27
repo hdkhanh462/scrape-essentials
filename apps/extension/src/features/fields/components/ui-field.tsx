@@ -46,10 +46,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormNumberInput
             control={form.control}
             name="uiOptions.defaultValue"
-            label={t("field.defaultValue")}
+            label={t("field:defaultValue")}
             hideError
             inputProps={{
-              placeholder: t("field.enterDefaultValue"),
+              placeholder: t("field:enterDefaultValue"),
               autoComplete: "off",
             }}
           />
@@ -59,10 +59,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormSelect
             control={form.control}
             name="uiOptions.defaultValue"
-            label={t("field.defaultValue")}
+            label={t("field:defaultValue")}
             hideError
             inputProps={{
-              placeholder: t("field.enterDefaultValue"),
+              placeholder: t("field:enterDefaultValue"),
               children: (
                 <>
                   <SelectItem value="true">True</SelectItem>
@@ -77,10 +77,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormTagsInput
             control={form.control}
             name="uiOptions.defaultValue"
-            label={t("field.defaultValue")}
+            label={t("field:defaultValue")}
             hideError
             inputProps={{
-              placeholder: t("field.enterDefaultValue"),
+              placeholder: t("field:enterDefaultValue"),
             }}
           />
         );
@@ -89,10 +89,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
           <FormInput
             control={form.control}
             name="uiOptions.defaultValue"
-            label={t("field.defaultValue")}
+            label={t("field:defaultValue")}
             hideError
             inputProps={{
-              placeholder: t("field.enterDefaultValue"),
+              placeholder: t("field:enterDefaultValue"),
               autoComplete: "off",
             }}
           />
@@ -106,10 +106,10 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
         <FormInput
           control={form.control}
           name="uiOptions.label"
-          label={t("common.label")}
+          label={t("common:label")}
           hideError
           inputProps={{
-            placeholder: t("field.enterLabel"),
+            placeholder: t("field:enterLabel"),
             autoComplete: "off",
           }}
         />
@@ -126,7 +126,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
       </div>
       {isSelectFieldType(type) && (
         <FieldSet>
-          <FieldLegend className="text-sm!">{t("field.options")}</FieldLegend>
+          <FieldLegend className="text-sm!">{t("field:options")}</FieldLegend>
           <FieldGroup className="gap-3">
             {fields.map((item, index) => (
               <Controller
@@ -155,7 +155,7 @@ export function UiField({ form, fullErrors }: FieldTypePropsV2) {
             className="h-8"
             onClick={() => append({ label: "", value: "" })}
           >
-            {t("field.addOption")}
+            {t("field:addOption")}
           </Button>
         </FieldSet>
       )}
@@ -186,7 +186,7 @@ function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
                 label: e.target.value,
               })
             }
-            placeholder={t("field.enterOptionLabel")}
+            placeholder={t("field:enterOptionLabel")}
             autoComplete="off"
           />
           <Input
@@ -197,7 +197,7 @@ function OptionItem({ index, field, errors, onRemove }: OptionItemProps) {
                 value: e.target.value,
               })
             }
-            placeholder={t("field.enterOptionValue")}
+            placeholder={t("field:enterOptionValue")}
             autoComplete="off"
           />
         </div>

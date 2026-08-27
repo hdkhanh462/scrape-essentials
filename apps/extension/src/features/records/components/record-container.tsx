@@ -39,7 +39,7 @@ export function RecordContainer() {
       setSelectedIds([]);
       setRowSelection({});
       deleteConfirmDialog.close();
-      toast.success(t("message.recordsDeletedSuccessfully"));
+      toast.success(t("message:recordsDeletedSuccessfully"));
     },
   });
 
@@ -75,8 +75,8 @@ export function RecordContainer() {
       </DataTable>
       <ConfirmDialog
         control={deleteConfirmDialog}
-        title={t("dialog.areYouSure")}
-        description={t("dialog.deleteRecordsConfirmation")}
+        title={t("dialog:areYouSure")}
+        description={t("dialog:deleteRecordsConfirmation")}
         onConfirm={() => deleteRecordsMutation.mutate(selectedIds)}
       />
     </div>

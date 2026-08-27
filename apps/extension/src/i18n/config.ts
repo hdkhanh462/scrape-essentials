@@ -63,7 +63,7 @@ i18next.use(initReactI18next).init({
   resources,
   ns: Object.keys(resources.en),
   defaultNS: "common",
-  nsSeparator: ".",
+  nsSeparator: ":",
   keySeparator: false,
 });
 

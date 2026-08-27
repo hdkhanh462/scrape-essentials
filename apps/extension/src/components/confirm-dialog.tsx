@@ -46,7 +46,7 @@ export const ConfirmDialog: React.FC<Props> = (props) => {
             {...cancelButton?.override}
             onClick={control.close}
           >
-            {cancelButton?.label || t("common.cancel")}
+            {cancelButton?.label || t("common:cancel")}
           </Button>
           <Button
             variant="destructive"
@@ -58,7 +58,7 @@ export const ConfirmDialog: React.FC<Props> = (props) => {
             {confirmButton?.isLoading ? (
               <Loader className="mr-2" isLoading />
             ) : null}
-            {confirmButton?.label || t("common.confirm")}
+            {confirmButton?.label || t("common:confirm")}
           </Button>
         </Field>
       }

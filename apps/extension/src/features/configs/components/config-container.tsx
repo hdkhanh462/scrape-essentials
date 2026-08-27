@@ -35,7 +35,7 @@ export function ConfigContainer() {
       setSelectedIds([]);
       setRowSelection({});
       deleteConfirmDialog.close();
-      toast.success(t("message.configsDeletedSuccessfully"));
+      toast.success(t("message:configsDeletedSuccessfully"));
     },
   });
 
@@ -65,13 +65,13 @@ export function ConfigContainer() {
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("config.configName")} />
+        <DataTableColumnHeader column={column} title={t("config:configName")} />
       ),
     },
     {
       accessorKey: "domains",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("config.domains")} />
+        <DataTableColumnHeader column={column} title={t("config:domains")} />
       ),
       cell: ({ row }) => (
         <BadgeOverflow
@@ -83,7 +83,7 @@ export function ConfigContainer() {
     {
       accessorKey: "tags",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("config.tags")} />
+        <DataTableColumnHeader column={column} title={t("config:tags")} />
       ),
       cell: ({ row }) => (
         <BadgeOverflow
@@ -103,14 +103,14 @@ export function ConfigContainer() {
       accessorKey: "isActive",
       filterFn: (row, id, value: string) => value.includes(row.getValue(id)),
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("common.active")} />
+        <DataTableColumnHeader column={column} title={t("common:active")} />
       ),
       cell: ({ row }) => <ConfigActiveCell row={row} />,
     },
     {
       accessorKey: "createdAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("common.createdAt")} />
+        <DataTableColumnHeader column={column} title={t("common:createdAt")} />
       ),
       cell: ({ row }) => (
         <FormattedDateTime value={row.getValue("createdAt")} />
@@ -119,7 +119,7 @@ export function ConfigContainer() {
     {
       accessorKey: "updatedAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("common.updatedAt")} />
+        <DataTableColumnHeader column={column} title={t("common:updatedAt")} />
       ),
       cell: ({ row }) => (
         <FormattedDateTime value={row.getValue("updatedAt")} />
@@ -159,8 +159,8 @@ export function ConfigContainer() {
           </DataTable>
           <ConfirmDialog
             control={deleteConfirmDialog}
-            title={t("dialog.areYouSure")}
-            description={t("dialog.deleteConfigsConfirmation")}
+            title={t("dialog:areYouSure")}
+            description={t("dialog:deleteConfigsConfirmation")}
             onConfirm={() => deleteConfigsMutation.mutate(selectedIds)}
           />
         </>
