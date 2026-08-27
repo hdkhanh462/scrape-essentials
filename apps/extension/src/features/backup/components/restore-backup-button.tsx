@@ -92,7 +92,7 @@ export function RestoreBackupButton({
                     onRestore(backup.id);
                     setOpen(false);
                   }}
-                  className="flex-col items-start gap-0.5"
+                  className="flex-col items-start gap-0.5 [&>svg]:hidden"
                 >
                   <span className="font-medium text-sm">
                     {formatDateTime(backup.createdTime, {
