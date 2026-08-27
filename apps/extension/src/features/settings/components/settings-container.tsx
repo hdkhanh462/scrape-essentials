@@ -219,11 +219,7 @@ export function SettingsContainer() {
                           {backupListQuery.isLoading
                             ? "…"
                             : totalBackupSize
-                              ? `${formatBytes(totalBackupSize)}${
-                                  (backupListQuery.data?.length ?? 0) > 1
-                                    ? ` (${backupListQuery.data?.length} ${t("backup:files")})`
-                                    : ""
-                                }`
+                              ? `${formatBytes(totalBackupSize)}`
                               : t("backup:noBackupYet")}
                         </span>
                       </span>
