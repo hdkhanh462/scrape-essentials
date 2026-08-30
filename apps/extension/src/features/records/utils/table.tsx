@@ -37,6 +37,7 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
           field.type === FieldType.InputMultiSelect ||
           field.type === FieldType.InputTags ? (
             <BadgeOverflow
+              className="min-w-64"
               items={(row.original.data[field.name] as Array<string>) || []}
               renderBadge={(_, label) => (
                 <Badge variant="outline">{label}</Badge>

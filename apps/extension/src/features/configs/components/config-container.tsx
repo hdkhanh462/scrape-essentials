@@ -75,6 +75,7 @@ export function ConfigContainer() {
       ),
       cell: ({ row }) => (
         <BadgeOverflow
+          className="min-w-64"
           items={row.getValue<string[]>("domains") || []}
           renderBadge={(_, label) => <Badge variant="outline">{label}</Badge>}
         />
@@ -87,6 +88,7 @@ export function ConfigContainer() {
       ),
       cell: ({ row }) => (
         <BadgeOverflow
+          className="min-w-64"
           items={row.getValue<string[]>("tags") || []}
           renderBadge={(_, label) => <Badge variant="outline">{label}</Badge>}
         />

@@ -22,6 +22,13 @@ type BadgeOverflowProps<T = string> = useRender.ComponentProps<"div"> &
   (T extends object ? GetBadgeLabel<T> : Partial<GetBadgeLabel<T>>) & {
     items: T[];
     lineCount?: number;
+    /**
+     * Minimum number of badges to always keep visible, even if they don't
+     * fit within the measured container width (falls back to overflowing
+     * the container rather than collapsing everything into "+N").
+     * @default 1
+     */
+    minVisibleItems?: number;
     renderBadge: (item: T, label: string) => React.ReactNode;
     renderOverflow?: (count: number) => React.ReactNode;
   };
@@ -31,6 +38,7 @@ function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
     items,
     getBadgeLabel: getBadgeLabelProp,
     lineCount = 1,
+    minVisibleItems = 1,
     renderBadge,
     renderOverflow,
     render,
@@ -162,6 +170,10 @@ function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
         currentLine++;
         currentLineWidth = widthWithGap;
         visible.push(item);
+      } else if (visible.length < minVisibleItems) {
+        // Doesn't fit, but we haven't reached the guaranteed minimum yet —
+        // keep it visible and let it overflow the container.
+        visible.push(item);
       } else {
         // We're on the last line and this badge doesn't fit
         break;
@@ -177,6 +189,7 @@ function BadgeOverflow<T = string>(props: BadgeOverflowProps<T>) {
     getBadgeLabel,
     containerWidth,
     lineCount,
+    minVisibleItems,
     badgeGap,
     overflowBadgeWidth,
     badgeWidths,
