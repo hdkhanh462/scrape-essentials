@@ -63,3 +63,7 @@ Hardware:
 	```bash
 	bun run build
 	```
+
+### 📚 Docs
+
+- [Generate a config with an AI LLM](apps/extension/docs/ai-config-prompt.md) — prompt template to have an AI generate an importable extension config from a website URL and a list of fields
