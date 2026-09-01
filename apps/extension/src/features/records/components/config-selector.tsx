@@ -19,6 +19,7 @@ import { useGetConfigs } from "@/features/configs/hooks";
 import { recordQueryKey } from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { queryClient } from "@/features/shared/query-client";
+import { cn } from "@/lib/utils";
 
 export const ConfigSelector = () => {
   const [open, setOpen] = useState(false);
@@ -48,9 +49,19 @@ export const ConfigSelector = () => {
               aria-expanded={open}
               className="h-8 w-full max-w-35 justify-between lg:max-w-62"
             >
-              {configId && configs
-                ? configs.find((config) => config.id === configId)?.name
-                : t("config:selectConfig")}
+              <span
+                className={cn(
+                  "truncate",
+                  configId &&
+                    configs?.find((config) => config.id === configId)
+                      ?.isActive === false &&
+                    "text-muted-foreground",
+                )}
+              >
+                {configId && configs
+                  ? configs.find((config) => config.id === configId)?.name
+                  : t("config:selectConfig")}
+              </span>
               <ChevronsUpDownIcon className="opacity-50" />
             </Button>
           }
@@ -81,7 +92,14 @@ export const ConfigSelector = () => {
                       setOpen(false);
                     }}
                   >
-                    {config.name}
+                    <span
+                      className={cn(
+                        "truncate",
+                        !config.isActive && "text-muted-foreground",
+                      )}
+                    >
+                      {config.name}
+                    </span>
                   </CommandItem>
                 ))}
               </CommandGroup>
