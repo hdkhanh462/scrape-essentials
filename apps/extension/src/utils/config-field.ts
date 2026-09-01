@@ -1,5 +1,5 @@
 import type { FieldInput } from "@/features/fields/types/form-input";
-import { FieldType } from "@/lib/dexie";
+import { type ConfigField, FieldType } from "@/lib/dexie";
 
 export function isTextField(field: FieldInput): field is Extract<
   FieldInput,
@@ -108,4 +108,12 @@ export function isScrapeFieldType(type: FieldType) {
 
 export function isPageUrlFieldType(type: FieldType) {
   return type === FieldType.PageUrl;
+}
+
+export function isArrayField(field: ConfigField) {
+  return (
+    !!field.scrapeOptions?.isMultiple ||
+    field.type === FieldType.InputMultiSelect ||
+    field.type === FieldType.InputTags
+  );
 }

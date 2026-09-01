@@ -21,6 +21,13 @@
         "additionalProperties": false
       }
     },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "isActive": {
       "type": "boolean"
     },
@@ -32,6 +39,9 @@
           {
             "type": "object",
             "properties": {
+              "fieldId": {
+                "type": "string"
+              },
               "parentFieldId": {
                 "type": "string"
               },
@@ -65,9 +75,10 @@
                     "type": "string",
                     "enum": [
                       "input-text",
-                      "input-textarea",
                       "input-number",
-                      "input-checkbox"
+                      "input-checkbox",
+                      "input-textarea",
+                      "input-tags"
                     ]
                   },
                   "uiOptions": {
@@ -224,6 +235,6 @@
       }
     }
   },
-  "required": ["name", "domains", "fields"],
+  "required": ["name", "domains", "tags", "fields"],
   "additionalProperties": false
 }

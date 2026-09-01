@@ -7,7 +7,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RecordCell } from "@/features/records/components/record-boolean-cell";
 import { RecordTableRowActions } from "@/features/records/components/record-table-row-actions";
 import { getFieldType } from "@/features/records/utils/helpers";
-import { type ConfigField, FieldType, type ScrapedRecord } from "@/lib/dexie";
+import type { ConfigField, ScrapedRecord } from "@/lib/dexie";
+import { isArrayField } from "@/utils/config-field";
 
 type BuildColumnHandler = (
   url: string,
@@ -18,24 +19,26 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
   const temp: ColumnDef<ScrapedRecord>[] = [];
   fields.forEach((field) => {
     if (field.isParent || field.isPrimary) return;
-    const colType =
-      field.scrapeOptions?.isMultiple ||
-      field.type === FieldType.InputMultiSelect ||
-      field.type === FieldType.InputTags
-        ? "string[]"
-        : getFieldType(field.type, ["string", "number", "boolean"], "string");
+    const isArray = isArrayField(field);
+    const colType = isArray
+      ? "string[]"
+      : getFieldType(field.type, ["string", "number", "boolean"], "string");
     temp.push({
       id: field.name,
       accessorKey: `data.${field.name}`,
       meta: { type: colType },
+      filterFn: isArray
+        ? (row, id, value: string[]) =>
+            ((row.getValue(id) as string[]) || []).some((v) =>
+              value.includes(v),
+            )
+        : undefined,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={field.name} />
       ),
       cell: ({ row }) => (
         <div>
-          {field.scrapeOptions?.isMultiple ||
-          field.type === FieldType.InputMultiSelect ||
-          field.type === FieldType.InputTags ? (
+          {isArray ? (
             <BadgeOverflow
               className="min-w-64"
               items={(row.original.data[field.name] as Array<string>) || []}

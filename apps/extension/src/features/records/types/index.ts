@@ -5,6 +5,11 @@ export type GetScrapedRecordsPayload = {
   configId?: ScrapeConfig["id"];
 };
 
+export type GetRecordFieldValuesPayload = {
+  configId?: ScrapeConfig["id"];
+  fieldName: string;
+};
+
 export type GetScrapedRecordPayload = Partial<
   Pick<ScrapedRecord, "id" | "key">
 >;

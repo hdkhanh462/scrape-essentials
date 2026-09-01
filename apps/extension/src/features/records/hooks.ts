@@ -10,12 +10,14 @@ import {
   deleteRecord,
   editRecord,
   getRecordById,
+  getRecordFieldValues,
   getRecords,
   importRecords,
 } from "@/features/records/services";
 import type {
   AddScrapedRecordPayload,
   EditScrapedRecordPayload,
+  GetRecordFieldValuesPayload,
   GetScrapedRecordPayload,
   GetScrapedRecordsPayload,
   ImportRecordsPayload,
@@ -30,12 +32,24 @@ export const recordQueryKey = {
     [...recordQueryKey.all, "list", payload] as const,
   detail: (payload: GetScrapedRecordPayload) =>
     [...recordQueryKey.all, "detail", payload] as const,
+  fieldValues: (payload: GetRecordFieldValuesPayload) =>
+    [...recordQueryKey.all, "fieldValues", payload] as const,
 };
 
 export const useGetRecords = (payload: GetScrapedRecordsPayload) => {
   return useQuery<ScrapedRecord[]>({
     queryKey: recordQueryKey.list(payload),
     queryFn: () => getRecords(payload),
+    enabled: !!payload.configId,
+  });
+};
+
+export const useGetRecordFieldValues = (
+  payload: GetRecordFieldValuesPayload,
+) => {
+  return useQuery<string[]>({
+    queryKey: recordQueryKey.fieldValues(payload),
+    queryFn: () => getRecordFieldValues(payload),
     enabled: !!payload.configId,
   });
 };

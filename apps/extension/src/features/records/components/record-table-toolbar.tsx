@@ -1,4 +1,4 @@
-import type { Table } from "@tanstack/react-table";
+import type { Column, Table } from "@tanstack/react-table";
 import { DownloadIcon, UploadIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,12 +9,17 @@ import { DataTableViewOptions } from "@/components/data-table/data-table-view-op
 import { Button } from "@/components/ui/button";
 import { useGetFields } from "@/features/fields/hooks";
 import { SearchHistory } from "@/features/records/components/search-history";
-import { useImportRecords } from "@/features/records/hooks";
+import {
+  useGetRecordFieldValues,
+  useImportRecords,
+} from "@/features/records/hooks";
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { isValidFilter } from "@/features/records/utils/filter";
 import { useDialog } from "@/hooks/use-dialog";
-import { dexie, type ScrapedRecord } from "@/lib/dexie";
+import { type ConfigField, dexie, type ScrapedRecord } from "@/lib/dexie";
+import { isArrayField } from "@/utils/config-field";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
+import { logger } from "@/utils/logger";
 import { toastError } from "@/utils/toast";
 
 interface DataTableToolbarProps {
@@ -42,6 +47,16 @@ export function RecordTableToolbar({
     isShowOnTable: true,
     isFilterable: true,
   });
+
+  logger.debug(
+    "[RecordTableToolbar] filterable fields",
+    fields?.map((field) => ({
+      name: field.name,
+      type: field.type,
+      isFilterable: field.isFilterable,
+      isArrayField: isArrayField(field),
+    })),
+  );
 
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
   const isSelected = selectedCount > 0;
@@ -98,20 +113,29 @@ export function RecordTableToolbar({
           onSearch={setFilterString}
         />
 
-        {fields?.map((field) => (
-          <DataTableFacetedFilter
-            key={field.id}
-            // biome-ignore lint/suspicious/noExplicitAny: <>
-            column={table.getColumn(field.name) as any}
-            title={field.name}
-            options={
-              field.uiOptions?.options?.map((option) => ({
-                value: option.value,
-                label: option.label,
-              })) || []
-            }
-          />
-        ))}
+        {fields?.map((field) =>
+          isArrayField(field) ? (
+            <RecordArrayFacetedFilter
+              key={field.id}
+              table={table}
+              configId={configId}
+              field={field}
+            />
+          ) : (
+            <DataTableFacetedFilter
+              key={field.id}
+              // biome-ignore lint/suspicious/noExplicitAny: <>
+              column={table.getColumn(field.name) as any}
+              title={field.name}
+              options={
+                field.uiOptions?.options?.map((option) => ({
+                  value: option.value,
+                  label: option.label,
+                })) || []
+              }
+            />
+          ),
+        )}
 
         {isSelected && (
           <Button
@@ -159,5 +183,41 @@ export function RecordTableToolbar({
         <DataTableViewOptions table={table} />
       </div>
     </div>
+  );
+}
+
+interface RecordArrayFacetedFilterProps {
+  table: Table<ScrapedRecord>;
+  configId: ScrapedRecord["configId"] | undefined;
+  field: ConfigField;
+}
+
+function RecordArrayFacetedFilter({
+  table,
+  configId,
+  field,
+}: RecordArrayFacetedFilterProps) {
+  const { data: values } = useGetRecordFieldValues({
+    configId,
+    fieldName: field.name,
+  });
+
+  logger.debug("[RecordArrayFacetedFilter]", field.name, {
+    configId,
+    column: !!table.getColumn(field.name),
+    values,
+  });
+
+  return (
+    <DataTableFacetedFilter
+      column={
+        table.getColumn(field.name) as Column<ScrapedRecord, string> | undefined
+      }
+      title={field.name}
+      options={(values ?? []).map((value) => ({
+        value,
+        label: value,
+      }))}
+    />
   );
 }

@@ -1,6 +1,7 @@
 import type {
   AddScrapedRecordPayload,
   EditScrapedRecordPayload,
+  GetRecordFieldValuesPayload,
   GetScrapedRecordPayload,
   GetScrapedRecordsPayload,
   ImportRecordsPayload,
@@ -16,6 +17,26 @@ export const getRecords = async (
     .where("configId")
     .equals(payload.configId)
     .toArray();
+};
+
+export const getRecordFieldValues = async (
+  payload: GetRecordFieldValuesPayload,
+): Promise<string[]> => {
+  if (!payload.configId) return [];
+
+  const records = await dexie.scrapedRecords
+    .where("configId")
+    .equals(payload.configId)
+    .toArray();
+
+  return [
+    ...new Set(
+      records.flatMap((record) => {
+        const value = record.data[payload.fieldName];
+        return Array.isArray(value) ? (value as string[]) : [];
+      }),
+    ),
+  ];
 };
 
 export const getRecordById = async (
