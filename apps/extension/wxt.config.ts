@@ -13,7 +13,7 @@ export default defineConfig({
     name: "Scrape Essentials",
     description: "__MSG_extDescription__",
     version: "0.3.5",
-    permissions: ["activeTab", "identity", "storage", "scripting", "alarms"],
+    permissions: ["activeTab", "identity", "storage", "scripting"],
     host_permissions: ["<all_urls>"],
     default_locale: "en",
   }),
