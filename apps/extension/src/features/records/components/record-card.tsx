@@ -224,7 +224,9 @@ export function RecordCard({
                         <ScrapeField
                           key={field.id}
                           field={field}
-                          value={rawScrapedData?.[field.name] as string}
+                          value={
+                            rawScrapedData?.[field.name] as string | string[]
+                          }
                         />
                       ),
                   )}
