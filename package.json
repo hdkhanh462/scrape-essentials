@@ -19,6 +19,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "build:ext": "turbo -F extension build",
     "check-types": "turbo check-types",
     "dev:server": "turbo -F server dev",
     "deploy": "turbo -F @scrape-essentials/infra deploy",

@@ -579,7 +579,7 @@ export function SettingsContainer() {
         }}
       >
         {restoreInfo?.modifiedTime && (
-          <p className="mt-3 rounded-md border border-border bg-muted p-3 text-muted-foreground text-sm">
+          <p className="rounded-md border border-border bg-muted p-3 text-muted-foreground text-sm">
             {t("dialog:restoreBackupInfo", {
               time: formatRelativeTime(
                 new Date(restoreInfo.modifiedTime).getTime(),
