@@ -201,26 +201,30 @@ export function SettingsContainer() {
                 </div>
                 <FieldDescription className="max-w-100">
                   {t("backup:backupDescription")}
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <span className="flex items-center gap-2 font-medium text-foreground/80 text-xs">
-                      <History className="size-3.5 text-muted-foreground" />
-                      {t("backup:lastBackup")}:{" "}
-                      <span className="font-normal text-muted-foreground">
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-1">
+                      <span className="flex items-center gap-1.5 font-medium text-foreground/80 text-xs">
+                        <History className="size-3.5 shrink-0 text-muted-foreground" />
+                        {t("backup:lastBackup")}
+                      </span>
+                      <span className="truncate pl-5 font-normal text-muted-foreground text-xs">
                         {formatRelativeTime(lastBackup)}
                       </span>
-                    </span>
+                    </div>
                     {userInfo && (
-                      <span className="flex items-center gap-2 font-medium text-foreground/80 text-xs">
-                        <FileDigitIcon className="size-3.5 text-muted-foreground" />
-                        {t("backup:size")}:{" "}
-                        <span className="font-normal text-muted-foreground">
+                      <div className="flex flex-col gap-1">
+                        <span className="flex items-center gap-1.5 font-medium text-foreground/80 text-xs">
+                          <FileDigitIcon className="size-3.5 shrink-0 text-muted-foreground" />
+                          {t("backup:size")}
+                        </span>
+                        <span className="truncate pl-5 font-normal text-muted-foreground text-xs">
                           {backupListQuery.isLoading
                             ? "…"
                             : totalBackupSize
                               ? `${formatBytes(totalBackupSize)}`
                               : t("backup:noBackupYet")}
                         </span>
-                      </span>
+                      </div>
                     )}
                   </div>
                 </FieldDescription>
