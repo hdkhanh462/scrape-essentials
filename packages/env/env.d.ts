@@ -1,4 +1,4 @@
-import { type server } from "@scrape-essentials/infra/alchemy.run";
+import type { server } from "@scrape-essentials/infra/alchemy.run";
 
 // This file infers types for the cloudflare:workers environment from your Alchemy Worker.
 // @see https://alchemy.run/concepts/bindings/#type-safe-bindings
