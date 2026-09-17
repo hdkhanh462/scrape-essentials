@@ -19,7 +19,7 @@ export const server = await Worker("server", {
   bindings: {
     CORS_ORIGIN: alchemy.env.CORS_ORIGIN!,
     GOOGLE_CLIENT_ID: alchemy.env.GOOGLE_CLIENT_ID!,
-    GOOGLE_CLIENT_SECRET: alchemy.env.GOOGLE_CLIENT_SECRET!,
+    GOOGLE_CLIENT_SECRET: alchemy.secret(alchemy.env.GOOGLE_CLIENT_SECRET!),
     GOOGLE_REDIRECT_URI: alchemy.env.GOOGLE_REDIRECT_URI!,
   },
   dev: {
