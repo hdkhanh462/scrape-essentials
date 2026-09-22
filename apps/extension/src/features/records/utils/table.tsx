@@ -32,7 +32,7 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
             ((row.getValue(id) as string[]) || []).some((v) =>
               value.includes(v),
             )
-        : undefined,
+        : (row, id, value: string[]) => value.includes(row.getValue(id)),
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={field.name} />
       ),
