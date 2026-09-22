@@ -12,7 +12,7 @@ export default defineConfig({
   manifest: () => ({
     name: "Scrape Essentials",
     description: "__MSG_extDescription__",
-    version: "0.3.5",
+    version: "0.3.6",
     permissions: ["activeTab", "identity", "storage", "scripting"],
     host_permissions: ["<all_urls>"],
     default_locale: "en",
