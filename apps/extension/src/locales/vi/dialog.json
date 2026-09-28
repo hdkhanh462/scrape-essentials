@@ -8,5 +8,6 @@
   "deleteRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn các bản ghi đã chọn.",
   "importRecordsConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ nhập và ghi đè lên các bản ghi hiện có.",
   "restoreConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ khôi phục vĩnh viễn cài đặt của bạn và ghi đè lên cài đặt và cấu hình hiện có.",
+  "deleteBackupConfirmation": "Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn bản sao lưu đã chọn khỏi Google Drive.",
   "restoreBackupInfo": "Bản sao lưu được tạo {{time}}"
 }

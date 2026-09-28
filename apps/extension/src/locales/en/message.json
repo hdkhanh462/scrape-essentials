@@ -37,6 +37,8 @@
   "restoreSuccessful": "Restore successful",
   "importRecordsFailed": "Failed to import records",
   "restoreFailed": "Restore failed",
+  "backupDeletedSuccessfully": "Backup deleted successfully",
+  "failedToDeleteBackup": "Failed to delete backup",
   "connectSuccessful": "Connected to Google Drive",
   "connectFailed": "Failed to connect to Google Drive",
   "disconnectSuccessful": "Disconnected from Google Drive",

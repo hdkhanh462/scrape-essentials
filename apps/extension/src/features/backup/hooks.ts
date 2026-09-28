@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import {
   connectGoogle,
+  deleteBackup,
   disconnectGoogle,
   downloadBackup,
   getBackupMetadata,
@@ -86,6 +87,22 @@ export const useRestoreBackup = (
     mutationFn: downloadBackup,
     onSuccess: (...params) => {
       queryClient.invalidateQueries({ queryKey: backupQueryKey.metadata });
+      options?.onSuccess?.(...params);
+    },
+  });
+};
+
+export const useDeleteBackup = (
+  options?: UseMutationOptions<void, Error, string>,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    ...options,
+    mutationFn: deleteBackup,
+    onSuccess: (...params) => {
+      queryClient.invalidateQueries({ queryKey: backupQueryKey.metadata });
+      queryClient.invalidateQueries({ queryKey: backupQueryKey.list });
       options?.onSuccess?.(...params);
     },
   });

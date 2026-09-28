@@ -8,5 +8,6 @@
   "deleteRecordsConfirmation": "This action cannot be undone. This will permanently delete your selected records.",
   "importRecordsConfirmation": "This action cannot be undone. This will permanently import and overwrite your existing records.",
   "restoreConfirmation": "This action cannot be undone. This will permanently restore your settings and overwrite your existing settings and configurations.",
+  "deleteBackupConfirmation": "This action cannot be undone. This will permanently delete the selected backup from Google Drive.",
   "restoreBackupInfo": "Backup created {{time}}"
 }

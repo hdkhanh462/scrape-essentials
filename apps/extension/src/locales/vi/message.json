@@ -37,6 +37,8 @@
   "restoreSuccessful": "Khôi phục thành công",
   "importRecordsFailed": "Không thể nhập bản ghi",
   "restoreFailed": "Khôi phục thất bại",
+  "backupDeletedSuccessfully": "Xóa bản sao lưu thành công",
+  "failedToDeleteBackup": "Xóa bản sao lưu thất bại",
   "connectSuccessful": "Đã kết nối với Google Drive",
   "connectFailed": "Không thể kết nối với Google Drive",
   "disconnectSuccessful": "Đã ngắt kết nối với Google Drive",
