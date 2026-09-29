@@ -13,5 +13,7 @@
   "paste": "Dán",
   "pasted": "Đã dán",
   "restore": "Khôi phục",
-  "restoring": "Đang khôi phục..."
+  "restoring": "Đang khôi phục...",
+  "filter": "Lọc",
+  "clearFilters": "Xóa bộ lọc"
 }

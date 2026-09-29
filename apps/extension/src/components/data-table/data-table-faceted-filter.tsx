@@ -31,12 +31,18 @@ interface DataTableFacetedFilterProps<
     value: TValue;
     icon?: React.ComponentType<{ className?: string }>;
   }[];
+  triggerClassName?: string;
 }
 
 export function DataTableFacetedFilter<
   TData,
   TValue extends React.Key | boolean,
->({ column, title, options }: DataTableFacetedFilterProps<TData, TValue>) {
+>({
+  column,
+  title,
+  options,
+  triggerClassName,
+}: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as TValue[]);
 
@@ -44,7 +50,11 @@ export function DataTableFacetedFilter<
     <Popover>
       <PopoverTrigger
         render={
-          <Button variant="outline" size="sm" className="h-8 border-dashed">
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn("h-8 border-dashed", triggerClassName)}
+          >
             <PlusCircle />
             {title}
             {selectedValues?.size > 0 && (

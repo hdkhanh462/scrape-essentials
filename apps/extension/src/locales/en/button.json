@@ -13,5 +13,7 @@
   "paste": "Paste",
   "pasted": "Pasted",
   "restore": "Restore",
-  "restoring": "Restoring..."
+  "restoring": "Restoring...",
+  "filter": "Filter",
+  "clearFilters": "Clear filters"
 }

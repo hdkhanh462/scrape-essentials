@@ -1,12 +1,26 @@
 import type { Column, Table } from "@tanstack/react-table";
-import { DownloadIcon, UploadIcon, XIcon } from "lucide-react";
+import {
+  DownloadIcon,
+  FilterIcon,
+  UploadIcon,
+  XIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useGetFields } from "@/features/fields/hooks";
 import { SearchHistory } from "@/features/records/components/search-history";
 import {
@@ -58,8 +72,15 @@ export function RecordTableToolbar({
     })),
   );
 
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
   const isSelected = selectedCount > 0;
+
+  const fieldColumnIds = new Set(fields?.map((field) => field.name));
+  const activeFieldFilterCount = table
+    .getState()
+    .columnFilters.filter((filter) => fieldColumnIds.has(filter.id)).length;
 
   const handleExport = async () => {
     const records = await dexie.scrapedRecords.toArray();
@@ -113,28 +134,82 @@ export function RecordTableToolbar({
           onSearch={setFilterString}
         />
 
-        {fields?.map((field) =>
-          isArrayField(field) ? (
-            <RecordArrayFacetedFilter
-              key={field.id}
-              table={table}
-              configId={configId}
-              field={field}
-            />
-          ) : (
-            <DataTableFacetedFilter
-              key={field.id}
-              // biome-ignore lint/suspicious/noExplicitAny: <>
-              column={table.getColumn(field.name) as any}
-              title={field.name}
-              options={
-                field.uiOptions?.options?.map((option) => ({
-                  value: option.value,
-                  label: option.label,
-                })) || []
+        {!!fields?.length && (
+          <Sheet open={filterDrawerOpen} onOpenChange={setFilterDrawerOpen}>
+            <SheetTrigger
+              render={
+                <Button variant="outline" size="sm" className="h-8">
+                  <FilterIcon className="size-3.5" />
+                  {t("button:filter")}
+                  {activeFieldFilterCount > 0 && (
+                    <Badge
+                      variant="secondary"
+                      className="rounded-sm px-1 font-normal"
+                    >
+                      {activeFieldFilterCount}
+                    </Badge>
+                  )}
+                </Button>
               }
             />
-          ),
+            <SheetContent className="w-80" showCloseButton={false}>
+              <SheetHeader className="flex-row items-center justify-between">
+                <SheetTitle className="leading-none">
+                  {t("button:filter")}
+                </SheetTitle>
+                <div className="flex items-center gap-1">
+                  {activeFieldFilterCount > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      onClick={() => {
+                        for (const field of fields) {
+                          table
+                            .getColumn(field.name)
+                            ?.setFilterValue(undefined);
+                        }
+                      }}
+                    >
+                      {t("button:clearFilters")}
+                    </Button>
+                  )}
+                  <SheetClose
+                    render={<Button variant="ghost" size="icon-xs" />}
+                  >
+                    <XIcon />
+                    <span className="sr-only">Close</span>
+                  </SheetClose>
+                </div>
+              </SheetHeader>
+              <div className="flex flex-col gap-2 overflow-y-auto px-4 pb-4">
+                {fields.map((field) =>
+                  isArrayField(field) ? (
+                    <RecordArrayFacetedFilter
+                      key={field.id}
+                      table={table}
+                      configId={configId}
+                      field={field}
+                      triggerClassName="w-full justify-start border-solid"
+                    />
+                  ) : (
+                    <DataTableFacetedFilter
+                      key={field.id}
+                      // biome-ignore lint/suspicious/noExplicitAny: <>
+                      column={table.getColumn(field.name) as any}
+                      title={field.name}
+                      options={
+                        field.uiOptions?.options?.map((option) => ({
+                          value: option.value,
+                          label: option.label,
+                        })) || []
+                      }
+                      triggerClassName="w-full justify-start border-solid"
+                    />
+                  ),
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
         )}
 
         {isSelected && (
@@ -190,12 +265,14 @@ interface RecordArrayFacetedFilterProps {
   table: Table<ScrapedRecord>;
   configId: ScrapedRecord["configId"] | undefined;
   field: ConfigField;
+  triggerClassName?: string;
 }
 
 function RecordArrayFacetedFilter({
   table,
   configId,
   field,
+  triggerClassName,
 }: RecordArrayFacetedFilterProps) {
   const { data: values } = useGetRecordFieldValues({
     configId,
@@ -218,6 +295,7 @@ function RecordArrayFacetedFilter({
         value,
         label: value,
       }))}
+      triggerClassName={triggerClassName}
     />
   );
 }
