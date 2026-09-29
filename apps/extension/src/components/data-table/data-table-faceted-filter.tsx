@@ -45,6 +45,11 @@ export function DataTableFacetedFilter<
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as TValue[]);
+  const sortedOptions = [...options].sort((a, b) => {
+    const aSelected = selectedValues.has(a.value) ? 0 : 1;
+    const bSelected = selectedValues.has(b.value) ? 0 : 1;
+    return aSelected - bSelected;
+  });
 
   return (
     <Popover>
@@ -99,7 +104,7 @@ export function DataTableFacetedFilter<
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => {
+              {sortedOptions.map((option) => {
                 const isSelected = selectedValues.has(option.value);
                 return (
                   <CommandItem
