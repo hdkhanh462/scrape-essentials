@@ -4,5 +4,10 @@
   "recordDataCopied": "Record data copied",
   "urlNotFound": "URL not found",
   "openUrls": "Open URLs",
-  "openUrlsConfirmation": "This will open {{count}} URL(s) in new tabs. Continue?"
+  "openUrlsConfirmation": "This will open {{count}} URL(s) in new tabs. Continue?",
+  "copyData": "Copy data",
+  "copyJson": "Copy JSON",
+  "copyUrl": "Copy URL",
+  "urlCopied": "URL copied",
+  "jsonCopied": "JSON copied"
 }

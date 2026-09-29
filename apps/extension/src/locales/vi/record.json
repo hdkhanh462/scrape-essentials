@@ -4,5 +4,10 @@
   "recordDataCopied": "Dữ liệu bản ghi đã được sao chép",
   "urlNotFound": "Không tìm thấy URL",
   "openUrls": "Mở URL",
-  "openUrlsConfirmation": "Thao tác này sẽ mở {{count}} URL trong các tab mới. Tiếp tục?"
+  "openUrlsConfirmation": "Thao tác này sẽ mở {{count}} URL trong các tab mới. Tiếp tục?",
+  "copyData": "Sao chép dữ liệu",
+  "copyJson": "Sao chép JSON",
+  "copyUrl": "Sao chép URL",
+  "urlCopied": "Đã sao chép URL",
+  "jsonCopied": "Đã sao chép JSON"
 }

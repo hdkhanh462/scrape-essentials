@@ -9,6 +9,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDeleteRecord } from "@/features/records/hooks";
@@ -67,6 +70,21 @@ export function RecordTableRowActions({ row }: Props) {
     browser.tabs.create({ url: row.original.url, active: true });
   };
 
+  const handleCopyUrl = () => {
+    if (!row.original.url) {
+      toast.error(t("record:urlNotFound"));
+      return;
+    }
+
+    copyRecord.copy(row.original.url);
+    toast.success(t("record:urlCopied"));
+  };
+
+  const handleCopyJson = () => {
+    copyRecord.copy(JSON.stringify(row.original.data, null, 2));
+    toast.success(t("record:jsonCopied"));
+  };
+
   const { t } = useTranslation();
 
   return (
@@ -84,9 +102,20 @@ export function RecordTableRowActions({ row }: Props) {
         }
       />
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onClick={handleCopyRecord}>
-          {t("button:copy")}
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>{t("button:copy")}</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem onClick={handleCopyRecord}>
+              {t("record:copyData")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleCopyJson}>
+              {t("record:copyJson")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleCopyUrl}>
+              {t("record:copyUrl")}
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuItem onClick={handleOpenNewTab}>
           {t("record:gotoUrl")}
         </DropdownMenuItem>
