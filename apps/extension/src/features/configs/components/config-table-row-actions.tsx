@@ -9,6 +9,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDeleteConfig, useDuplicateConfig } from "@/features/configs/hooks";
@@ -118,12 +121,17 @@ export function ConfigTableRowActions({ row }: Props) {
         <DropdownMenuItem onClick={handleEditSelect}>
           {t("button:edit")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>
-          {t("button:copy")} ID
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyConfig}>
-          {t("button:copy")} JSON
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>{t("button:copy")}</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem onClick={handleCopyId}>
+              {t("common:copyId")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleCopyConfig}>
+              {t("record:copyJson")}
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuItem
           onClick={() => duplicateConfigMutation.mutate(row.original.id)}
         >

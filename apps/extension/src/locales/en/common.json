@@ -11,5 +11,6 @@
   "createdAt": "Created At",
   "updatedAt": "Updated At",
   "cancel": "Cancel",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "copyId": "Copy ID"
 }

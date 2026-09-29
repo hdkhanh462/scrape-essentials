@@ -11,5 +11,6 @@
   "createdAt": "Ngày tạo",
   "updatedAt": "Ngày cập nhật",
   "cancel": "Hủy",
-  "confirm": "Xác nhận"
+  "confirm": "Xác nhận",
+  "copyId": "Sao chép ID"
 }
