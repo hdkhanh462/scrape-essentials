@@ -8,7 +8,7 @@ import { RecordCell } from "@/features/records/components/record-boolean-cell";
 import { RecordTableRowActions } from "@/features/records/components/record-table-row-actions";
 import { getFieldType } from "@/features/records/utils/helpers";
 import type { ConfigField, ScrapedRecord } from "@/lib/dexie";
-import { isArrayField } from "@/utils/config-field";
+import { EMPTY_FILTER_VALUE, isArrayField } from "@/utils/config-field";
 
 type BuildColumnHandler = (
   url: string,
@@ -28,11 +28,20 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
       accessorKey: `data.${field.name}`,
       meta: { type: colType },
       filterFn: isArray
-        ? (row, id, value: string[]) =>
-            ((row.getValue(id) as string[]) || []).some((v) =>
-              value.includes(v),
-            )
-        : (row, id, value: string[]) => value.includes(row.getValue(id)),
+        ? (row, id, value: string[]) => {
+            const cellValue = (row.getValue(id) as string[]) || [];
+            return value.some((v) =>
+              v === EMPTY_FILTER_VALUE
+                ? cellValue.length === 0
+                : cellValue.includes(v),
+            );
+          }
+        : (row, id, value: string[]) => {
+            const cellValue = row.getValue(id);
+            return value.some((v) =>
+              v === EMPTY_FILTER_VALUE ? !cellValue : cellValue === v,
+            );
+          },
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={field.name} />
       ),

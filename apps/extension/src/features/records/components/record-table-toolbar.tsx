@@ -32,7 +32,7 @@ import { useRecordStore } from "@/features/records/stores/record.store";
 import { isValidFilter } from "@/features/records/utils/filter";
 import { useDialog } from "@/hooks/use-dialog";
 import { type ConfigField, dexie, type ScrapedRecord } from "@/lib/dexie";
-import { isArrayField } from "@/utils/config-field";
+import { EMPTY_FILTER_VALUE, isArrayField } from "@/utils/config-field";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
 import { logger } from "@/utils/logger";
 import { toastError } from "@/utils/toast";
@@ -217,12 +217,13 @@ export function RecordTableToolbar({
                       // biome-ignore lint/suspicious/noExplicitAny: <>
                       column={table.getColumn(field.name) as any}
                       title={field.name}
-                      options={
-                        field.uiOptions?.options?.map((option) => ({
+                      options={[
+                        { value: EMPTY_FILTER_VALUE, label: EMPTY_FILTER_VALUE },
+                        ...(field.uiOptions?.options?.map((option) => ({
                           value: option.value,
                           label: option.label,
-                        })) || []
-                      }
+                        })) || []),
+                      ]}
                       triggerClassName="w-full justify-start border-solid"
                     />
                   ),
@@ -332,10 +333,13 @@ function RecordArrayFacetedFilter({
         table.getColumn(field.name) as Column<ScrapedRecord, string> | undefined
       }
       title={field.name}
-      options={(values ?? []).map((value) => ({
-        value,
-        label: value,
-      }))}
+      options={[
+        { value: EMPTY_FILTER_VALUE, label: EMPTY_FILTER_VALUE },
+        ...(values ?? []).map((value) => ({
+          value,
+          label: value,
+        })),
+      ]}
       triggerClassName={triggerClassName}
     />
   );

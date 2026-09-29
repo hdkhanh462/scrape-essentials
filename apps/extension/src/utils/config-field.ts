@@ -117,3 +117,7 @@ export function isArrayField(field: ConfigField) {
     field.type === FieldType.InputTags
   );
 }
+
+// Sentinel filter value representing an empty/missing field, shown as "-"
+// to match how empty cells are already rendered in the table.
+export const EMPTY_FILTER_VALUE = "-";
