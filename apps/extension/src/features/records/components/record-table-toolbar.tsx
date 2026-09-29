@@ -1,6 +1,7 @@
 import type { Column, Table } from "@tanstack/react-table";
 import {
   DownloadIcon,
+  ExternalLinkIcon,
   FilterIcon,
   UploadIcon,
   XIcon,
@@ -55,6 +56,8 @@ export function RecordTableToolbar({
 
   const importConfirmDialog = useDialog();
   const { mutate: importRecords } = useImportRecords();
+
+  const openUrlsConfirmDialog = useDialog();
 
   const { data: fields } = useGetFields({
     configId,
@@ -121,6 +124,23 @@ export function RecordTableToolbar({
       return false;
     }
     return true;
+  };
+
+  const selectedUrls = table
+    .getFilteredSelectedRowModel()
+    .rows.map((row) => row.original.url)
+    .filter((url): url is string => !!url);
+
+  const handleOpenUrls = () => {
+    if (selectedUrls.length === 0) {
+      toast.error(t("message:noUrlToOpen"));
+      return;
+    }
+
+    for (const url of selectedUrls) {
+      browser.tabs.create({ url, active: false });
+    }
+    openUrlsConfirmDialog.close();
   };
 
   return (
@@ -214,6 +234,18 @@ export function RecordTableToolbar({
 
         {isSelected && (
           <Button
+            variant="outline"
+            size="sm"
+            className="h-8"
+            onClick={openUrlsConfirmDialog.open}
+          >
+            <ExternalLinkIcon />
+            {t("record:openUrls")} ({selectedUrls.length})
+          </Button>
+        )}
+
+        {isSelected && (
+          <Button
             variant="destructive"
             size="sm"
             className="h-8"
@@ -228,6 +260,15 @@ export function RecordTableToolbar({
             <XIcon />
           </Button>
         )}
+
+        <ConfirmDialog
+          control={openUrlsConfirmDialog}
+          title={t("dialog:areYouSure")}
+          description={t("record:openUrlsConfirmation", {
+            count: selectedUrls.length,
+          })}
+          onConfirm={handleOpenUrls}
+        />
       </div>
 
       <div className="flex items-center gap-2">

@@ -43,5 +43,6 @@
   "connectFailed": "Failed to connect to Google Drive",
   "disconnectSuccessful": "Disconnected from Google Drive",
   "disconnectFailed": "Failed to disconnect from Google Drive",
-  "recentSearches": "Recent searches"
+  "recentSearches": "Recent searches",
+  "noUrlToOpen": "No URL to open for the selected records"
 }

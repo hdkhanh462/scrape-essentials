@@ -2,5 +2,7 @@
   "scrapedData": "Scraped Data",
   "gotoUrl": "Go to URL",
   "recordDataCopied": "Record data copied",
-  "urlNotFound": "URL not found"
+  "urlNotFound": "URL not found",
+  "openUrls": "Open URLs",
+  "openUrlsConfirmation": "This will open {{count}} URL(s) in new tabs. Continue?"
 }

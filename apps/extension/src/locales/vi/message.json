@@ -43,5 +43,6 @@
   "connectFailed": "Không thể kết nối với Google Drive",
   "disconnectSuccessful": "Đã ngắt kết nối với Google Drive",
   "disconnectFailed": "Không thể ngắt kết nối với Google Drive",
-  "recentSearches": "Các tìm kiếm gần đây"
+  "recentSearches": "Các tìm kiếm gần đây",
+  "noUrlToOpen": "Không có URL nào để mở trong các bản ghi đã chọn"
 }
