@@ -56,6 +56,7 @@ const typeUnion = z.discriminatedUnion("type", [
       condition: z.string().optional(),
       attributeName: z.string().optional(),
       isMultiple: z.boolean().optional(),
+      isFacetFilter: z.boolean().optional(),
     }),
     ...TextSchema.shape,
   }),

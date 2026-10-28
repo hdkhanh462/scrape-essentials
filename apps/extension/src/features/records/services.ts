@@ -33,7 +33,8 @@ export const getRecordFieldValues = async (
     ...new Set(
       records.flatMap((record) => {
         const value = record.data[payload.fieldName];
-        return Array.isArray(value) ? (value as string[]) : [];
+        if (Array.isArray(value)) return value as string[];
+        return typeof value === "string" && value !== "" ? [value] : [];
       }),
     ),
   ];

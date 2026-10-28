@@ -42,6 +42,7 @@ export interface FieldScrapeOptions {
   condition?: string;
   attributeName?: string;
   isMultiple?: boolean;
+  isFacetFilter?: boolean;
 }
 
 export interface FieldUiOptions {

@@ -43,6 +43,7 @@ const DEFAULT_VALUES: FieldInput = {
     attributeName: "",
     condition: "",
     isMultiple: false,
+    isFacetFilter: false,
   },
 };
 

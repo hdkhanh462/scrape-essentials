@@ -4,7 +4,7 @@ import type {
   GetFieldsPayload,
 } from "@/features/fields/types";
 import { type ConfigField, dexie, FieldType } from "@/lib/dexie";
-import { isArrayField } from "@/utils/config-field";
+import { isFacetFilterField } from "@/utils/config-field";
 import { fieldInputToDb } from "@/utils/converts";
 
 export const getFields = async (
@@ -24,7 +24,7 @@ export const getFields = async (
       payload.isFilterable === undefined
         ? true
         : f.isFilterable === payload.isFilterable &&
-          (f.type === FieldType.InputSelect || isArrayField(f)),
+          (f.type === FieldType.InputSelect || isFacetFilterField(f)),
     )
     .sortBy("order");
 };

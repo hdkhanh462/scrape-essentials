@@ -10,6 +10,7 @@
   "required": "Bắt buộc",
   "primary": "Trường Chính",
   "multiple": "Nhiều",
+  "facetFilter": "Lọc theo giá trị",
   "parent": "Trường Cha",
   "selectParentField": "Chọn trường cha",
   "defaultValue": "Giá trị mặc định",

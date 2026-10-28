@@ -32,7 +32,11 @@ import { useRecordStore } from "@/features/records/stores/record.store";
 import { isValidFilter } from "@/features/records/utils/filter";
 import { useDialog } from "@/hooks/use-dialog";
 import { type ConfigField, dexie, type ScrapedRecord } from "@/lib/dexie";
-import { EMPTY_FILTER_VALUE, isArrayField } from "@/utils/config-field";
+import {
+  EMPTY_FILTER_VALUE,
+  isArrayField,
+  isFacetFilterField,
+} from "@/utils/config-field";
 import { exportBlob, importFromJSON } from "@/utils/import-export";
 import { logger } from "@/utils/logger";
 import { toastError } from "@/utils/toast";
@@ -203,7 +207,7 @@ export function RecordTableToolbar({
               </SheetHeader>
               <div className="flex flex-col gap-2 overflow-y-auto px-4 pb-4">
                 {fields.map((field) =>
-                  isArrayField(field) ? (
+                  isFacetFilterField(field) ? (
                     <RecordArrayFacetedFilter
                       key={field.id}
                       table={table}

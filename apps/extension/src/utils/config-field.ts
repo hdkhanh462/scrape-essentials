@@ -118,6 +118,11 @@ export function isArrayField(field: ConfigField) {
   );
 }
 
+// Scalar scrape fields can opt in to the same value-list filter as array fields.
+export function isFacetFilterField(field: ConfigField) {
+  return isArrayField(field) || !!field.scrapeOptions?.isFacetFilter;
+}
+
 // Sentinel filter value representing an empty/missing field, shown as "-"
 // to match how empty cells are already rendered in the table.
 export const EMPTY_FILTER_VALUE = "-";

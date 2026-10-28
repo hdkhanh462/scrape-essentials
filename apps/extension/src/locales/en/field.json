@@ -10,6 +10,7 @@
   "required": "Required",
   "primary": "Primary",
   "multiple": "Multiple",
+  "facetFilter": "Filter by value",
   "parent": "Parent",
   "selectParentField": "Select parent field",
   "defaultValue": "Default Value",

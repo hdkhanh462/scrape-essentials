@@ -50,6 +50,11 @@ export default function CheckboxFields({ form }: FieldTypePropsV2) {
           />
           <FormCheckbox
             control={form.control}
+            name="scrapeOptions.isFacetFilter"
+            label={t("field:facetFilter")}
+          />
+          <FormCheckbox
+            control={form.control}
             name="isParent"
             label={t("field:parent")}
           />
