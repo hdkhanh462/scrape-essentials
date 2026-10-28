@@ -222,7 +222,10 @@ export function RecordTableToolbar({
                       column={table.getColumn(field.name) as any}
                       title={field.name}
                       options={[
-                        { value: EMPTY_FILTER_VALUE, label: EMPTY_FILTER_VALUE },
+                        {
+                          value: EMPTY_FILTER_VALUE,
+                          label: EMPTY_FILTER_VALUE,
+                        },
                         ...(field.uiOptions?.options?.map((option) => ({
                           value: option.value,
                           label: option.label,
