@@ -35,6 +35,7 @@
   "backupSuccessful": "Sao lưu thành công",
   "backupFailed": "Sao lưu thất bại",
   "restoreSuccessful": "Khôi phục thành công",
+  "recordsImportedSuccessfully": "Bản ghi đã được nhập thành công",
   "importRecordsFailed": "Không thể nhập bản ghi",
   "restoreFailed": "Khôi phục thất bại",
   "backupDeletedSuccessfully": "Xóa bản sao lưu thành công",

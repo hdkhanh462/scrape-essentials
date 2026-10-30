@@ -72,7 +72,8 @@ export function RecordTableToolbar({
   const [filterValue, setFilterValue] = useState(filterString);
 
   const importConfirmDialog = useDialog();
-  const { mutate: importRecords } = useImportRecords();
+  const { mutate: importRecords, isPending: isImportingRecords } =
+    useImportRecords();
 
   const openUrlsConfirmDialog = useDialog();
 
@@ -128,10 +129,10 @@ export function RecordTableToolbar({
 
     importRecords(importPayload, {
       onSuccess: () => {
-        toast.success(t("message:configsImportedSuccessfully"));
+        toast.success(t("message:recordsImportedSuccessfully"));
         importConfirmDialog.close();
       },
-      onError: (error) => toastError(error, t("message:failedToImportConfigs")),
+      onError: (error) => toastError(error, t("message:importRecordsFailed")),
     });
   };
 
@@ -322,6 +323,11 @@ export function RecordTableToolbar({
           title={t("dialog:areYouSure")}
           description={t("dialog:importRecordsConfirmation")}
           onConfirm={handleImportConfirm}
+          confirmButton={{
+            isLoading: isImportingRecords,
+            override: { disabled: isImportingRecords },
+          }}
+          cancelButton={{ override: { disabled: isImportingRecords } }}
         />
         <DataTableViewOptions table={table} />
       </div>

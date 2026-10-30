@@ -211,6 +211,13 @@ export function ConfigTableToolbar({
           title={t("dialog:areYouSure")}
           description={t("dialog:importConfigConfirmation")}
           onConfirm={handleImportConfirm}
+          confirmButton={{
+            isLoading: importConfigsMutation.isPending,
+            override: { disabled: importConfigsMutation.isPending },
+          }}
+          cancelButton={{
+            override: { disabled: importConfigsMutation.isPending },
+          }}
         />
         <DataTableViewOptions table={table} />
         <Button size="sm" className="h-8" onClick={handleAddConfigClick}>

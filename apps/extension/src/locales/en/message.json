@@ -35,6 +35,7 @@
   "backupSuccessful": "Backup successful",
   "backupFailed": "Backup failed",
   "restoreSuccessful": "Restore successful",
+  "recordsImportedSuccessfully": "Records imported successfully",
   "importRecordsFailed": "Failed to import records",
   "restoreFailed": "Restore failed",
   "backupDeletedSuccessfully": "Backup deleted successfully",
