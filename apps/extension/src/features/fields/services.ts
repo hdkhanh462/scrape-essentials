@@ -24,7 +24,9 @@ export const getFields = async (
       payload.isFilterable === undefined
         ? true
         : f.isFilterable === payload.isFilterable &&
-          (f.type === FieldType.InputSelect || isFacetFilterField(f)),
+          (f.type === FieldType.InputSelect ||
+            f.type === FieldType.InputNumber ||
+            isFacetFilterField(f)),
     )
     .sortBy("order");
 };

@@ -3,6 +3,7 @@ import {
   DownloadIcon,
   ExternalLinkIcon,
   FilterIcon,
+  PlusCircle,
   UploadIcon,
   XIcon,
 } from "lucide-react";
@@ -15,6 +16,12 @@ import { DataTableViewOptions } from "@/components/data-table/data-table-view-op
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -22,6 +29,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Slider } from "@/components/ui/slider";
 import { useGetFields } from "@/features/fields/hooks";
 import { SearchHistory } from "@/features/records/components/search-history";
 import {
@@ -31,7 +39,12 @@ import {
 import { useRecordStore } from "@/features/records/stores/record.store";
 import { isValidFilter } from "@/features/records/utils/filter";
 import { useDialog } from "@/hooks/use-dialog";
-import { type ConfigField, dexie, type ScrapedRecord } from "@/lib/dexie";
+import {
+  type ConfigField,
+  dexie,
+  FieldType,
+  type ScrapedRecord,
+} from "@/lib/dexie";
 import {
   EMPTY_FILTER_VALUE,
   isArrayField,
@@ -207,7 +220,13 @@ export function RecordTableToolbar({
               </SheetHeader>
               <div className="flex flex-col gap-2 overflow-y-auto px-4 pb-4">
                 {fields.map((field) =>
-                  isFacetFilterField(field) ? (
+                  field.type === FieldType.InputNumber ? (
+                    <RecordNumberRangeFilter
+                      key={field.id}
+                      table={table}
+                      field={field}
+                    />
+                  ) : isFacetFilterField(field) ? (
                     <RecordArrayFacetedFilter
                       key={field.id}
                       table={table}
@@ -307,6 +326,97 @@ export function RecordTableToolbar({
         <DataTableViewOptions table={table} />
       </div>
     </div>
+  );
+}
+
+interface RecordNumberRangeFilterProps {
+  table: Table<ScrapedRecord>;
+  field: ConfigField;
+}
+
+function RecordNumberRangeFilter({
+  table,
+  field,
+}: RecordNumberRangeFilterProps) {
+  const column = table.getColumn(field.name);
+  const applied = column?.getFilterValue() as [number, number] | undefined;
+
+  const numbers = table
+    .getCoreRowModel()
+    .rows.map((row) => row.original.data[field.name])
+    .filter((v) => v !== undefined && v !== null && v !== "")
+    .map(Number)
+    .filter(Number.isFinite);
+  const min = numbers.length ? Math.min(...numbers) : 0;
+  const max = numbers.length ? Math.max(...numbers) : 0;
+  const step = numbers.every(Number.isInteger) ? 1 : 0.01;
+
+  const [draft, setDraft] = useState<number[] | null>(null);
+  const current = draft ?? applied ?? [min, max];
+
+  return (
+    <Popover>
+      <PopoverTrigger
+        render={
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 w-full justify-start border-solid"
+          >
+            <PlusCircle />
+            {field.name}
+            {applied && (
+              <>
+                <Separator orientation="vertical" className="mx-2 h-4" />
+                <Badge
+                  variant="secondary"
+                  className="rounded-sm px-1 font-normal"
+                >
+                  {applied[0]} – {applied[1]}
+                </Badge>
+              </>
+            )}
+          </Button>
+        }
+      />
+      <PopoverContent className="w-64 gap-3" align="start">
+        {min === max ? (
+          <span className="text-muted-foreground text-sm">
+            {numbers.length ? min : "-"}
+          </span>
+        ) : (
+          <>
+            <Slider
+              min={min}
+              max={max}
+              step={step}
+              value={current}
+              onValueChange={(v) => setDraft(v as number[])}
+              onValueCommitted={(v) => {
+                const [lo, hi] = v as number[];
+                setDraft(null);
+                column?.setFilterValue(
+                  lo === min && hi === max ? undefined : [lo, hi],
+                );
+              }}
+            />
+            <div className="flex justify-between font-mono text-xs">
+              <span>{current[0]}</span>
+              <span>{current[1]}</span>
+            </div>
+          </>
+        )}
+        {applied && (
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={() => column?.setFilterValue(undefined)}
+          >
+            Clear filters
+          </Button>
+        )}
+      </PopoverContent>
+    </Popover>
   );
 }
 
