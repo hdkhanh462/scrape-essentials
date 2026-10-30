@@ -14,6 +14,7 @@ import { DataTableFacetedFilter } from "@/components/data-table/data-table-facet
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CURRENT_SCHEMA_VERSION } from "@/features/backup/constants";
 import { useGetConfigTags, useImportConfigs } from "@/features/configs/hooks";
 import { useConfigStore } from "@/features/configs/stores/config.store";
 import type { ImportConfigsPayload } from "@/features/configs/types";
@@ -54,9 +55,13 @@ export function ConfigTableToolbar({
   const isSelected = selectedCount > 0;
 
   const handleExport = async () => {
-    const allConfigs = await dexie.scrapeConfigs.toArray();
-    const allConfigFields = await dexie.configFields.toArray();
-    const exportData = { allConfigs, allConfigFields };
+    const configs = await dexie.scrapeConfigs.toArray();
+    const fields = await dexie.configFields.toArray();
+    const exportData: ImportConfigsPayload = {
+      schemaVersion: CURRENT_SCHEMA_VERSION,
+      configs,
+      fields,
+    };
     const blob = new Blob([JSON.stringify(exportData)], {
       type: "application/json",
     });
