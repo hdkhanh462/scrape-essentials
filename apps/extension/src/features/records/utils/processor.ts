@@ -73,7 +73,7 @@ async function processScrapeField(bodyHtml: string, field: ConfigField) {
     );
 
     let tempValue: string | string[] = "";
-    parentElements.forEach((element) => {
+    for (const element of Array.from(parentElements)) {
       const _text = element.textContent || "";
       const conditionMet =
         field.scrapeOptions?.condition &&
@@ -87,8 +87,11 @@ async function processScrapeField(bodyHtml: string, field: ConfigField) {
         `(element text: ${_text})`,
       );
 
-      if (conditionMet) tempValue = processDataQuery(element, field);
-    });
+      if (conditionMet) {
+        tempValue = processDataQuery(element, field);
+        break;
+      }
+    }
 
     logger.debug("Extracted value for field", field.name, ":", tempValue);
 
