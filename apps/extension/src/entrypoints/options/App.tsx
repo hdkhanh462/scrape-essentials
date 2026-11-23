@@ -15,9 +15,9 @@ function App() {
   const activeItem = sidebarItems.find((item) => item.id === activeTab);
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-svh overflow-hidden">
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="h-svh min-h-0 overflow-hidden">
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <span className="font-medium">{activeItem?.label}</span>
