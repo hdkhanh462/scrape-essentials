@@ -3,7 +3,6 @@ import {
   CloudUpload,
   FileDigitIcon,
   History,
-  LogOutIcon,
   RotateCcwIcon,
 } from "lucide-react";
 import { Activity, useState } from "react";
@@ -13,15 +12,8 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { FormSelect } from "@/components/form";
 import Loader from "@/components/loader";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Field,
   FieldContent,
@@ -41,8 +33,6 @@ import { RestoreBackupButton } from "@/features/backup/components/restore-backup
 import {
   useBackupList,
   useBackupToDrive,
-  useConnectGoogle,
-  useDisconnectGoogle,
   useRestoreBackup,
 } from "@/features/backup/hooks";
 import { useGoogleStore } from "@/features/backup/stores/google.store";
@@ -89,14 +79,6 @@ export function SettingsContainer() {
     (sum, backup) => sum + backup.size,
     0,
   );
-  const connectMutation = useConnectGoogle({
-    onSuccess: () => toast.success(t("message:connectSuccessful")),
-    onError: (error) => toastError(error, t("message:connectFailed")),
-  });
-  const disconnectMutation = useDisconnectGoogle({
-    onSuccess: () => toast.success(t("message:disconnectSuccessful")),
-    onError: (error) => toastError(error, t("message:disconnectFailed")),
-  });
   const restoreMutation = useRestoreBackup({
     onSuccess: (data) => {
       setRestoreInfo(data);
@@ -168,14 +150,6 @@ export function SettingsContainer() {
     backupMutation.mutate();
   };
 
-  const handleConnect = async () => {
-    connectMutation.mutate();
-  };
-
-  const handleDisconnect = async () => {
-    disconnectMutation.mutate();
-  };
-
   return (
     <div className="py-8">
       <form onChange={form.handleSubmit(handleSubmit)}>
@@ -230,62 +204,7 @@ export function SettingsContainer() {
                 </FieldDescription>
               </FieldContent>
               <div className="flex min-w-75 flex-col gap-4">
-                <div className="flex items-center gap-4 rounded-xl border bg-accent/30 p-3 shadow-xs">
-                  {userInfo ? (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger
-                        nativeButton={false}
-                        render={
-                          <div className="flex items-center gap-3 overflow-hidden rounded-xl p-2 text-left hover:cursor-pointer hover:bg-accent hover:shadow-sm">
-                            <Avatar className="size-10 border-2 border-background shadow-sm">
-                              <AvatarImage src={userInfo.picture} />
-                            </Avatar>
-                            <div className="flex min-w-0 flex-col">
-                              <span className="truncate font-semibold text-sm">
-                                {userInfo.name}
-                              </span>
-                              <span className="truncate text-muted-foreground text-xs">
-                                {userInfo.email}
-                              </span>
-                            </div>
-                          </div>
-                        }
-                      />
-                      <DropdownMenuContent align="start" className="w-44">
-                        <DropdownMenuItem
-                          variant="destructive"
-                          className="justify-between"
-                          onClick={handleDisconnect}
-                          disabled={disconnectMutation.isPending}
-                        >
-                          {t("backup:disconnect")}
-                          <LogOutIcon />
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  ) : (
-                    <button
-                      type="button"
-                      className="flex items-center gap-3 overflow-hidden rounded-xl p-2 text-start text-muted-foreground hover:bg-accent hover:shadow-sm disabled:cursor-not-allowed"
-                      disabled={connectMutation.isPending}
-                      onClick={handleConnect}
-                    >
-                      <Avatar className="size-10 border-2 border-background shadow-sm">
-                        <AvatarFallback className="bg-primary/10 font-bold text-primary text-xs">
-                          N/A
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex min-w-0 flex-col">
-                        <span className="truncate font-semibold text-sm">
-                          {t("backup:notSignedIn")}
-                        </span>
-                        <span className="truncate text-muted-foreground text-xs">
-                          {t("backup:connectGoogleDrive")}
-                        </span>
-                      </div>
-                      <Loader isLoading={connectMutation.isPending} />
-                    </button>
-                  )}
+                <div className="flex items-center justify-end gap-4">
                   <div className="flex gap-2">
                     <RestoreBackupButton
                       disabled={!userInfo}
