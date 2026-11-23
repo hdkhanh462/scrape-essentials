@@ -22,7 +22,7 @@ function App() {
           <SidebarTrigger className="-ml-1" />
           <span className="font-medium">{activeItem?.label}</span>
         </header>
-        <div className="min-h-0 flex-1 overflow-y-auto">
+        <div className="app-scroll-area min-h-0 flex-1 overflow-y-auto">
           <div className="container mx-auto p-4">
             <SidebarContent value="configs">
               <ConfigContainer />

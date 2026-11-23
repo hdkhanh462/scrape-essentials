@@ -1,6 +1,4 @@
 {
-  "label": "Settings",
-  "settingsDescription": "Configure your extension settings and preferences.",
   "debugMode": "Debug mode",
   "debugModeDescription": "Enable debug mode to see detailed logs and troubleshoot issues.",
   "themes": "Themes",

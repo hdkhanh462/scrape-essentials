@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
-
+import type * as React from "react";
+import { NavUser } from "@/components/nav-user";
 import { sidebarItems } from "@/components/sidebar";
 import {
   Sidebar,
@@ -17,21 +17,20 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useOptionsStore } from "@/features/shared/stores/options.store";
-import { NavUser } from "@/components/nav-user";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { activeTab, setActiveTab } = useOptionsStore();
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="border-b">
-        <div className="flex h-12 items-center gap-2 px-2">
+      <SidebarHeader className="h-14 justify-center border-b">
+        <div className="flex h-10 items-center gap-2 px-2">
           <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             SE
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
             <span className="truncate font-medium">Scrape Essentials</span>
-            <span className="truncate text-xs text-muted-foreground">
+            <span className="truncate text-muted-foreground text-xs">
               Options
             </span>
           </div>

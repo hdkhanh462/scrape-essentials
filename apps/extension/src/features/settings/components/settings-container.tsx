@@ -20,7 +20,6 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
   FieldSeparator,
   FieldSet,
   FieldTitle,
@@ -151,16 +150,10 @@ export function SettingsContainer() {
   };
 
   return (
-    <div className="py-8">
+    <div className="space-y-4">
       <form onChange={form.handleSubmit(handleSubmit)}>
         <FieldSet>
-          <FieldLegend>{t("settings:label")}</FieldLegend>
-          <FieldDescription>
-            {t("settings:settingsDescription")}
-          </FieldDescription>
-
           <FieldGroup>
-            <FieldSeparator />
             <Field orientation="responsive">
               <FieldContent>
                 <div className="flex items-center gap-2">
