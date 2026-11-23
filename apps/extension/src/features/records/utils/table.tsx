@@ -43,12 +43,23 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
               const n = Number(cellValue);
               return n >= value[0] && n <= value[1];
             }
-          : (row, id, value: string[]) => {
-              const cellValue = row.getValue(id);
-              return value.some((v) =>
-                v === EMPTY_FILTER_VALUE ? !cellValue : cellValue === v,
-              );
-            },
+          : colType === "boolean"
+            ? (row, id, value: string[]) => {
+                const cellValue = row.getValue(id);
+                return value.some((v) =>
+                  v === EMPTY_FILTER_VALUE
+                    ? cellValue === undefined ||
+                      cellValue === null ||
+                      cellValue === ""
+                    : String(cellValue) === v,
+                );
+              }
+            : (row, id, value: string[]) => {
+                const cellValue = row.getValue(id);
+                return value.some((v) =>
+                  v === EMPTY_FILTER_VALUE ? !cellValue : cellValue === v,
+                );
+              },
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={field.name} />
       ),

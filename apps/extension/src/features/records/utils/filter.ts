@@ -115,7 +115,9 @@ function evaluateArrayExpr(expr: ArrayExpr, rowValues: string[]): boolean {
 }
 
 function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
-  const cellValue = row.getValue(condition.column) || "-";
+  const rawCellValue = row.getValue(condition.column);
+  const cellValue =
+    rawCellValue === undefined || rawCellValue === null ? "-" : rawCellValue;
 
   if (cellValue === null) return false;
 

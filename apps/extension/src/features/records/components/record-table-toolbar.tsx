@@ -227,6 +227,22 @@ export function RecordTableToolbar({
                       table={table}
                       field={field}
                     />
+                  ) : field.type === FieldType.InputCheckbox ? (
+                    <DataTableFacetedFilter
+                      key={field.id}
+                      // biome-ignore lint/suspicious/noExplicitAny: <>
+                      column={table.getColumn(field.name) as any}
+                      title={field.name}
+                      options={[
+                        {
+                          value: EMPTY_FILTER_VALUE,
+                          label: EMPTY_FILTER_VALUE,
+                        },
+                        { value: "true", label: "True" },
+                        { value: "false", label: "False" },
+                      ]}
+                      triggerClassName="w-full justify-start border-solid"
+                    />
                   ) : isFacetFilterField(field) ? (
                     <RecordArrayFacetedFilter
                       key={field.id}
