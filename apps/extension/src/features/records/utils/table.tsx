@@ -37,9 +37,22 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
             );
           }
         : colType === "number"
-          ? (row, id, value: [number, number]) => {
+          ? (row, id, value: [number, number] | typeof EMPTY_FILTER_VALUE) => {
               const cellValue = row.getValue(id);
-              if (cellValue === undefined || cellValue === null) return false;
+              if (value === EMPTY_FILTER_VALUE) {
+                return (
+                  cellValue === undefined ||
+                  cellValue === null ||
+                  cellValue === ""
+                );
+              }
+              if (
+                cellValue === undefined ||
+                cellValue === null ||
+                cellValue === ""
+              ) {
+                return false;
+              }
               const n = Number(cellValue);
               return n >= value[0] && n <= value[1];
             }

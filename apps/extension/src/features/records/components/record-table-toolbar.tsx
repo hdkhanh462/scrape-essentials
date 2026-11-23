@@ -361,7 +361,15 @@ function RecordNumberRangeFilter({
   field,
 }: RecordNumberRangeFilterProps) {
   const column = table.getColumn(field.name);
-  const applied = column?.getFilterValue() as [number, number] | undefined;
+  const filterValue = column?.getFilterValue() as
+    | [number, number]
+    | typeof EMPTY_FILTER_VALUE
+    | undefined;
+  const appliedMissing = filterValue === EMPTY_FILTER_VALUE;
+  const applied =
+    Array.isArray(filterValue) && filterValue.length === 2
+      ? filterValue
+      : undefined;
 
   const numbers = table
     .getCoreRowModel()
@@ -387,14 +395,16 @@ function RecordNumberRangeFilter({
           >
             <PlusCircle />
             {field.name}
-            {applied && (
+            {(applied || appliedMissing) && (
               <>
                 <Separator orientation="vertical" className="mx-2 h-4" />
                 <Badge
                   variant="secondary"
                   className="rounded-sm px-1 font-normal"
                 >
-                  {applied[0]} – {applied[1]}
+                  {appliedMissing
+                    ? EMPTY_FILTER_VALUE
+                    : `${applied![0]} – ${applied![1]}`}
                 </Badge>
               </>
             )}
@@ -428,7 +438,18 @@ function RecordNumberRangeFilter({
             </div>
           </>
         )}
-        {applied && (
+        <Button
+          variant={appliedMissing ? "secondary" : "ghost"}
+          size="xs"
+          onClick={() =>
+            column?.setFilterValue(
+              appliedMissing ? undefined : EMPTY_FILTER_VALUE,
+            )
+          }
+        >
+          {appliedMissing ? "Clear -" : "Filter -"}
+        </Button>
+        {(applied || appliedMissing) && (
           <Button
             variant="ghost"
             size="xs"

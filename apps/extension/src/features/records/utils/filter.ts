@@ -122,6 +122,23 @@ function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
   if (cellValue === null) return false;
 
   const type = columnMeta?.type;
+  const isMissingNumber =
+    type === "number" &&
+    (rawCellValue === undefined ||
+      rawCellValue === null ||
+      rawCellValue === "");
+
+  if (isMissingNumber) {
+    if (condition.value === "-") {
+      if (condition.operator === ":" || condition.operator === "=") return true;
+      if (condition.operator === "!=" || condition.operator === "!:") {
+        return false;
+      }
+    }
+    if (condition.operator === "!=" && condition.value !== "-") return true;
+    if (condition.operator === ":" || condition.operator === "=") return false;
+    if (condition.operator === "!:") return true;
+  }
 
   // Handle numeric comparisons regardless of type
   if (
@@ -165,6 +182,17 @@ function evaluateCondition(row: any, condition: Condition, columnMeta: any) {
 
     // ================== NUMBER ==================
     case "number": {
+      const isMissing =
+        rawCellValue === undefined ||
+        rawCellValue === null ||
+        rawCellValue === "";
+      if (isMissing) {
+        if (condition.value === "-") {
+          return condition.operator === ":" || condition.operator === "=";
+        }
+        return condition.operator === "!=" || condition.operator === "!:";
+      }
+
       const v = Number(cellValue);
       const f = Number(condition.value);
       if (Number.isNaN(f)) return false;

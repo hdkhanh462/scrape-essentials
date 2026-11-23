@@ -40,7 +40,9 @@ export const RecordCell = ({ row, columnId, value, url }: Props) => {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="max-w-75 truncate font-medium">{value || "-"}</span>
+      <span className="max-w-75 truncate font-medium">
+        {value === undefined || value === null || value === "" ? "-" : value}
+      </span>
     </div>
   );
 };
