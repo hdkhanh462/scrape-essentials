@@ -1,4 +1,6 @@
 {
+  "label": "Cài đặt",
+  "options": "Tùy chọn",
   "debugMode": "Chế độ gỡ lỗi",
   "debugModeDescription": "Bật chế độ gỡ lỗi để xem nhật ký chi tiết và khắc phục sự cố.",
   "themes": "Giao diện",

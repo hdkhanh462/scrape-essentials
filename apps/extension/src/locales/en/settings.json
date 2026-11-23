@@ -1,4 +1,6 @@
 {
+  "label": "Settings",
+  "options": "Options",
   "debugMode": "Debug mode",
   "debugModeDescription": "Enable debug mode to see detailed logs and troubleshoot issues.",
   "themes": "Themes",

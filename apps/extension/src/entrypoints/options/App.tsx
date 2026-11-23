@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarContent, sidebarItems } from "@/components/sidebar";
 import {
@@ -12,6 +13,7 @@ import { useOptionsStore } from "@/features/shared/stores/options.store";
 
 function App() {
   const { activeTab } = useOptionsStore();
+  const { t } = useTranslation();
   const activeItem = sidebarItems.find((item) => item.id === activeTab);
 
   return (
@@ -20,7 +22,9 @@ function App() {
       <SidebarInset className="h-svh min-h-0 overflow-hidden">
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
-          <span className="font-medium">{activeItem?.label}</span>
+          <span className="font-medium">
+            {activeItem ? t(activeItem.labelKey) : ""}
+          </span>
         </header>
         <div className="app-scroll-area min-h-0 flex-1 overflow-y-auto">
           <div className="container mx-auto p-4">

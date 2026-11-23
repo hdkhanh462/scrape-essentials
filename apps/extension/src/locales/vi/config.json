@@ -7,6 +7,7 @@
   "selectConfig": "Chọn cấu hình...",
   "searchConfig": "Tìm kiếm cấu hình...",
   "label": "Cấu hình",
+  "navLabel": "Cấu hình",
   "addDomain": "Thêm miền",
   "domains": "Tên Miền"
 }

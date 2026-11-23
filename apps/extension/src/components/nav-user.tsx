@@ -6,6 +6,7 @@ import {
   LogOutIcon,
   SettingsIcon,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -28,6 +29,7 @@ import { useOptionsStore } from "@/features/shared/stores/options.store";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
+  const { t } = useTranslation();
   const { userInfo } = useGoogleStore();
   const setActiveTab = useOptionsStore((state) => state.setActiveTab);
   const connectMutation = useConnectGoogle();
@@ -57,10 +59,10 @@ export function NavUser() {
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">
-                {userInfo?.name ?? "Not signed in"}
+                {userInfo?.name ?? t("backup:notSignedIn")}
               </span>
               <span className="truncate text-xs">
-                {userInfo?.email ?? "Connect Google Drive"}
+                {userInfo?.email ?? t("backup:connectGoogleDrive")}
               </span>
             </div>
             <ChevronsUpDownIcon className="ml-auto" />
@@ -86,10 +88,10 @@ export function NavUser() {
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">
-                      {userInfo?.name ?? "Not signed in"}
+                      {userInfo?.name ?? t("backup:notSignedIn")}
                     </span>
                     <span className="truncate text-xs">
-                      {userInfo?.email ?? "Connect Google Drive"}
+                      {userInfo?.email ?? t("backup:connectGoogleDrive")}
                     </span>
                   </div>
                 </div>
@@ -101,11 +103,11 @@ export function NavUser() {
                 <>
                   <DropdownMenuItem onClick={openSettings}>
                     <SettingsIcon />
-                    Settings
+                    {t("settings:label")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setActiveTab("settings")}>
                     <CloudIcon />
-                    Google Drive
+                    {t("backup:googleDrive")}
                   </DropdownMenuItem>
                 </>
               ) : (
@@ -114,7 +116,7 @@ export function NavUser() {
                   disabled={connectMutation.isPending}
                 >
                   <CloudIcon />
-                  Connect Google Drive
+                  {t("backup:connectGoogleDrive")}
                 </DropdownMenuItem>
               )}
             </DropdownMenuGroup>
@@ -127,7 +129,7 @@ export function NavUser() {
                   disabled={disconnectMutation.isPending}
                 >
                   <LogOutIcon />
-                  Disconnect
+                  {t("backup:disconnect")}
                 </DropdownMenuItem>
               </>
             ) : null}

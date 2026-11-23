@@ -1,6 +1,7 @@
 "use client";
 
 import type * as React from "react";
+import { useTranslation } from "react-i18next";
 import { NavUser } from "@/components/nav-user";
 import { sidebarItems } from "@/components/sidebar";
 import {
@@ -20,6 +21,7 @@ import { useOptionsStore } from "@/features/shared/stores/options.store";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { activeTab, setActiveTab } = useOptionsStore();
+  const { t } = useTranslation();
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -31,14 +33,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
             <span className="truncate font-medium">Scrape Essentials</span>
             <span className="truncate text-muted-foreground text-xs">
-              Options
+              {t("settings:options")}
             </span>
           </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("common:workspace")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarItems.map((item) => {
@@ -48,12 +50,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 return (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
-                      tooltip={item.label}
+                      tooltip={t(item.labelKey)}
                       isActive={isActive}
                       onClick={() => setActiveTab(item.id)}
                     >
                       <Icon />
-                      <span>{item.label}</span>
+                      <span>{t(item.labelKey)}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

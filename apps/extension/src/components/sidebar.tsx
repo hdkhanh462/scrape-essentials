@@ -4,9 +4,9 @@ import { Activity, type PropsWithChildren } from "react";
 import { useOptionsStore } from "@/features/shared/stores/options.store";
 
 export const sidebarItems = [
-  { id: "configs", label: "Configs", icon: WrenchIcon },
-  { id: "records", label: "Records", icon: BoxIcon },
-  { id: "settings", label: "Settings", icon: SettingsIcon },
+  { id: "configs", labelKey: "config:navLabel", icon: WrenchIcon },
+  { id: "records", labelKey: "record:navLabel", icon: BoxIcon },
+  { id: "settings", labelKey: "settings:label", icon: SettingsIcon },
 ] as const;
 
 export type SidebarTab = (typeof sidebarItems)[number]["id"];

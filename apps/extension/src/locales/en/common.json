@@ -12,5 +12,6 @@
   "updatedAt": "Updated At",
   "cancel": "Cancel",
   "confirm": "Confirm",
-  "copyId": "Copy ID"
+  "copyId": "Copy ID",
+  "workspace": "Workspace"
 }

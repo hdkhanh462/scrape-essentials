@@ -1,5 +1,6 @@
 {
   "label": "Config",
+  "navLabel": "Configs",
   "filterConfigs": "Filter configs...",
   "configName": "Config Name",
   "tags": "Tags",
