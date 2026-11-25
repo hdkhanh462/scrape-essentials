@@ -26,6 +26,7 @@ export const getFields = async (
         : f.isFilterable === payload.isFilterable &&
           (f.type === FieldType.InputSelect ||
             f.type === FieldType.InputNumber ||
+            f.type === FieldType.InputCheckbox ||
             isFacetFilterField(f)),
     )
     .sortBy("order");

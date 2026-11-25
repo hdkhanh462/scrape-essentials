@@ -233,14 +233,16 @@ export function RecordTableToolbar({
                       // biome-ignore lint/suspicious/noExplicitAny: <>
                       column={table.getColumn(field.name) as any}
                       title={field.name}
-                      options={[
-                        {
-                          value: EMPTY_FILTER_VALUE,
-                          label: EMPTY_FILTER_VALUE,
-                        },
-                        { value: "true", label: "True" },
-                        { value: "false", label: "False" },
-                      ]}
+                      options={
+                        [
+                          {
+                            value: EMPTY_FILTER_VALUE,
+                            label: EMPTY_FILTER_VALUE,
+                          },
+                          { value: true, label: "True" },
+                          { value: false, label: "False" },
+                        ] as { label: string; value: string | boolean }[]
+                      }
                       triggerClassName="w-full justify-start border-solid"
                     />
                   ) : isFacetFilterField(field) ? (

@@ -57,14 +57,14 @@ export const buildColumn: BuildColumnHandler = (url, fields) => {
               return n >= value[0] && n <= value[1];
             }
           : colType === "boolean"
-            ? (row, id, value: string[]) => {
+            ? (row, id, value: (string | boolean)[]) => {
                 const cellValue = row.getValue(id);
                 return value.some((v) =>
                   v === EMPTY_FILTER_VALUE
                     ? cellValue === undefined ||
                       cellValue === null ||
                       cellValue === ""
-                    : String(cellValue) === v,
+                    : cellValue === v,
                 );
               }
             : (row, id, value: string[]) => {
