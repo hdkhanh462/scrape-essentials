@@ -26,8 +26,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="h-14 justify-center border-b">
-        <div className="flex h-10 items-center gap-2 px-2">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground group-data-[collapsible=icon]:mx-auto">
+        <div className="flex h-10 items-center gap-2 transition-[gap] duration-200 ease-linear group-data-[collapsible=icon]:gap-0">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             SE
           </div>
           <div className="grid min-w-0 max-w-40 flex-1 overflow-hidden text-left text-sm leading-tight opacity-100 transition-[max-width,opacity] duration-200 ease-linear group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:opacity-0">
