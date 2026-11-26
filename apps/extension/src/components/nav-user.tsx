@@ -49,7 +49,10 @@ export function NavUser() {
               />
             }
           >
-            <Avatar size="lg">
+            <Avatar
+              size="lg"
+              className="group-data-[collapsible=icon]:size-8!"
+            >
               {userInfo ? (
                 <AvatarImage src={userInfo.picture} alt={userInfo.name} />
               ) : null}
